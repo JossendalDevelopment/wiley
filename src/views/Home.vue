@@ -1,3 +1,6 @@
+<notes>
+    This view will serve as the default screen, showing all available cameras live feeds
+</notes>
 <template>
     <v-layout>
         <V-flex xs3>

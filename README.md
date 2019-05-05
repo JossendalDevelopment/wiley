@@ -1,5 +1,13 @@
 # wiley
 
+## Run Dockerized in development
+```
+docker build -t wiley .
+```
+```
+./devserver.sh
+```
+
 ## Project setup
 ```
 npm install
