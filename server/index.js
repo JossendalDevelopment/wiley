@@ -24,36 +24,6 @@ app.use(function(req, res, next) {
 app.use('/api', publicRouter)
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
 
-// app.get('/nest', cors(), (req, res) => {
-//     console.log("HIT API")
-//     var token = "c.Nz7bNdrH7ufmYC281BFtoUQQBBseHTDZ7uwbTCDzvXwakNsDzS8JcuBMB8yclwwVYx8T9Nq6nSXYoOQqON5bHpPEkwC9jUoC7ZvLEogbwhSZ0srisIpcUh3rJegnR4B2byPmZUMYAM9JMcdM"; // Update with your token
-
-//     var url = "https://developer-api.nest.com";
-
-//     var options = {
-//         "method": "GET",
-//         "path": "/",
-//         "headers": {
-//             "Access-Control-Allow-Origin": "*",
-//             "Content-Type": "application/json",
-//             "Authorization": "Bearer " + token
-//         },
-//         // "followRedirect": true
-//     };
-
-//     request(url, options, (err, resp, data) => {
-//         console.log('response code: ' + resp.statusCode);
-//         if (err) {
-//             console.log('Error: ' + err.message);
-//         }
-//         return res.json(data);
-//     });
-
-//     // console.log("APIREQUEST", apiRequest)
-//     // apiRequest.end();
-// })
-
-
 app.listen(3001, () => {
     console.log("Server listening on port 3001")
 });
