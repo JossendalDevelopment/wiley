@@ -1,11 +1,13 @@
 <template>
     <!-- <v-flex> -->
-            <v-hover>
+    <v-hover>
         <v-flex pa-1 class="video-feed-wrapper" style="max-width:750px;" slot-scope="{ hover }">
                 <div>
                     <video ref="video" class="video" width="100%" height="100%" autoplay>
                     </video>
                     <canvas ref="canvas" class="canvas" width="100%" height="100%"></canvas>
+
+
                 </div>
                 <v-layout class="controls">
                     <p class="mb-0 top">Cam {{ camNumber }}</p>
@@ -22,7 +24,7 @@
                     <!-- <v-btn id="snap" small flat v-on:click="capture()">capture</v-btn> -->
                 </v-layout>
         </v-flex>
-            </v-hover>
+    </v-hover>
         <!-- <ul>
             <li v-for="(c, i) in captures" :key="c+ i" style="vertical-align:middle;">
                 <img v-bind:src="c" height="50" />
@@ -32,8 +34,11 @@
 </template>
 
 <script>
+
 export default {
     data: () => ({
+        cameras: {},
+        cameraData: {},
         video: null,
         canvas: null,
         // captures: []
@@ -45,7 +50,20 @@ export default {
             default: null
         }
     },
-    mounted() {
+    mounted () {
+        // try {
+        //     this.video = this.$refs.video;
+        //     // this.cameraData = axios.get(`${process.env.VUE_APP_NEST_BASE_URL}/devices/cameras/${process.env.VUE_APP_DEVICE_ID}`, 
+        //     axios.get(`http://localhost:3001/nest`)
+        //         .then(response => {
+        //             this.cameras = JSON.parse(response.data).devices.cameras;
+        //             this.cameraData = this.cameras[Object.keys(this.cameras)[0]];
+        //             console.log("CAMERA", this.cameraData)
+        //             // this.video.srcObject = this.cameraData.web_url;
+        //         })
+        // } catch(err) {
+        //     console.error(err.message);
+        // }
         this.video = this.$refs.video;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({

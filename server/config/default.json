@@ -1,0 +1,9 @@
+{
+    "db": {
+        "user": "",
+        "password": "",
+        "hostname": "",
+        "database": ""
+    },
+    "jwt-secret": "bd429114-41d3-19d3-812s-0td5r89p825q"
+}

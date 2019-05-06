@@ -1,7 +1,14 @@
 module.exports = {
-  devServer: {
-    port: 5001
-  },
+    devServer: {
+        port: 5001,
+        proxy: 'http://localhost:3001'
+        // proxy: {
+        //     '/api': {
+        //         target: 'http://localhost:3001',
+        //         changeOrigin: true
+        //     }
+        // },
+    },
 //   chainWebpack: config => {
 //     config.module
 //       .rule('ignore')

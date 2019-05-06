@@ -1,4 +1,18 @@
 #!/bin/bash
-echo 'Running the server...'
+command -v docker > /dev/null
+if ! [ $? -eq 0 ] ; then
+    boldecho '\033[31mRequired developer tooling is missing!'
+    echo "This project depends on Docker for environment management."
+    echo "https://docker.com"
+    exit 1
+else
+    echo -e "\033[32mFound Docker!\033[0m"
+fi
 
-docker run -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 5001:5001 wiley
+echo -e "\033[32mRunning Server...\033[0m"
+
+# docker run -v ${PWD}:/usr/src/app -p 5001:5001 -it $(docker build -q -f ./Dockerfile .)
+# docker run -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 5000:5000 wiley
+docker build -t wiley .
+docker run -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 5000:5000 wiley
+

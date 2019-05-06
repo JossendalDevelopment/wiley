@@ -9,9 +9,9 @@
         <v-flex xs9>
             <v-layout row wrap align-start>
                 <v-flex
-                    v-for="n in 4"
+                    v-for="n in 2"
                     :key="n"
-                    xs4
+                    xs6
                 >
                     <video--live-feed :camNumber="n" v-on:capture="onCaptureTaken($event)"/>
                 </v-flex>

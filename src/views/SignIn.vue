@@ -7,21 +7,23 @@
               </v-layout>
           </v-flex>
           <v-flex xs8 px-5>
-            <v-card flat>
-              <v-toolbar dark flat color="secondary">
+            <v-card flat color="primaryDark">
+              <v-toolbar flat color="primaryDark">
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                     <v-text-field 
                         prepend-icon="fas fa-user" 
-                        name="login" 
-                        label="Login" 
+                        name="employeeId" 
+                        v-model="employeeId"
+                        label="Employee ID" 
                         type="text">
                     </v-text-field>
                     <v-text-field 
                         prepend-icon="fas fa-lock" 
                         name="password" 
+                        v-model="password"
                         label="Password" 
                         id="password" 
                         type="password">
@@ -39,9 +41,17 @@
 </template>
 <script>
 export default {
+    data: () => ({
+        employeeId: '',
+        password: ''
+    }),
     methods: {
         login() {
-            this.$router.replace('/');
+            this.$auth.login(this.employeeId, this.password)
+                .then(resp => {
+                    console.log("Login response", resp)
+                    this.$router.replace('/');
+                })
         }
     }
 }
