@@ -21,7 +21,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', publicRouter);
+app.use('/api', publicRouter)
+// app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
 
 // app.get('/nest', cors(), (req, res) => {
 //     console.log("HIT API")

@@ -2,14 +2,32 @@
 import axios from 'axios';
 // import { authHeader } from '../helpers';
 
-function login(employeeId, password) {
-    return axios.post('http://localhost:3001/login', {eid: employeeId, password:password})
+const instance = axios.create();
+instance.token = window.localStorage.getItem('token') || null;
+
+instance.new = function(url = '/') {
+    this.defaults.baseURL = url;
+
+    if (this.token) {
+        this.tokenInterceptor = this.interceptors.request.use(config => {
+            config.headers['Authorization'] = 'Bearer ' + this.token;
+            return config;
+        })
+    }
+};
+
+instance.login = function(employeeId, password) {
+    return this.post('http://localhost:3001/api/login', {eid: employeeId, password:password})
         .then(user => {
             // login successful if there's a jwt token in the response
-            console.log("USER.SERVICE", user)
             if (user.data.token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user.data.token));
+                window.localStorage.setItem('user', JSON.stringify(user.data));
+                window.localStorage.setItem('token', user.data.token)
+                this.tokenInterceptor = this.interceptors.request.use(config => {
+                    config.headers['Authorization'] = 'Bearer ' + user.data.token
+                    return config
+                })
             }
 
             return user;
@@ -17,12 +35,15 @@ function login(employeeId, password) {
         .catch(err => {
             return err
         })
-}
+};
 
-function logout() {
+instance.logout = function() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
-}
+    this.token = null;
+    this.interceptors.request.eject(this.tokenInterceptor);
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('user');
+};
 
 // function getAll() {
 //     const requestOptions = {
@@ -51,8 +72,9 @@ function logout() {
 //     });
 // }
 
-export const userService = {
-    login,
-    logout,
-    // getAll
-};
+export default instance;
+// export const userService = {
+//     login,
+//     logout,
+//     // getAll
+// };

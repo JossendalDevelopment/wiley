@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 router.post('/login', (req, res) => {
     const token = jwt.sign({employeeId: req.body.eid}, config.get('jwt-secret'))
 
-    formatResponse(res, 'Login Success', { token: token });
+    formatResponse(res, 'success', { token: token });
 });
 
 

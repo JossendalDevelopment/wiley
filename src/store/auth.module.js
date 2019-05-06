@@ -1,4 +1,5 @@
-import { userService } from '../services';
+import api from '../services/api.service';
+api.new('/api')
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
@@ -37,8 +38,7 @@ export const authentication = {
     actions: {
         login({ dispatch, commit }, { employeeId, password }) {
             commit('loginRequest', { employeeId, password });
-
-            return userService.login(employeeId, password)
+            return api.login(employeeId, password)
                 .then(user => {
                     console.log("AUTH_MODULE", user.data)
                         commit('loginSuccess', user.data);
@@ -51,7 +51,7 @@ export const authentication = {
                 );
         },
         logout({ commit }) {
-            userService.logout();
+            api.logout();
             commit('logout');
         }
     },
