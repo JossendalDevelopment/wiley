@@ -1,13 +1,15 @@
+const path = require('path');
+
 module.exports = {
+    // build to server folder for deployment to heroku
+    outputDir: path.resolve(__dirname, './server/public'),
     devServer: {
         port: 5001,
-        proxy: 'http://localhost:3001'
-        // proxy: {
-        //     '/api': {
-        //         target: 'http://localhost:3001',
-        //         changeOrigin: true
-        //     }
-        // },
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3001'
+            }
+        }
     },
 //   chainWebpack: config => {
 //     config.module

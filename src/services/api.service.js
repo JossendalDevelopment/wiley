@@ -17,7 +17,7 @@ instance.new = function(url = '/') {
 };
 
 instance.login = function(employeeId, password) {
-    return this.post('http://localhost:3001/api/login', {eid: employeeId, password:password})
+    return this.post('/login', {eid: employeeId, password:password})
         .then(user => {
             // login successful if there's a jwt token in the response
             if (user.data.token) {

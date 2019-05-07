@@ -14,9 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// serve static from dist for heroku
-app.use(express.static(path.join(__dirname, 'dist')));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -30,6 +28,15 @@ app.use(function(req, res, next) {
 
 app.use('/api', publicRouter)
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
+
+// handle production environment
+if (process.env.NODE_ENV === 'production') {
+
+    app.get(/.*/, (req, res) => {
+        res.sendFile(path.join(__dirname, 'public/index.html'))
+    })
+
+}
 
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT)

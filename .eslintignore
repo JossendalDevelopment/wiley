@@ -3,4 +3,5 @@
 
 # Ignore built files except build/index.js
 dist/*
+server/public/*
 # !build/index.js
