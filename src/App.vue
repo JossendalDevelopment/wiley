@@ -65,7 +65,15 @@ export default {
             this.$router.replace('/sign_in');
         },
         async simulateAlert() {
-            
+            // let alertData = {
+            //     'type': 'motion',
+            //     'detectedObject': 'coyote',
+            //     'probability': '95%',
+            //     'time': Date.now(),
+            //     'camerId': 100
+            // }
+
+            // send to vuex
         }
     },
 }

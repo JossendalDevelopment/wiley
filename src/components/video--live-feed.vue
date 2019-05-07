@@ -2,26 +2,30 @@
     <!-- <v-flex> -->
     <v-hover>
         <v-flex pa-1 class="video-feed-wrapper" slot-scope="{ hover }">
-            <video-player :options="videoOptions"/>
+            <video-player :options="getVideoOptions()"/>
                 <!-- <div>
                     <video ref="video" class="video" width="100%" height="100%" autoplay>
                     </video>
                     <canvas ref="canvas" class="canvas" width="100%" height="100%"></canvas>
-
-
                 </div> -->
             <v-layout class="controls">
-                <p class="mb-0 top test-ref primary--text">Cam {{ camNumber }}</p>
-                <v-layout class="bottom" :style="`background-color:${$vuetify.theme.accent}`">
+                <p class="mb-0 top test-ref primary--text">Cam {{ stream.camNumber }}</p>
+                <v-layout 
+                    v-if="hover" 
+                    class="bottom px-2" 
+                    justify-space-between
+                    align-center
+                    :style="`background-color:${$vuetify.theme.accent}`">
+                    <v-layout align-center>
+                        <v-icon>fas fa-exclamation-triangle</v-icon>
+                        <span class="pl-1">Object Detected</span>
+                    </v-layout>
                     <v-btn 
-                        v-show="hover"
-                        icon
-                        class="bottom"
-                        :to="{ name: 'cam_details', params: { id: +camNumber } }" 
+                        class="mr-0"
+                        :to="{ name: 'cam_details', params: { id: stream.camNumber } }" 
                         small 
-                        flat 
-                    >
-                        <v-icon color="accent">fas fa-eye</v-icon>
+                        outline >
+                        Inspect
                     </v-btn>
                 </v-layout>
                 <!-- <v-btn id="snap" small flat v-on:click="capture()">capture</v-btn> -->
@@ -44,10 +48,9 @@ export default {
         'video-player': videoPlayer,
     },
     props: {
-        camNumber: {
-            type: Number,
-            required: false,
-            default: null
+        stream: {
+            type: Object,
+            required: true,
         }
     },
     data: () => ({
@@ -57,22 +60,13 @@ export default {
         canvas: null,
         // captures: []
         videoOptions: {
-            autoplay: false,
-            controls: true,
+            autoplay: true,
+            controls: false,
             responsive: true,
             muted: true,
             language: 'en',
             playbackRates: [0.7, 1.0, 1.5, 2.0],
-            sources: [
-                {
-                    src: "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
-                    type: "video/mp4"
-                },
-                {
-                    src: "http://vjs.zencdn.net/v/oceans.mp4",
-                    type: "video/mp4"
-                }
-            ]
+            sources: [] // being set from overview and source prop
         }
     }),
     mounted () {
@@ -89,14 +83,14 @@ export default {
         // } catch(err) {
         //     console.error(err.message);
         // }
-        this.video = this.$refs.video;
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({
-                video: true
-            }).then(stream => {
-                this.video.srcObject = stream;
-            });
-        }
+        // this.video = this.$refs.video;
+        // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        //     navigator.mediaDevices.getUserMedia({
+        //         video: true
+        //     }).then(stream => {
+        //         this.video.srcObject = stream;
+        //     });
+        // }
     },
     beforeDestroy() {
         this.video = null;
@@ -109,6 +103,12 @@ export default {
             this.$emit('capture', this.canvas.toDataURL("image/webp"))
             // this.captures.push(this.canvas.toDataURL("image/webp"));
         },
+        getVideoOptions() {
+            this.videoOptions.sources = [this.stream.sourceData];
+            return this.videoOptions;
+        }
+    },
+    computed: {
     }
 }
 </script>
@@ -136,6 +136,6 @@ export default {
         bottom: 5px;
         right: 5px;
         left: 5px;
-        height: 10%
+        height: 12%
     }
 </style>

@@ -36,4 +36,7 @@ export default {
     width: 100% !important;
     height: 100% !important;
 }
+.video-js > button.vjs-big-play-button {
+    display: none;
+}
 </style>
