@@ -30,9 +30,8 @@ app.use('/api', publicRouter)
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
 
 // handle production environment
-console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
-
+    console.log(process.env.NODE_ENV, path.join(__dirname, 'public/'))
     app.get(/.*/, (req, res) => {
         res.sendFile(path.join(__dirname, 'public/index.html'))
     })
