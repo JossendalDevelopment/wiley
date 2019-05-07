@@ -24,9 +24,9 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'))
-})
+// app.get(/.*/, (req, res) => {
+//     res.sendFile(path.join(__dirname, 'dist/index.html'))
+// })
 
 app.use('/api', publicRouter)
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
