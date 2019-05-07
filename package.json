@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "dev": "concurrently \"cd server && npm run start\" \"npm run serve\" ",
-    "start": "export NODE_ENV=production && node server/index.js"
+    "postinstall": "if test \"$NODE_ENV\" = \"production\" ; then npm run build ; fi ",    "start": "export NODE_ENV=production && node server/index.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
