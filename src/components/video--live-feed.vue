@@ -10,7 +10,7 @@
 
                 </div>
                 <v-layout class="controls">
-                    <p class="mb-0 top">Cam {{ camNumber }}</p>
+                    <p class="mb-0 top test-ref">Cam {{ camNumber }}</p>
                     <v-btn 
                         v-show="hover"
                         icon

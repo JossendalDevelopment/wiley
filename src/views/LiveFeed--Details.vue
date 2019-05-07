@@ -1,5 +1,5 @@
 <template>
-        <v-layout>
+        <v-layout class="test-ref">
             <V-flex xs3>
                 <video--controls />
             </V-flex>

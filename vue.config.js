@@ -1,8 +1,7 @@
-const path = require('path');
+// const path = require('path');
 
 module.exports = {
-    // build to server folder for deployment to heroku
-    outputDir: path.resolve(__dirname, './server/public'),
+    // outputDir: path.resolve(__dirname, 'public'),
     devServer: {
         port: 5001,
         proxy: {
