@@ -7,11 +7,12 @@
             <video--controls :captures="captures"/>
         </V-flex>
         <v-flex xs9>
-            <v-layout row wrap align-start>
+            <v-layout row wrap align-start fill-height>
                 <v-flex
-                    v-for="n in 2"
+                    v-for="n in 4"
                     :key="n"
                     xs6
+                    style="height: 50%;"
                 >
                     <video--live-feed :camNumber="n" v-on:capture="onCaptureTaken($event)"/>
                 </v-flex>

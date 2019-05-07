@@ -31,6 +31,9 @@
                 <v-toolbar-title @click="$router.push('/')" class="accent--text">Wiley</v-toolbar-title>
                 <v-spacer> </v-spacer>
                 <v-toolbar-items class="hidden-xs-and-down">
+                    <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
+                </v-toolbar-items>
+                <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" @click="logout()" flat>Logout</v-btn>
                 </v-toolbar-items>
             </v-toolbar>
@@ -61,6 +64,9 @@ export default {
             await this.$auth.logout();
             this.$router.replace('/sign_in');
         },
+        async simulateAlert() {
+            
+        }
     },
 }
 </script>
