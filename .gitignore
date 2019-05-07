@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-/dist
+# /dist # heroku needs this file in its commit to operate
 
 # local env files
 .env.local
