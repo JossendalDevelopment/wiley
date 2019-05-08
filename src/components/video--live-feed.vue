@@ -1,7 +1,8 @@
 <template>
     <!-- <v-flex> -->
     <v-hover>
-        <v-flex pa-0 class="video-feed-wrapper" slot-scope="{ hover }">
+        <!-- <v-flex pa-0 class="video-feed-wrapper" slot-scope="{ hover }"> -->
+        <v-flex class="video-feed-wrapper">
             <video-player :options="getVideoOptions()"/>
                 <!-- <div>
                     <video ref="video" class="video" width="100%" height="100%" autoplay>
@@ -10,7 +11,6 @@
                 </div> -->
             <v-layout class="controls">
                 <v-layout 
-                    v-if="!hover" 
                     class="top" 
                     justify-end
                     align-start>
@@ -24,14 +24,14 @@
                     justify-space-between
                     align-center
                     :style="`background-color:${$vuetify.theme.accent}`">
-                    <v-layout align-center>
+                    <v-layout align-center class="ma-0">
                         <v-icon class="white--text">fas fa-exclamation-triangle</v-icon>
                         <span class="pl-1 white--text">Object Detected</span>
                     </v-layout>
                     <v-btn 
                         class="mr-0"
                         color="white"
-                        :to="{ name: 'cam_details', params: { id: stream.camNumber } }" 
+                        :to="{ name: 'cam_details', params: { id: stream.id } }" 
                         small 
                         outline >
                         Inspect
@@ -79,20 +79,6 @@ export default {
         }
     }),
     mounted () {
-        console.log(this.$cameraAlert)
-        // try {
-        //     this.video = this.$refs.video;
-        //     // this.cameraData = axios.get(`${process.env.VUE_APP_NEST_BASE_URL}/devices/cameras/${process.env.VUE_APP_DEVICE_ID}`, 
-        //     axios.get(`http://localhost:3001/nest`)
-        //         .then(response => {
-        //             this.cameras = JSON.parse(response.data).devices.cameras;
-        //             this.cameraData = this.cameras[Object.keys(this.cameras)[0]];
-        //             console.log("CAMERA", this.cameraData)
-        //             // this.video.srcObject = this.cameraData.web_url;
-        //         })
-        // } catch(err) {
-        //     console.error(err.message);
-        // }
         // this.video = this.$refs.video;
         // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         //     navigator.mediaDevices.getUserMedia({
@@ -114,6 +100,7 @@ export default {
             // this.captures.push(this.canvas.toDataURL("image/webp"));
         },
         getVideoOptions() {
+            // console.log("DATA", this.stream.sourceData)
             this.videoOptions.sources = [this.stream.sourceData];
             return this.videoOptions;
         }
@@ -136,9 +123,9 @@ export default {
     }
     .controls .top {
         position: absolute;
-        top: 0px;
-        right: 0px;
-        left: 0px;
+        top: 2px;
+        right: 4px;
+        left: 4px;
         height: 15%
     }
 </style>

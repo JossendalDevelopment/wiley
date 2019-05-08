@@ -20,9 +20,13 @@ export default {
         }
     },
     mounted() {
-        this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
-            console.log('onPlayerReady', this);
-        })
+        console.log("creating video player with:", this.options)
+        if(this.options) {
+            this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
+                console.log('onPlayerReady', this);
+                this.play()
+            })
+        }
     },
     beforeDestroy() {
         if (this.player) {

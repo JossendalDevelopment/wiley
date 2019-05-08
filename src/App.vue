@@ -28,13 +28,22 @@
             </v-navigation-drawer>
             <v-toolbar app fixed clipped-left>
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <v-toolbar-title @click="$router.push('/')" class="accent--text">Wiley</v-toolbar-title>
+                <v-toolbar-title @click="$router.push('/')" class="accent--text mr-4">Wiley</v-toolbar-title>
+                <v-toolbar-items class="hidden-xs-and-down">
+                    <v-btn v-if="$auth.status.loggedIn" flat >History</v-btn>
+                </v-toolbar-items>
+                <v-toolbar-items class="hidden-xs-and-down">
+                    <v-btn v-if="$auth.status.loggedIn" to="/" flat >Feed</v-btn>
+                </v-toolbar-items>
+                <v-toolbar-items class="hidden-xs-and-down">
+                    <v-btn v-if="$auth.status.loggedIn" flat >Settings</v-btn>
+                </v-toolbar-items>
                 <v-spacer> </v-spacer>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-xs-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" @click="logout()" flat>Logout</v-btn>
+                    <v-btn v-if="$auth.status.loggedIn" flat @click="logout()">Logout</v-btn>
                 </v-toolbar-items>
             </v-toolbar>
             <v-content app>
@@ -71,7 +80,12 @@ export default {
                 'detectedObject': 'coyote',
                 'probability': '95%',
                 'time': Date.now(),
-                'cameraId': 100
+                'cameraId': 100,
+                'camNumber': 1,
+                'sourceData': {
+                    'src': "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
+                    'type': "video/mp4"
+                }
             }
             // send to vuex
             this.$cameraAlert.createAlert(alertData)
