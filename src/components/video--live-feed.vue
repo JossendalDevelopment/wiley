@@ -19,7 +19,7 @@
                         class="pa-2 test-ref primary--text">Cam {{ stream.camNumber }}</p>
                 </v-layout>
                 <v-layout 
-                    v-if="hover" 
+                    v-if="$cameraAlert.alertData.cameraId == stream.id" 
                     class="top px-2" 
                     justify-space-between
                     align-center
@@ -79,6 +79,7 @@ export default {
         }
     }),
     mounted () {
+        console.log(this.$cameraAlert)
         // try {
         //     this.video = this.$refs.video;
         //     // this.cameraData = axios.get(`${process.env.VUE_APP_NEST_BASE_URL}/devices/cameras/${process.env.VUE_APP_DEVICE_ID}`, 

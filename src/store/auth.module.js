@@ -1,5 +1,5 @@
 import api from '../services/api.service';
-api.new('/api')
+api.new('/api');
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
@@ -11,9 +11,9 @@ export const authentication = {
     state: initialState,
     getters: {
         user: (state) => {
-            // cart plugin attaches a number of functions to state.cart 
+            // auth plugin attaches a number of functions to state.cart 
             // making it unuseable as a getter for now 
-            // instead use $cart.getCart() from plugin
+            // instead create $auth.getUser() from plugin
             return state;
         },
     },

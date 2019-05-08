@@ -64,17 +64,17 @@ export default {
             await this.$auth.logout();
             this.$router.replace('/sign_in');
         },
-        async simulateAlert() {
-            // let alertData = {
-            //     'alertStatus': 'active',
-            //     'type': 'motion',
-            //     'detectedObject': 'coyote',
-            //     'probability': '95%',
-            //     'time': Date.now(),
-            //     'camerId': 100
-            // }
-
+        simulateAlert() {
+            const alertData = {
+                'alertStatus': 'active',
+                'type': 'motion',
+                'detectedObject': 'coyote',
+                'probability': '95%',
+                'time': Date.now(),
+                'cameraId': 100
+            }
             // send to vuex
+            this.$cameraAlert.createAlert(alertData)
         }
     },
 }
