@@ -66,6 +66,7 @@ export default {
         },
         async simulateAlert() {
             // let alertData = {
+            //     'alertStatus': 'active',
             //     'type': 'motion',
             //     'detectedObject': 'coyote',
             //     'probability': '95%',

@@ -1,7 +1,7 @@
 <template>
     <!-- <v-flex> -->
     <v-hover>
-        <v-flex pa-1 class="video-feed-wrapper" slot-scope="{ hover }">
+        <v-flex pa-0 class="video-feed-wrapper" slot-scope="{ hover }">
             <video-player :options="getVideoOptions()"/>
                 <!-- <div>
                     <video ref="video" class="video" width="100%" height="100%" autoplay>
@@ -9,19 +9,28 @@
                     <canvas ref="canvas" class="canvas" width="100%" height="100%"></canvas>
                 </div> -->
             <v-layout class="controls">
-                <p class="mb-0 top test-ref primary--text">Cam {{ stream.camNumber }}</p>
+                <v-layout 
+                    v-if="!hover" 
+                    class="top" 
+                    justify-end
+                    align-start>
+                    <p 
+                        :style="`background-color:rgba(222,222,222,0.3)`"
+                        class="pa-2 test-ref primary--text">Cam {{ stream.camNumber }}</p>
+                </v-layout>
                 <v-layout 
                     v-if="hover" 
-                    class="bottom px-2" 
+                    class="top px-2" 
                     justify-space-between
                     align-center
                     :style="`background-color:${$vuetify.theme.accent}`">
                     <v-layout align-center>
-                        <v-icon>fas fa-exclamation-triangle</v-icon>
-                        <span class="pl-1">Object Detected</span>
+                        <v-icon class="white--text">fas fa-exclamation-triangle</v-icon>
+                        <span class="pl-1 white--text">Object Detected</span>
                     </v-layout>
                     <v-btn 
                         class="mr-0"
+                        color="white"
                         :to="{ name: 'cam_details', params: { id: stream.camNumber } }" 
                         small 
                         outline >
@@ -126,16 +135,9 @@ export default {
     }
     .controls .top {
         position: absolute;
-        padding: 8px;
-        top: 0;
-        right: 0;
-    }
-    .controls .bottom {
-        position: absolute;
-        // padding: 8px;
-        bottom: 5px;
-        right: 5px;
-        left: 5px;
-        height: 12%
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        height: 15%
     }
 </style>
