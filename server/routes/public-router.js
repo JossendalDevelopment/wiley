@@ -1,8 +1,9 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+// const config = require('config');
+// const admin = require('firebase-admin');
 
-const config = require('config');
-const formatResponse = require('../helpers/format-response.js');
+// const formatResponse = require('../helpers/format-response.js');
 
 var router = express.Router();
 
@@ -10,11 +11,28 @@ router.get('/', (req, res) => {
     res.json({ title: 'Please visit jossendal.com today' });
 })
 
-router.post('/login', (req, res) => {
-    const token = jwt.sign({employeeId: req.body.eid}, config.get('jwt-secret'))
+// router.post('/login', (req, res) => {
+    // const token = jwt.sign({employeeEmail: req.body.employeeEmail}, config.get('jwt-secret'))
+    // admin.auth().createUser({
+    //     email: req.body.employeeEmail,
+    //     emailVerified: true,
+    //     // phoneNumber: '123-456-7890',
+    //     password: req.body.password,
+    //     displayName: 'Test',
+    //     // photoURL: '',
+    //     disabled: false
+    // })
+    // .then((userRecord) => {
+    //     // See the UserRecord reference doc for the contents of userRecord.
+    //     console.log('Successfully created new user:', userRecord);
+    //     formatResponse(res, 'success', { token: userRecord });
+    // })
+    // .catch(function(error) {
+    //     console.log('Error creating new user:', error);
+    // });
+    // formatResponse(res, 'success', { token: token });
 
-    formatResponse(res, 'success', { token: token });
-});
+// });
 
 
 module.exports = router;

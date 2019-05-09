@@ -1,11 +1,21 @@
-const functions = require('firebase-functions');
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const ejwt = require('express-jwt');
+const config = require('config');
+
 const PORT = process.env.PORT || 3001;
 
+// firebase initialization
+const admin = require('firebase-admin');
+const functions = require('firebase-functions');
+
+admin.initializeApp(functions.config().firebase);
+
+// routes
 const publicRouter = require('./routes/public-router.js');
+const authenticatedRouter = require('./routes/authenticated-router.js');
 
 var app = express();
 
@@ -15,14 +25,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
 app.use('/api', publicRouter)
-// app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
+app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter)
 
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT)

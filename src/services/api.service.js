@@ -15,9 +15,10 @@ instance.new = function(url = '/') {
     }
 };
 
-instance.login = function(employeeId, password) {
-    return this.post('/login', {eid: employeeId, password:password})
+instance.login = function(employeeEmail, password) {
+    return this.post('/login', {employeeEmail: employeeEmail, password:password})
         .then(resp => {
+            console.log("Server response", resp)
             const user = resp.data
             // login successful if there's a jwt token in the response
             if (user.data.token) {

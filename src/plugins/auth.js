@@ -6,9 +6,9 @@ export default {
             computed: {
                 "$auth"() {
                     var auth = store.getters['authentication/user'];
-                    auth.login = (employeeId, password) => {
+                    auth.login = (employeeEmail, password) => {
                         return store.dispatch('authentication/login', {
-                            employeeId: employeeId, 
+                            employeeEmail: employeeEmail, 
                             password: password
                         });
                     }

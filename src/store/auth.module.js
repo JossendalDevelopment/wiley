@@ -1,5 +1,7 @@
 import api from '../services/api.service';
 api.new('/api');
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
@@ -36,22 +38,37 @@ export const authentication = {
         }
     },
     actions: {
-        login({ dispatch, commit }, { employeeId, password }) {
-            commit('loginRequest', { employeeId, password });
-            return api.login(employeeId, password)
+        login({ commit }, { employeeEmail, password }) {
+            commit('loginRequest', { employeeEmail, password });
+            return firebase.auth().signInWithEmailAndPassword(employeeEmail, password)
                 .then(user => {
-                    console.log("AUTH_MODULE", user.data)
-                        commit('loginSuccess', user.data);
-                        return user.data;
-                    },
-                    error => {
-                        commit('loginFailure', error);
-                        dispatch('alert/error', error, { root: true });
+                    const newUser = {
+                        email: user.user.email,
+                        verified: user.user.emailVerified,
+                        id: user.user.uid,
                     }
-                );
+                    window.localStorage.setItem('token', newUser.id)
+                    commit('loginSuccess', newUser);
+                    return newUser;
+                })
+                .catch(error => {
+                    commit('loginFailure', error);
+                    return error;
+                })
+            // return api.login(employeeEmail, password)
+            //     .then(user => {
+            //         commit('loginSuccess', user.data);
+            //         return user.data;
+            //     },
+            //     error => {
+            //         commit('loginFailure', error);
+            //         dispatch('alert/error', error, { root: true });
+            //     }
+            // );
         },
         logout({ commit }) {
-            api.logout();
+            firebase.auth().signOut();
+            window.localStorage.clear();
             commit('logout');
         }
     },
