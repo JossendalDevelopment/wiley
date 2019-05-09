@@ -41,7 +41,7 @@
                         </template>
                     </v-checkbox>
                     <v-spacer></v-spacer>
-                    <v-btn color="accent" @click="login()">Sign In</v-btn>
+                    <v-btn :loading="$auth.status.loggingIn" color="accent" @click="login()">Sign In</v-btn>
                 </v-card-actions>
                 <v-card-actions>
                     <v-btn to="" flat>Forgot password</v-btn>
