@@ -2,9 +2,25 @@ import { shallowMount } from '@vue/test-utils';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 
+import Home from '@/views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
 import Overview from '@/views/Overview.vue';
 import LiveFeedDetails from '@/views/LiveFeed--Details.vue';
+
+describe('Home.vue renders', () => {
+    let wrp;
+
+    beforeEach(() => {
+        Vue.use(Vuetify);
+    
+        wrp = shallowMount(Home, { });
+    });
+
+    // checks Home.vue is a component.
+    it('Registers a component', () => {
+        expect(wrp.isVueInstance()).toBeTruthy()
+    })
+});
 
 describe('SignIn.vue renders', () => {
     let wrp;
@@ -42,8 +58,15 @@ describe('LiveFeed--Details renders', () => {
     it('Registers an id from query string', () => {
         const wrp = shallowMount(LiveFeedDetails, {
             mocks: {
+                // props
+                stream: {
+                    sourceData: {}
+                },
+                $cameraAlert: {
+                    alertData: {}
+                },
                 $route: {
-                    params: { id: 1 }
+                    params: { id: 100 }
                 }
             }
         })

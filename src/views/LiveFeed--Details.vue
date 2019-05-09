@@ -91,9 +91,6 @@ export default {
         }, 200)
     },
     methods: {
-        onCaptureTaken(event) {
-            console.log(event)
-        },
         setVideoOptions() {
             this.videoOptions.sources = [this.stream.sourceData];
         },
@@ -101,6 +98,7 @@ export default {
             // clear alertData state
             this.$cameraAlert.clearAlert();
             // send event log to history queue of some kind
+            // this.$eventHistory.addEvent(this.$cameraAlert.alertData);
             // route somewhere
             this.$router.replace('/overview')
         },
@@ -111,7 +109,7 @@ export default {
     },
     computed: {
         parseTime() {
-            return format(new Date(), 'MM/DD/YYYY hh:mm:ss')
+            return format(new Date(), 'MM/DD/YYYY   hh:mm:ss')
         },
         getVideoOptions() {
             return this.videoOptions;

@@ -7,7 +7,7 @@
                         <span class="title font-weight-bold">Welcome</span>
                     </v-card-title>
                     <v-card-text class="headline font-weight-light">
-                        Welcome Text
+                        <router-link to="/overview" style="color:black;">View Camera Feed</router-link>
                     </v-card-text>
                 </v-card>
             </v-flex>

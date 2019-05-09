@@ -5,7 +5,7 @@
 </notes>
 <template>
     <v-container grid-list-xs fill-height pa-0>
-        <v-layout row wrap>
+        <v-layout row wrap align-center>
             <v-flex
                 v-for="stream in streams"
                 :key="stream.id"
