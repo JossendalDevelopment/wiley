@@ -14,13 +14,13 @@ import 'vuetify/dist/vuetify.min.css';
 import 'video.js/dist/video-js.css';
 
 firebase.initializeApp({
-    apiKey: "AIzaSyC14MMLeymY_W_9a-Qoc8bYQji55tUm0Ak",
-    authDomain: "wiley-app.firebaseapp.com",
-    databaseURL: "https://wiley-app.firebaseio.com",
-    projectId: "wiley-app",
-    storageBucket: "wiley-app.appspot.com",
-    messagingSenderId: "918656739220",
-    appId: "1:918656739220:web:46326f33d145a55f"
+    apiKey: process.env.VUE_APP_API_KEY,
+    authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+    databaseURL: process.env.VUE_APP_DATABASE_URL,
+    projectId: process.env.VUE_APP_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+    appId: process.env.VUE_APP_APP_ID
 });
 
 Vue.config.productionTip = false;
