@@ -1,33 +1,7 @@
 <template>
     <div id="app">
         <v-app id="inspire">
-            <v-navigation-drawer
-                clipped
-                fixed
-                v-model="drawer"
-                app
-                disable-resize-watcher >
-                <v-list dense>
-                    <v-list-tile @click="() => {}">
-                        <v-list-tile-action>
-                            <v-icon>fas fa-tachometer-alt</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Drawer stuff</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile @click="() => {}">
-                        <v-list-tile-action>
-                            <v-icon>fas fa-cog</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Settings</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
-            </v-navigation-drawer>
-            <v-toolbar app fixed clipped-left>
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar app fixed clipped-left v-if="$auth.status.loggedIn">
                 <v-toolbar-title @click="$router.push('/')" class="accent--text mr-4">Wiley</v-toolbar-title>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>
@@ -41,6 +15,31 @@
                 <v-spacer> </v-spacer>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
+                </v-toolbar-items>
+                <v-toolbar-items class="hidden-xs-and-down">
+
+                    <v-menu open-on-hover bottom offset-y v-if="$auth.status.loggedIn">
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-on="on"
+                                flat
+                            >
+                                {{ $auth.user.email }}
+                                <v-icon class="pl-1">fas fa-caret-down</v-icon>
+                            </v-btn>
+                        </template>
+
+                        <v-list>
+                            <v-list-tile
+                                v-for="(n) in 3"
+                                :key="n"
+                                @click="() => null"
+                            >
+                                <v-list-tile-title>{{ n }}</v-list-tile-title>
+                            </v-list-tile>
+                        </v-list>
+                    </v-menu>
+
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" flat @click="logout()">Logout</v-btn>
@@ -68,7 +67,6 @@ export default {
     name: 'App',
     props: { },
     data: () => ({
-        drawer: false,
     }),
     methods: {
         async logout() {

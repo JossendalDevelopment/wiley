@@ -103,6 +103,7 @@ export default {
             this.$router.replace('/overview')
         },
         confirmObject() {
+            this.$eventHistory.createEvent(this.$cameraAlert.alertData)
             // send alertData to a broadcast message queue
             // send event log to history queue
         }

@@ -1,12 +1,24 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-// const cors = require('cors');
 const bodyParser = require('body-parser');
-// const request = require('request');
+// const ejwt = require('express-jwt');
+// const config = require('config');
+
 const PORT = process.env.PORT || 3001;
 
-const publicRouter = require('./routes/public-router.js');
+// firebase initialization
+const admin = require('firebase-admin');
+const serviceAccount = require("../serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://wiley-app.firebaseio.com"
+});
+
+// routers
+const publicRouter = require('./routes/public-router');
+const authenticatedRouter = require('./routes/authenticated-router');
 
 var app = express();
 
@@ -22,31 +34,17 @@ app.use(function(req, res, next) {
     next();
 });
 
-// app.get(/.*/, (req, res) => {
-//     res.sendFile(path.join(__dirname, 'dist/index.html'))
-// })
-
-app.use('/api', publicRouter)
-// app.use('/api', ejwt({secret: config.get('jwt-secret')}), privateRouter)
-
-// handle production environment
-if (process.env.NODE_ENV === 'production') {
-    console.log(process.env.NODE_ENV, path.join(__dirname, 'public/'))
-    app.get(/.*/, (req, res) => {
-        res.sendFile(path.join(__dirname, 'public/index.html'))
-    })
-
-}
+app.use('/api', publicRouter);
+app.use('/api', authenticatedRouter);
+// app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter);
 
 app.listen(PORT, () => {
-    console.log("Server listening on port " + PORT)
+    console.log("Server listening on port " + PORT);
 });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
-
 
 module.exports = app;
