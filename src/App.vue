@@ -30,13 +30,13 @@
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <v-toolbar-title @click="$router.push('/')" class="accent--text mr-4">Wiley</v-toolbar-title>
                 <v-toolbar-items class="hidden-xs-and-down">
+                    <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>
+                </v-toolbar-items>
+                <v-toolbar-items class="hidden-xs-and-down">
+                    <v-btn v-if="$auth.status.loggedIn" to="/overview" flat >Feed</v-btn>
+                </v-toolbar-items>
+                <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" flat >History</v-btn>
-                </v-toolbar-items>
-                <v-toolbar-items class="hidden-xs-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" to="/" flat >Feed</v-btn>
-                </v-toolbar-items>
-                <v-toolbar-items class="hidden-xs-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" flat >Settings</v-btn>
                 </v-toolbar-items>
                 <v-spacer> </v-spacer>
                 <v-toolbar-items class="hidden-xs-and-down">
@@ -62,6 +62,8 @@
     </div>
 </template>
 <script>
+import AlertData from '@/types/cameraAlertType';
+
 export default {
     name: 'App',
     props: { },
@@ -74,7 +76,7 @@ export default {
             this.$router.replace('/sign_in');
         },
         simulateAlert() {
-            const alertData = {
+            const alertData = new AlertData({
                 'alertStatus': 'active',
                 'type': 'motion',
                 'detectedObject': 'coyote',
@@ -86,8 +88,7 @@ export default {
                     'src': "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
                     'type': "video/mp4"
                 }
-            }
-            // send to vuex
+            })
             this.$cameraAlert.createAlert(alertData)
         }
     },

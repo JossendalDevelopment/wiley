@@ -20,11 +20,9 @@ export default {
         }
     },
     mounted() {
-        console.log("creating video player with:", this.options)
         if(this.options) {
             this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
                 console.log('onPlayerReady', this);
-                this.play()
             })
         }
     },
@@ -37,8 +35,9 @@ export default {
 </script>
 <style >
 .video-js {
-    width: 100% !important;
-    height: 100% !important;
+    /* width: 100% !important; */
+    /* height: 100% !important; */
+    /* background-color: transparent !important; */
 }
 .video-js > button.vjs-big-play-button {
     display: none;

@@ -11,6 +11,9 @@ export default {
                             alertData
                         });
                     }
+                    alert.clearAlert = () => {
+                        return store.dispatch('cameraAlert/clearAlert')
+                    }
                     return alert;
                 }
             }

@@ -1,18 +1,10 @@
-import api from '../services/api.service';
-api.new('/api');
+import AlertData from '@/types/cameraAlertType';
+// import api from '../services/api.service';
+// api.new('/api');
 
 export const cameraAlert = {
     namespaced: true,
-    state: { 
-        alertData: {
-            'alertStatus': '',
-            'type': '',
-            'detectedObject': '',
-            'probability': '',
-            'time': '',
-            'cameraId': null
-        }
-    },
+    state: {alertData: {...new AlertData()} } ,
     getters: {
         alert: (state) => {
             return state;
@@ -22,18 +14,16 @@ export const cameraAlert = {
         createAlert(state, payload) {
             state.alertData = payload.alertData;
         },
-        logout(state) {
-            state.status = {};
-            state.user = null;
+        clearAlert: (state) => {
+            state.alertData = new AlertData();
         }
     },
     actions: {
         createAlert({ commit }, payload) {
             commit('createAlert', payload);
         },
-        logout({ commit }) {
-            api.logout();
-            commit('logout');
+        clearAlert({ commit }) {
+            commit('clearAlert');
         }
     },
 }

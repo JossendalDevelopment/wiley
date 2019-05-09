@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import CameraDetailsPage from '@/views/LiveFeed--Details.vue';
-import SignIn from '@/views/SignIn.vue';
 import Overview from '@/views/Overview.vue';
+import SignIn from '@/views/SignIn.vue';
+import Home from '@/views/Home.vue';
 
 Vue.use(Router);
 
@@ -11,8 +12,8 @@ export const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {path: '', name: 'overview', component: Overview, alias: '/overview'},
-    // { path: '/', name: 'home', component: Home },
+    { path: '/', name: 'home', component: Home },
+    { path: '/overview', name: 'overview', component: Overview },
     { path: '/sign_in', name: 'signIn', component: SignIn },
     { path: '/cam_details/:id', name: 'cam_details', component: CameraDetailsPage },
     { path: '*', redirect: '/' }

@@ -4,13 +4,13 @@
     Assumption is that any live streaming data will come in through here.
 </notes>
 <template>
-    <v-container grid-list-sm text-xs-center fill-height>
+    <v-container grid-list-xs fill-height pa-0>
         <v-layout row wrap>
             <v-flex
                 v-for="stream in streams"
                 :key="stream.id"
                 xs6
-                style="height: 50%;" >
+                >
                 <video--live-feed :stream="stream" v-on:capture="onCaptureTaken($event)"/>
             </v-flex>
         </v-layout>

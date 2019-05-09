@@ -8,6 +8,7 @@
         </V-flex>
         <v-flex xs9 v-if="!working">
             <v-layout row wrap align-start justify-center fill-height>
+                <!-- Above video -->
                 <v-flex xs10>
                     <v-layout justify-space-between align-center>
                         <p class="mb-0">{{ parseTime }}</p>
@@ -17,16 +18,33 @@
                         </v-layout>
                     </v-layout>
                 </v-flex>
-                <v-flex xs10 style="height: 70%;" >
+                <!-- video -->
+                <v-flex xs10 class="video-feed-wrapper">
+
                     <video-player :options="getVideoOptions"/>
-                    <!-- <video--live-feed :stream="stream" v-on:capture="onCaptureTaken($event)"/> -->
+                    <!-- video overlay -->
+                    <v-layout class="controls" align-start justify-end>
+                        <div style="display:flex; align-items:center; padding:10px;" :style="`background-color:rgba(222,222,222,0.3)`">
+                            <div class="live-icon"></div>
+                            <p 
+                                class="pl-2 mb-0 test-ref primary--text">
+                                Live Feed
+                            </p>
+                        </div>
+                    </v-layout>
+                </v-flex>
+                <!-- below video -->
+                <v-flex xs10>
+                    <v-layout justify-center>
+                        <h3>{{ formatProbabilityText }}</h3>
+                    </v-layout>
                 </v-flex>
                 <v-flex xs10>
                     <v-layout justify-center>
-                        <v-btn large class="error btn">
+                        <v-btn @click="falseAlarm()" large class="error btn">
                             False Alarm 
                         </v-btn>
-                        <v-btn large class="success btn">
+                        <v-btn @click="confirmObject()" large class="success btn">
                             Confirm Object
                         </v-btn>
                     </v-layout>
@@ -55,6 +73,8 @@ export default {
             autoplay: true,
             controls: true,
             responsive: true,
+            aspectRatio: '16:9',
+            fill: true,
             muted: true,
             language: 'en',
             playbackRates: [0.5, 1.0, 1.5, 2.0],
@@ -65,10 +85,10 @@ export default {
     mounted() {
         this.stream = CameraFeedsJson.find(stream => stream.id == this.$route.params.id);
         this.setVideoOptions();
-        console.log("Stream in 1", this.stream)
         setTimeout(() => {
+            // just simulating an async
             this.working = false;
-        }, 1000)
+        }, 200)
     },
     methods: {
         onCaptureTaken(event) {
@@ -77,14 +97,27 @@ export default {
         setVideoOptions() {
             this.videoOptions.sources = [this.stream.sourceData];
         },
+        falseAlarm() {
+            // clear alertData state
+            this.$cameraAlert.clearAlert();
+            // send event log to history queue of some kind
+            // route somewhere
+            this.$router.replace('/overview')
+        },
+        confirmObject() {
+            // send alertData to a broadcast message queue
+            // send event log to history queue
+        }
     },
     computed: {
         parseTime() {
             return format(new Date(), 'MM/DD/YYYY hh:mm:ss')
         },
         getVideoOptions() {
-            console.log("get video options 2", this.videoOptions)
             return this.videoOptions;
+        },
+        formatProbabilityText() {
+            return `Wiley is ${this.$cameraAlert.alertData.probability} sure this is a ${this.$cameraAlert.alertData.detectedObject}. Please confirm.`
         }
     }
 }
@@ -92,5 +125,21 @@ export default {
 <style scoped>
 .btn {
     width: 40%;
+}
+.video-feed-wrapper {
+    position: relative;
+}
+.controls {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+}
+.live-icon {
+    border: 1px solid;
+    border-radius: 100%;
+    height: 20px;
+    width: 20px;
+    background-color: red;
 }
 </style>
