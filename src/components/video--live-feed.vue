@@ -84,8 +84,6 @@ export default {
             return this.videoOptions;
         }
     },
-    computed: {
-    }
 }
 </script>
 
