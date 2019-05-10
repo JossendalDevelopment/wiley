@@ -1,3 +1,5 @@
+// this is purely assumption on what an alerted event might look like
+
 function AlertData(data) {
     Object.assign(this, AlertData.template, data);
 }
@@ -5,11 +7,14 @@ function AlertData(data) {
 Object.defineProperty(AlertData, 'template',  {
     get() {
         return {
-            'alertStatus': '',
+            'id': '',
+            'status': '',
             'type': '',
             'detectedObject': '',
             'probability': '',
-            'time': '',
+            'startTime': '',
+            'endTime': '',
+            'duration': '',
             'cameraId': null,
             'camNumber': null,
             'name': '',

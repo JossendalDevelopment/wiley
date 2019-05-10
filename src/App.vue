@@ -54,9 +54,9 @@
                     <!-- </v-layout> -->
                 </v-container>
             </v-content>
-            <v-footer app fixed>
+            <!-- <v-footer app fixed>
                 <span>&copy; 2019 Footer?</span>
-            </v-footer>
+            </v-footer> -->
         </v-app>
     </div>
 </template>
@@ -75,11 +75,19 @@ export default {
         },
         simulateAlert() {
             const alertData = new AlertData({
-                'alertStatus': 'active',
+                'id': '01',
+                'status': 'active',
                 'type': 'motion',
                 'detectedObject': 'coyote',
                 'probability': '95%',
-                'time': Date.now(),
+                'startTime': Date.now(),
+                'endTime': (() => {
+                    // create an end time a minute after start time
+                    var now = new Date();
+                    now.setMinutes(now.getMinutes() + 1); // timestamp
+                    return new Date(now); // Date object
+                })(),
+                'duration': 60, // in seconds
                 'cameraId': 100,
                 'camNumber': 1,
                 'sourceData': {

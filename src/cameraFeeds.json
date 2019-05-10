@@ -2,6 +2,7 @@
     {
         "id": 100,
         "camNumber": 1,
+        "camName": "Rail East",
         "sourceData": {
             "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
             "type": "video/mp4"
@@ -10,6 +11,7 @@
     {
         "id": 200,
         "camNumber": 2,
+        "camName": "Rail West",
         "sourceData": {
             "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
             "type": "video/mp4"
