@@ -54,7 +54,7 @@
     </v-layout>
 </template>
 <script>
-import VideoControls from '@/components/video--live-feed--controls.vue';
+import VideoControls from '@/components/video--details--controls.vue';
 import videoPlayer from '@/components/video-player';
 
 import format from 'date-fns/format';
