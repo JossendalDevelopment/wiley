@@ -5,13 +5,14 @@
 </notes>
 <template>
     <v-container grid-list-xs fill-height pa-0>
-        <v-layout row wrap align-center>
+        <v-layout row wrap align-start>
             <v-flex
                 v-for="stream in streams"
                 :key="stream.id"
                 xs6
                 >
-                <video--live-feed :stream="stream" v-on:capture="onCaptureTaken($event)"/>
+                <video-live-feed :stream="stream" />
+                <video-history />
             </v-flex>
         </v-layout>
     </v-container>
@@ -19,21 +20,18 @@
 
 <script>
 import VideoLiveFeed from '@/components/video--live-feed.vue';
+import VideoHistory from '@/components/video--live-feed--history.vue'
 
 import CameraFeedsJson from '@/cameraFeeds.json'
 
 export default {
     components: {
-        'video--live-feed': VideoLiveFeed,
+        'video-live-feed': VideoLiveFeed,
+        'video-history': VideoHistory,
     },
     data: () => ({
         captures: [],
         streams: CameraFeedsJson
     }),
-    methods: {
-        onCaptureTaken(event) {
-            this.captures.push(event);
-        }
-    }
 }
 </script>

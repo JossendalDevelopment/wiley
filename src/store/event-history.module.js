@@ -23,6 +23,7 @@ export const eventHistory = {
             api.createEvent(payload.event)
                 .then(resp => {
                     console.log(resp)
+                    // show popup of some kind on success
                 })
         },
     },

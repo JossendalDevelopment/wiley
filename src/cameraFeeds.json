@@ -14,21 +14,5 @@
             "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
             "type": "video/mp4"
         }
-    },
-    {
-        "id": 300,
-        "camNumber": 3,
-        "sourceData": {
-            "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
-            "type": "video/mp4"
-        }
-    },
-    {
-        "id": 400,
-        "camNumber": 4,
-        "sourceData": {
-            "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
-            "type": "video/mp4"
-        }
     }
 ]
