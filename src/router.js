@@ -13,7 +13,10 @@ export const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', name: 'home', component: Home },
+    { path: '/', name: 'home', component: Home, meta: {
+            requiresAuth: true
+        } 
+    },
     { path: '/sign_in', name: 'signIn', component: SignIn },
     { path: '/overview', name: 'overview', component: Overview, meta: {
             requiresAuth: true
@@ -33,9 +36,7 @@ router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
     if (requiresAuth && !currentUser) {
-        next('/sign-in');
-    } else if (requiresAuth && currentUser) {
-        next();
+        next('/sign_in');
     } else {
         next();
     }

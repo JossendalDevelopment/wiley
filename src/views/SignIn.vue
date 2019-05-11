@@ -61,10 +61,8 @@ export default {
     }),
     methods: {
         login() {
-            console.log(this.employeeEmail, this.password)
             this.$auth.login(this.employeeEmail, this.password)
-                .then(resp => {
-                    console.log("Login response", resp)
+                .then(() => {
                     this.$router.replace('/');
                 })
         },
