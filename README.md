@@ -1,19 +1,21 @@
 # wiley
 
-## Run Dockerized in development
-```
-docker build -t wiley .
-```
+## Run Dockerized with nginx and node
 ```
 ./devserver.sh
 ```
 
-## Project setup
+## Run in development
 ```
-npm install
+npm run dev
 ```
 
-### Compiles and hot-reloads for development
+## Build and deploy to firebase hosting
+```
+npm run deploy
+```
+
+### Compiles and hot-reloads for development W/O express
 ```
 npm run serve
 ```
@@ -23,7 +25,7 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
+### Run Unit tests
 ```
 npm run test
 ```
@@ -32,11 +34,3 @@ npm run test
 ```
 npm run lint
 ```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

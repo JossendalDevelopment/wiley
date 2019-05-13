@@ -14,5 +14,7 @@ echo -e "\033[32mRunning Server...\033[0m"
 # docker run -v ${PWD}:/usr/src/app -p 5001:5001 -it $(docker build -q -f ./Dockerfile .)
 # docker run -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 5000:5000 wiley
 docker build -t wiley .
-docker run -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 5000:5000 wiley
+# docker run -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 5000:5000 wiley
+echo -e "\033[32mApp available at localhost:8080...\033[0m"
+docker run -it -p 8080:80 --rm --name wiley_1 wiley
 
