@@ -1,16 +1,42 @@
-# base image
-FROM node:10.15.0
+# # base image
+# FROM node:lts-alpine
  
-# set working directory
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
+# # cached
+# RUN npm install -g http-server
+# RUN npm install -g @vue/cli
+
+# # set working directory
+# WORKDIR /app
  
-# add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
- 
-# install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install -g @vue/cli
-# start app
-CMD ["npm", "run", "dev"]
+# # install and cache app dependencies
+# COPY package*.json ./
+
+# # install project dependencies
+# RUN npm install
+# RUN cd server && npm install
+
+# # copy project files
+# COPY ./ /app
+
+# # RUN npm run build
+
+# EXPOSE 8080
+# # start app
+# # CMD [ "http-server", "dist"]
+# CMD [ "npm", "run", "dev"]
+
+# # production stage if needed 
+# # FROM nginx:stable-alpine as production-stage
+# # COPY --from=build-stage /app/dist /usr/share/nginx/html
+# # EXPOSE 80
+# # CMD ["nginx", "-g", "daemon off;"]
+
+FROM node:10
+COPY ./ /app
+WORKDIR /app
+RUN npm install && npm run build
+
+FROM nginx
+RUN mkdir /app
+COPY --from=0 /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf
