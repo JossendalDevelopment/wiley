@@ -3,15 +3,20 @@
     Assumption is that any live streaming data and corresponding alerts will come in through here.
 </notes>
 <template>
-    <v-container grid-list-xs fill-height pa-0>
+    <v-container grid-list-xs fill-height>
         <v-layout row wrap align-start>
             <v-flex
                 v-for="stream in streams"
                 :key="stream.id"
                 xs6
                 >
-                <video-live-feed :stream="stream" />
-                <video-history :stream="stream" :events="parseEvents(stream)"/>
+                <v-card>
+                    <v-card-title>
+                        <span class="title mx-auto">{{ stream.camName }}</span>
+                    </v-card-title>
+                    <video-live-feed :stream="stream" />
+                    <video-history :stream="stream" :events="parseEvents(stream)"/>
+                </v-card>
             </v-flex>
         </v-layout>
     </v-container>
@@ -27,9 +32,6 @@ export default {
     components: {
         'video-live-feed': VideoLiveFeed,
         'video-history': VideoHistory,
-    },
-    mounted() {
-        this.$notifySuccess("Sweet success");
     },
     data: () => ({
         captures: [],

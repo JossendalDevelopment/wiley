@@ -7,7 +7,7 @@
 <template>
     <v-hover>
         <!-- <v-flex pa-0 class="video-feed-wrapper" slot-scope="{ hover }"> -->
-        <v-flex class="video-feed-wrapper">
+        <v-flex class="video-feed-wrapper px-0">
 
             <!--  swap between for static image or video -->
             <!-- <video-player :options="getVideoOptions()"/> -->
@@ -86,6 +86,7 @@ export default {
     methods: {
         getVideoOptions() {
             // add the stream url or filepath to video options
+            // required for video-player component
             this.videoOptions.sources = [this.stream.sourceData];
             return this.videoOptions;
         }

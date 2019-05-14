@@ -53,10 +53,7 @@
 
                     <v-menu open-on-hover bottom offset-y v-if="$auth.status.loggedIn">
                         <template v-slot:activator="{ on }">
-                            <v-btn
-                                v-on="on"
-                                flat
-                            >
+                            <v-btn v-on="on" flat >
                                 {{ $auth.user.email }}
                                 <v-icon class="pl-1">fas fa-caret-down</v-icon>
                             </v-btn>
@@ -91,7 +88,7 @@
             <notifications 
                 :max="1"
                 position="bottom right"
-                :duration="-1"
+                :duration="4000"
                 group="app-notifications">
                 <div slot="body" slot-scope="props">
                     <v-alert    

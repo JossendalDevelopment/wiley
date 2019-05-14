@@ -53,7 +53,7 @@ export const authentication = {
                 })
                 .catch(error => {
                     commit('loginFailure', error);
-                    return error;
+                    return {e: error, status: 500};
                 })
             // return api.login(employeeEmail, password)
             //     .then(user => {
