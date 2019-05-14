@@ -7,7 +7,7 @@
 
             <v-flex xs4 style="background-color: #FFFFFF; height:100%;">
                 <v-layout align-center justify-center fill-height>
-                    <v-img max-width="80%" :src="require('@/assets/images/wiley_demo_logo.png')" />
+                    <v-img max-width="80%" :src="'/assets/images/wiley_demo_logo.png'" />
                 </v-layout>
             </v-flex>
 

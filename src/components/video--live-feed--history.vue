@@ -53,6 +53,7 @@
                     <v-btn
                         small
                         outline
+                        style="width:95%;"
                         @click="editItem(props.item)"
                         class="ml-auto white--text"
                     >
@@ -70,6 +71,7 @@
                     <v-btn
                         small
                         outline
+                        style="width:95%;"
                         class="ml-auto"
                         @click="editItem(props.item)"
                     >

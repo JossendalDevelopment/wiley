@@ -31,12 +31,14 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    // redirect to login page if not logged in and trying to access a restricted page
-    const currentUser = firebase.auth().currentUser;
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-
-    if (requiresAuth && !currentUser) {
-        next('/sign_in');
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                next('/sign_in');
+            } else {
+                next();
+            }
+        });
     } else {
         next();
     }
