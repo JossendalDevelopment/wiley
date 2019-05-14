@@ -1,7 +1,7 @@
 <notes>
     The goal of this component is to add any required overlay ui to the video-player component.
     Also the video-players options are being defined here and should likely not be.
-    Pending solution would be to have the video-player itself set those options and let parent components pass in any different video options. Same issue in live-video--detals component.
+    Pending solution would be to have the video-player itself set those options and let parent components override any necessary video options. Same issue in live-video--detals component.
     Additionally the controls bar could be made into a component that accepts its content via slots, making it usable in any video view.
 </notes>
 <template>
@@ -9,7 +9,9 @@
         <!-- <v-flex pa-0 class="video-feed-wrapper" slot-scope="{ hover }"> -->
         <v-flex class="video-feed-wrapper">
 
-            <video-player :options="getVideoOptions()"/>
+            <!--  swap between for static image or video -->
+            <!-- <video-player :options="getVideoOptions()"/> -->
+            <dummy-camera-image :source="stream.staticImage" />
 
             <v-layout class="controls">
                 <v-layout 
@@ -45,11 +47,13 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/video-player';
+// import VideoPlayer from '@/components/video-player';
+import DummyCameraImage from '@/components/dummy-camera-image';
 
 export default {
     components: {
-        'video-player': videoPlayer,
+        // 'video-player': VideoPlayer,
+        'dummy-camera-image': DummyCameraImage
     },
     props: {
         stream: {

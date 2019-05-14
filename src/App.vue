@@ -7,7 +7,7 @@
                         style="width:60px; height:50px; position:absolute; bottom:-1px; left:0px;"
                         contain
                         @click="$router.push('/')"
-                        :src="require('@/assets/images/wiley_demo_header_icon.png')"></v-img>
+                        :src="'/assets/images/wiley_demo_header_icon.png'"></v-img>
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>

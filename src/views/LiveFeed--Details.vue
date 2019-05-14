@@ -7,8 +7,8 @@
             <video--controls />
         </V-flex>
         <v-flex xs9 v-if="!working">
-            <v-layout row wrap align-start justify-center fill-height>
-                <!-- Above video -->
+            <!-- Above video -->
+            <v-layout align-center justify-center>
                 <v-flex xs10>
                     <v-layout justify-space-between align-center>
                         <p class="mb-0">{{ parseTime }}</p>
@@ -18,6 +18,8 @@
                         </v-layout>
                     </v-layout>
                 </v-flex>
+            </v-layout>
+            <v-layout row wrap align-start justify-center>
                 <!-- video -->
                 <v-flex xs10 class="video-feed-wrapper">
 
@@ -36,7 +38,7 @@
                 <!-- below video -->
                 <v-flex xs10>
                     <v-layout justify-center>
-                        <h3>{{ formatProbabilityText }}</h3>
+                        <h3 class="py-3">{{ formatProbabilityText }}</h3>
                     </v-layout>
                 </v-flex>
                 <v-flex xs10>
