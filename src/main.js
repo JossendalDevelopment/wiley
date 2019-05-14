@@ -7,6 +7,7 @@ import { router } from './router';
 import store from './store/index';
 
 import AuthPlugin from '@/plugins/auth.js';
+import Notifications from '@/plugins/notifications.js';
 import CameraAlertPlugin from '@/plugins/cameraAlert.js';
 import EventHistoryPlugin from '@/plugins/event.js';
 
@@ -27,6 +28,7 @@ Vue.config.productionTip = false;
 Vue.use(AuthPlugin);
 Vue.use(CameraAlertPlugin);
 Vue.use(EventHistoryPlugin);
+Vue.use(Notifications);
 
 new Vue({
   router,

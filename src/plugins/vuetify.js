@@ -8,7 +8,7 @@ Vue.use(Vuetify, {
     primaryDark: '#cccccc', // dark grey
     secondary: '#424242',
     accent: '#d42017',    // wiley red
-    error: '#FF5252',
+    error: '#FF4F65',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FFC107'

@@ -4,7 +4,10 @@ import AlertData from '@/types/cameraAlertType';
 
 export const cameraAlert = {
     namespaced: true,
-    state: {alertData: {...new AlertData()} } ,
+    state: {
+        alertData: {...new AlertData()},
+        active: false
+    },
     getters: {
         alert: (state) => {
             return state;
@@ -13,9 +16,11 @@ export const cameraAlert = {
     mutations: {
         createAlert(state, payload) {
             state.alertData = payload.alertData;
+            state.active = true;
         },
         clearAlert: (state) => {
             state.alertData = new AlertData();
+            state.active = false;
         }
     },
     actions: {

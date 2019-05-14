@@ -17,6 +17,7 @@ Object.defineProperty(AlertData, 'template',  {
             'duration': '',
             'cameraId': null,
             'camNumber': null,
+            'camName': '',
             'name': '',
             'sourceData': {
                 'src': '',

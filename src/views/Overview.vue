@@ -1,7 +1,6 @@
 <notes>
     This view will serve as the default screen, showing all available cameras live feeds.
-    It may or may not have any other ui such as the video-controls component.
-    Assumption is that any live streaming data will come in through here.
+    Assumption is that any live streaming data and corresponding alerts will come in through here.
 </notes>
 <template>
     <v-container grid-list-xs fill-height pa-0>
@@ -28,6 +27,9 @@ export default {
     components: {
         'video-live-feed': VideoLiveFeed,
         'video-history': VideoHistory,
+    },
+    mounted() {
+        this.$notifySuccess("Sweet success");
     },
     data: () => ({
         captures: [],
