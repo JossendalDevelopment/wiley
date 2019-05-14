@@ -13,7 +13,9 @@
             <!-- <video-player :options="getVideoOptions()"/> -->
             <dummy-camera-image :source="stream.staticImage" />
 
-            <v-layout class="controls">
+            <!-- This below is the alert bar that overlay the top of the image/video stream -->
+            <!-- Saving in case ui calls for it again but scrapped for now -->
+            <!-- <v-layout class="controls">
                 <v-layout 
                     class="top" 
                     justify-end
@@ -41,7 +43,7 @@
                         Inspect
                     </v-btn>
                 </v-layout>
-            </v-layout>
+            </v-layout> -->
         </v-flex>
     </v-hover>
 </template>
