@@ -7,7 +7,7 @@
 <template>
     <v-hover>
         <!-- <v-flex pa-0 class="video-feed-wrapper" slot-scope="{ hover }"> -->
-        <v-flex class="video-feed-wrapper px-0">
+        <v-flex class="video-feed-wrapper pa-0">
 
             <!--  swap between for static image or video -->
             <!-- <video-player :options="getVideoOptions()"/> -->
