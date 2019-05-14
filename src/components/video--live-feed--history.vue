@@ -1,3 +1,7 @@
+<notes>
+    A table based version for showing most recent events related to a particular camera.
+    Being kept pending a finalized ui. NOT CURRENTLY IN USE
+</notes>
 <template>
     <div>
         <v-toolbar flat>

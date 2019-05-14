@@ -3,7 +3,7 @@
     Assumption is that any live streaming data and corresponding alerts will come in through here.
 </notes>
 <template>
-    <v-container grid-list-xs fill-height>
+    <v-container grid-list-md fill-height>
         <v-layout row wrap align-start>
             <v-flex
                 v-for="stream in streams"
@@ -11,7 +11,7 @@
                 xs6
                 >
                 <v-card>
-                    <v-card-title>
+                    <v-card-title :style="`background-color:${$vuetify.theme.primary}`">
                         <span class="title mx-auto">{{ stream.camName }}</span>
                     </v-card-title>
                     <video-live-feed :stream="stream" />
@@ -24,14 +24,15 @@
 
 <script>
 import VideoLiveFeed from '@/components/video--live-feed.vue';
-import VideoHistory from '@/components/video--live-feed--history.vue'
+// import VideoHistory from '@/components/video--live-feed--history.vue'
+import VideoHistory2 from '@/components/video--live-feed--history2.vue'
 
 import CameraFeedsJson from '@/cameraFeeds.json'
 
 export default {
     components: {
         'video-live-feed': VideoLiveFeed,
-        'video-history': VideoHistory,
+        'video-history': VideoHistory2,
     },
     data: () => ({
         captures: [],
