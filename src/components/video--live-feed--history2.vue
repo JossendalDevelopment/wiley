@@ -1,13 +1,13 @@
 <template>
     <div>
-        <v-toolbar flat :style="`background-color:${$vuetify.theme.primary}`">
+        <v-toolbar flat color="white">
             <v-btn
                 fab
                 small
                 color="error"
                 @click="dialog = !dialog"
             >
-                <span style="font-size: 1.4rem;">11</span>
+                <span style="font-size: 1.4rem;">{{ events.length }}</span>
             </v-btn>
             <span class="title">Alerts</span>
     
@@ -16,17 +16,18 @@
             <v-btn
                 small
                 outline
-                @click="editItem(props.item)"
+                @click="$router.push({ name: 'cam_details', params: { id: stream.id } })"
                 class="ml-auto"
             >
                 View Details
             </v-btn>
         </v-toolbar>
-        <v-list :style="`background-color:${$vuetify.theme.primary}`">
+        <v-list class="py-0">
             <template v-for="(item, index) in items">
             <v-list-tile
               :key="item.title"
               ripple
+              @click="() => {}"
             >
                 <v-list-tile-action>
                     <p 
@@ -64,38 +65,57 @@ export default {
             required: true
         }
     },
+    mounted() {
+        const grouped = this.groupBy(this.events, (evt) => evt.detectedObject)
+        this.items.forEach(item => {
+            item.count = grouped.get(item.title) ? grouped.get(item.title).length : 0
+        })
+    },
     data: () => ({
         selected: [2],
         items: [
           {
             action: '15 min',
             title: 'Person',
-            count: 7
+            count: null
           },
           {
             action: '2 hr',
             title: 'Coyote',
-            count: 0
+            count: null
           },
           {
             action: '6 hr',
             title: 'Rail Car(Loading)',
-            count: 3
+            count: null
           },
           {
             action: '12 hr',
             title: 'Rail Car(Moving)',
-            count: 1
+            count: null
           },
           {
             action: '18hr',
             title: 'Operations/Maintenance Inspection',
-            count: 0
+            count: null
           }
         ],
         timer: null,
     }),
     methods: {
+        groupBy(list, keyGetter) {
+            const map = new Map();
+            list.forEach((item) => {
+                const key = keyGetter(item);
+                const collection = map.get(key);
+                if (!collection) {
+                    map.set(key, [item]);
+                } else {
+                    collection.push(item);
+                }
+            });
+            return map;
+        },
         close() {
             this.dialog = false
             setTimeout(() => {

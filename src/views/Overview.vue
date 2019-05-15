@@ -11,7 +11,7 @@
                 xs6
                 >
                 <v-card>
-                    <v-card-title :style="`background-color:${$vuetify.theme.primary}`">
+                    <v-card-title>
                         <span class="title mx-auto">{{ stream.camName }}</span>
                     </v-card-title>
                     <video-live-feed :stream="stream" />
@@ -24,10 +24,11 @@
 
 <script>
 import VideoLiveFeed from '@/components/video--live-feed.vue';
-// import VideoHistory from '@/components/video--live-feed--history.vue'
-import VideoHistory2 from '@/components/video--live-feed--history2.vue'
+// import VideoHistory from '@/components/video--live-feed--history.vue';
+import VideoHistory2 from '@/components/video--live-feed--history2.vue';
 
-import CameraFeedsJson from '@/cameraFeeds.json'
+import CameraFeedsJson from '@/cameraFeeds.json';
+import EventsJson from '@/dummyEvents.json';
 
 export default {
     components: {
@@ -37,126 +38,12 @@ export default {
     data: () => ({
         captures: [],
         streams: CameraFeedsJson,
-        events: [
-            // simulating a number of 'alert events'
-            {
-                camId: 100,
-                id: '01',
-                startTime: 159,
-                endTime: 6.0,
-                duration: 24,
-                status: 'active'
-            },
-            {
-                camId: 200,
-                id: '02',
-                startTime: 237,
-                endTime: 9.0,
-                duration: 37,
-                status: 'closed'
-            },
-            {
-                camId: 100,
-                id: '03',
-                startTime: 262,
-                endTime: 16.0,
-                duration: 23,
-                status: 'closed'
-            },
-            {
-                camId: 200,
-                id: '04',
-                startTime: 305,
-                endTime: 3.7,
-                duration: 67,
-                status: 'closed'
-            },
-            {
-                camId: 100,
-                id: '05',
-                startTime: 356,
-                endTime: 16.0,
-                duration: 49,
-                status: 'closed'
-            },
-            {
-                camId: 200,
-                id: '06',
-                startTime: 375,
-                endTime: 0.0,
-                duration: 94,
-                status: 'pending'
-            },
-            {
-                camId: 100,
-                id: '07',
-                startTime: 392,
-                endTime: 0.2,
-                duration: 98,
-                status: 'active'
-            },
-            {
-                camId: 200,
-                id: '08',
-                startTime: 408,
-                endTime: 3.2,
-                duration: 87,
-                status: 'pending'
-            },
-            {
-                camId: 100,
-                id: '09',
-                startTime: 452,
-                endTime: 25.0,
-                duration: 51,
-                status: 'closed'
-            },
-            {
-                camId: 200,
-                id: '10',
-                startTime: 518,
-                endTime: 26.0,
-                duration: 65,
-                status: 'closed'
-            },
-            {
-                camId: 100,
-                id: '11',
-                startTime: 452,
-                endTime: 25.0,
-                duration: 51,
-                status: 'closed'
-            },
-            {
-                camId: 200,
-                id: '12',
-                startTime: 518,
-                endTime: 26.0,
-                duration: 65,
-                status: 'closed'
-            },
-            {
-                camId: 100,
-                id: '13',
-                startTime: 452,
-                endTime: 25.0,
-                duration: 51,
-                status: 'closed'
-            },
-            {
-                camId: 200,
-                id: '14',
-                startTime: 518,
-                endTime: 26.0,
-                duration: 65,
-                status: 'closed'
-            }
-        ]
+        events: EventsJson
     }),
     methods: {
         parseEvents(stream) {
-            // cheese way to split events off to their respective cameras
-            return this.events.filter((e) => {
+            // cheese way to split dummy events off to their respective cameras
+            return this.events.events.filter((e) => {
                 return e.camId == stream.id
             })
         }

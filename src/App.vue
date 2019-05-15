@@ -16,6 +16,7 @@
             v-model="$cameraAlert.active"
             color="error"
             light
+            transition="slide-y-transition"
             dismissible
             style="margin-top:0px; margin-bottom:0px; padding-right:2rem;">
                 <p 
@@ -28,7 +29,7 @@
         </v-alert>
 
         <v-app id="inspire">
-            <v-toolbar app absolute v-if="$auth.status.loggedIn">
+            <v-toolbar app flat absolute v-if="$auth.status.loggedIn">
                 <v-toolbar-items style="position:relative; margin-right:60px;">
                     <v-img 
                         style="width:60px; height:50px; position:absolute; bottom:-1px; left:0px;"
@@ -39,12 +40,39 @@
                 <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>
                 </v-toolbar-items>
-                <v-toolbar-items class="hidden-xs-and-down">
+                <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/overview" flat >Feed</v-btn>
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn v-if="$auth.status.loggedIn" flat >History</v-btn>
                 </v-toolbar-items>
+                <v-spacer> </v-spacer>
+
+                <v-menu
+                    transition="slide-y-transition"
+                    bottom
+                >
+                    <template v-slot:activator="{ on }">
+                        <span>Status: </span>
+                        <v-btn
+                            v-on="on"
+                            color="white"
+                        >
+                            Normal Operations in Progress
+                            <v-icon class="pl-1">fas fa-caret-down</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-tile
+                        v-for="(n, i) in 3"
+                        :key="i"
+                        @click="() => {}"
+                        >
+                        <v-list-tile-title>{{ n }}</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
+
                 <v-spacer> </v-spacer>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
@@ -85,6 +113,8 @@
             <!-- <v-footer app fixed>
                 <span>&copy; 2019 Footer?</span>
             </v-footer> -->
+
+            <!-- global notifications logic -->
             <notifications 
                 :max="1"
                 position="bottom right"
