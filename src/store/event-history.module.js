@@ -1,4 +1,5 @@
 import api from '../services/event.service';
+
 api.new('/api');
 
 export const eventHistory = {
@@ -26,5 +27,11 @@ export const eventHistory = {
                     // show popup of some kind on success
                 })
         },
+        getAllEvents() {
+            return api.getAllEvents()
+                .then(resp => {
+                    return resp;
+                })
+        }
     },
 }

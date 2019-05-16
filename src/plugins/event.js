@@ -11,6 +11,9 @@ export default {
                             event
                         });
                     }
+                    event.getAllEvents = () => {
+                        return store.dispatch('eventHistory/getAllEvents', { })
+                    }
                     return event;
                 }
             }
