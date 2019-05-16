@@ -1,3 +1,7 @@
+<notes>
+    a list based layout for the controls sidebar related to the details view
+    CURRENTLY NOT IN USE
+</notes>
 <template>
     <v-layout column justify-space-between style="height:100%; background-color:#FFF;">
         <v-list>
