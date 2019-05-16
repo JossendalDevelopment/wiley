@@ -4,9 +4,9 @@
 <template>
     <v-layout class="test-ref">
         <V-flex xs3>
-            <video--controls />
+            <video--controls v-if="!working" :stream="stream" :events="parseEvents" />
         </V-flex>
-        <v-flex xs9 v-if="!working">
+        <v-flex xs9>
             <!-- Above video -->
             <v-layout align-center justify-center>
                 <v-flex xs10>
@@ -23,7 +23,8 @@
                 <!-- video -->
                 <v-flex xs10 class="video-feed-wrapper">
 
-                    <video-player :options="getVideoOptions"/>
+                    <dummy-camera-image :source="stream.staticImage" />
+                    <!-- <video-player :options="getVideoOptions"/> -->
                     <!-- video overlay -->
                     <v-layout class="controls" align-start justify-end>
                         <div style="display:flex; align-items:center; padding:10px;" :style="`background-color:rgba(222,222,222,0.3)`">
@@ -56,21 +57,25 @@
     </v-layout>
 </template>
 <script>
-import VideoControls from '@/components/video--details--controls.vue';
-import videoPlayer from '@/components/video-player';
+import VideoControls from '@/components/video--details--controls2.vue';
+// import videoPlayer from '@/components/video-player';
+import DummyCameraImage from '@/components/dummy-camera-image';
 
 import format from 'date-fns/format';
 
 import CameraFeedsJson from '@/cameraFeeds.json';
-import { setTimeout } from 'timers';
+import EventsJson from '@/dummyEvents.json';
 
 export default {
     components: {
         'video--controls': VideoControls,
-        'video-player': videoPlayer
+        'dummy-camera-image': DummyCameraImage
+        // 'video-player': videoPlayer
     },
     data: () => ({
         stream: {},
+        events: EventsJson,
+        working: true,
         videoOptions: {
             autoplay: true,
             controls: true,
@@ -80,17 +85,13 @@ export default {
             muted: true,
             language: 'en',
             playbackRates: [0.5, 1.0, 1.5, 2.0],
-            sources: [] // being set from overview and source prop
+            sources: [] // being set from setVideoOptions
         },
-        working: true
     }),
     mounted() {
         this.stream = CameraFeedsJson.find(stream => stream.id == this.$route.params.id);
+        this.working = false;
         this.setVideoOptions();
-        setTimeout(() => {
-            // just simulating an async
-            this.working = false;
-        }, 200)
     },
     methods: {
         setVideoOptions() {
@@ -108,11 +109,18 @@ export default {
             this.$eventHistory.createEvent(this.$cameraAlert.alertData)
             // send alertData to a broadcast message queue
             // send event log to history queue
-        }
+        },
     },
     computed: {
         parseTime() {
             return format(new Date(), 'MM/DD/YYYY   hh:mm:ss')
+        },
+        parseEvents() {
+            // cheese way to split dummy events off to their respective cameras
+            // TODO this function is being duplicated in Overview.vue - Abstract it
+            return this.events.events.filter((e) => {
+                return e.camId == this.stream.id
+            })
         },
         getVideoOptions() {
             return this.videoOptions;

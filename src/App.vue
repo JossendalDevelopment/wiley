@@ -57,20 +57,17 @@
                         <v-btn
                             v-on="on"
                             color="white"
+                            @click="toggleOperationsStatus()"
                         >
-                            Normal Operations in Progress
+                            {{ operationsStatus.name }}
                             <v-icon class="pl-1">fas fa-caret-down</v-icon>
                         </v-btn>
                     </template>
-                    <v-list>
-                        <v-list-tile
-                        v-for="(n, i) in 3"
-                        :key="i"
-                        @click="() => {}"
-                        >
-                        <v-list-tile-title>{{ n }}</v-list-tile-title>
+                    <!-- <v-list>
+                        <v-list-tile @click="() => {toggleOperationsStatus()}" >
+                            <v-list-tile-title>{{ operationsStatus.name }}</v-list-tile-title>
                         </v-list-tile>
-                    </v-list>
+                    </v-list> -->
                 </v-menu>
 
                 <v-spacer> </v-spacer>
@@ -140,7 +137,8 @@ export default {
     name: 'App',
     props: { },
     data: () => ({
-        alert: true
+        alert: true,
+        operationsStatus: {code: 1, name: 'Normal Operations in Progress'}
     }),
     computed: {
         formatAlertText() {
@@ -152,6 +150,11 @@ export default {
         async logout() {
             await this.$auth.logout();
             this.$router.replace('/sign_in');
+        },
+        toggleOperationsStatus() {
+            this.operationsStatus.code === 1 ?
+                this.operationsStatus = {code:2, name: 'Off Operations'} :
+                this.operationsStatus = {code:1, name: 'Normal Operations in Progress'}
         },
         simulateAlert() {
             const alertData = new AlertData({
@@ -184,7 +187,7 @@ export default {
 </script>
 <style>
 #app > div.v-alert.error > a > i {
-    /* overrides alert bar cancel icon color to white */
+    /* overrides alert header bars' cancel icon color to white */
     color:white;
 }
 </style>
