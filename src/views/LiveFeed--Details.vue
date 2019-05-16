@@ -44,22 +44,42 @@
                 </v-flex>
                 <v-flex xs10>
                     <v-layout justify-center>
-                        <v-btn @click="falseAlarm()" large class="error btn">
+                        <v-btn @click="openFalseAlarmModal()" large class="error btn">
                             False Alarm 
                         </v-btn>
-                        <v-btn @click="confirmObject()" large class="success btn">
+                        <v-btn @click="openConfirmModal()" large class="success btn">
                             Confirm Object
                         </v-btn>
                     </v-layout>
                 </v-flex>
             </v-layout>
         </v-flex>
+        <!-- Confirm/Deny modals -->
+        <app-dialog ref="confirm" max-width="500">
+            <template slot="modaltitle">
+                Confirm?
+            </template>
+            <template slot="modalcontent">
+                <div>Confirm this is a {{ $cameraAlert.alertData.detectedObject }}?</div>
+            </template>
+            <v-btn slot="detailsButton" color="success" @click="confirmObject()">Confirm</v-btn> 
+        </app-dialog>
+        <app-dialog ref="falsealarm" max-width="500">
+            <template slot="modaltitle">
+                Confirm?
+            </template>
+            <template slot="modalcontent">
+                <div>Register this event as a false alarm?</div>
+            </template>
+            <v-btn slot="detailsButton" color="success" @click="falseAlarm()">Confirm</v-btn> 
+        </app-dialog>
     </v-layout>
 </template>
 <script>
 import VideoControls from '@/components/video--details--controls2.vue';
 // import videoPlayer from '@/components/video-player';
 import DummyCameraImage from '@/components/dummy-camera-image';
+import Dialog from '@/components/app-dialog.vue';
 
 import format from 'date-fns/format';
 
@@ -69,7 +89,8 @@ import EventsJson from '@/dummyEvents.json';
 export default {
     components: {
         'video--controls': VideoControls,
-        'dummy-camera-image': DummyCameraImage
+        'dummy-camera-image': DummyCameraImage,
+        'app-dialog': Dialog
         // 'video-player': videoPlayer
     },
     data: () => ({
@@ -97,18 +118,26 @@ export default {
         setVideoOptions() {
             this.videoOptions.sources = [this.stream.sourceData];
         },
+        openConfirmModal() {
+            this.$refs.confirm.open();
+        },
+        openFalseAlarmModal() {
+            this.$refs.falsealarm.open();
+        },
         falseAlarm() {
             // clear alertData state
             this.$cameraAlert.clearAlert();
             // send event log to history queue of some kind
             // this.$eventHistory.addEvent(this.$cameraAlert.alertData);
-            // route somewhere
+            // route somewhere?
             this.$router.replace('/overview')
         },
         confirmObject() {
+            // TODO change alert status to closed/confirmed before submitting
             this.$eventHistory.createEvent(this.$cameraAlert.alertData)
-            // send alertData to a broadcast message queue
+            // send alertData to a broadcasting message queue
             // send event log to history queue
+            // clear active event
         },
     },
     computed: {
