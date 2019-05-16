@@ -16,15 +16,24 @@ instance.new = function(url = '/') {
 };
 
 instance.createEvent = function(event) {
-    console.log("Event service", event)
     return this.post('/create_event', { event })
         .then(resp => {
-            console.log("event service create event", resp)
+            console.log("event service created event", resp)
             return resp.data;
         })
         .catch(err => {
             return err;
         })
 };
+
+instance.getAllEvents = function() {
+    return this.get('/get_all_events')
+        .then(resp => {
+            return resp.data;
+        })
+        .catch(err => {
+            return err;
+        })
+}
 
 export default instance;

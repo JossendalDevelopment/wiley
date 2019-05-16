@@ -76,13 +76,12 @@ export default {
     data: () => ({
         employeeEmail: '',
         password: '',
-        remember: false
+        remember: false,
     }),
     methods: {
         login() {
             this.$auth.login(this.employeeEmail, this.password)
                 .then((resp) => {
-                    console.log("RESP", resp)
                     if(resp.status === 500) {
                         this.$notifyError('Invalid email and/or password');
                         return;

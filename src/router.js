@@ -4,6 +4,7 @@ import firebase from 'firebase';
 
 import CameraDetailsPage from '@/views/LiveFeed--Details.vue';
 import Overview from '@/views/Overview.vue';
+import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
 import Home from '@/views/Home.vue';
 
@@ -25,6 +26,10 @@ export const router = new Router({
     { path: '/cam_details/:id', name: 'cam_details', component: CameraDetailsPage, meta: {
             requiresAuth: true
         } 
+    },
+    { path: '/history', name: 'history', component: History, meta: {
+            requiresAuth: true
+        }
     },
     { path: '*', redirect: '/' }
   ]

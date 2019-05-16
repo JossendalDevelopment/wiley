@@ -44,7 +44,7 @@
                     <v-btn v-if="$auth.status.loggedIn" to="/overview" flat >Feed</v-btn>
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" flat >History</v-btn>
+                    <v-btn v-if="$auth.status.loggedIn" to="/history" flat >History</v-btn>
                 </v-toolbar-items>
                 <v-spacer> </v-spacer>
 

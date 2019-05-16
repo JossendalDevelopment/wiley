@@ -11,7 +11,6 @@ router.get('/authenticated', (req, res) => {
 })
 
 router.post('/create_event', (req, res) => {
-    console.log("BODY", req.body.event)
     const event = req.body.event;
     db.collection('event_log').add(event)
         .then((docRef) => {
@@ -22,6 +21,18 @@ router.post('/create_event', (req, res) => {
         });
     formatResponse(res, 'success', {});
 });
+
+router.get('/get_all_events', (req, res) => {
+    let result = [];
+    db.collection("event_log").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            let newDoc = doc.data();
+            newDoc.id = doc.id;
+            result.push(newDoc)
+        });
+        formatResponse(res, 'success', result)
+    });
+})
 
 
 module.exports = router;

@@ -1,11 +1,17 @@
-import { shallowMount } from '@vue/test-utils';
+/*   This is likely in disarray due to rapid ui iteration   */
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import { shallowMount } from '@vue/test-utils';
+// import axios from 'axios';
+jest.mock('axios', () => ({
+    get: jest.fn(),
+}));
 
-import Home from '@/views/Home.vue';
-import SignIn from '@/views/SignIn.vue';
-import Overview from '@/views/Overview.vue';
 import LiveFeedDetails from '@/views/LiveFeed--Details.vue';
+import Overview from '@/views/Overview.vue';
+import History from '@/views/History.vue';
+import SignIn from '@/views/SignIn.vue';
+import Home from '@/views/Home.vue';
 
 describe('Home.vue renders', () => {
     let wrp;
@@ -27,8 +33,17 @@ describe('SignIn.vue renders', () => {
 
     beforeEach(() => {
         Vue.use(Vuetify);
+        // axios.get.mockClear();
+        // axios.get.mockReturnValue(Promise.resolve({}));
     
-        wrp = shallowMount(SignIn, { });
+    });
+    wrp = shallowMount(SignIn, {
+        mocks: {
+            $vuetify: {
+                theme: {},
+                breakpoint: {}
+            },
+        },
     });
 
     // checks SignIn.vue is a component.
@@ -74,6 +89,21 @@ describe('LiveFeed--Details renders', () => {
         expect(wrp.contains(".test-ref"))
     })
 });
+
+describe('History renders', () => {
+    let wrp;
+
+    beforeEach(() => {
+        Vue.use(Vuetify);
+    
+        wrp = shallowMount(History, { });
+    });
+    // checks History.vue is a component.
+    it('Registers a component', () => {
+        expect(wrp.isVueInstance()).toBeTruthy()
+    })
+});
+
 // describe('SignIn.vue', () => {
 //   it('renders props.msg when passed', () => {
 //     const msg = 'new message'
