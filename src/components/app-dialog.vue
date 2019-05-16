@@ -27,7 +27,7 @@
                 large 
                 @click.stop="close"
             >
-                cancel
+                far fa-times-circle
             </v-icon>
             <span class="right mt-3 mr-3" style="display:inline-block;">
                 <slot name="leftofclose" />
