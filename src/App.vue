@@ -19,25 +19,27 @@
             transition="slide-y-transition"
             dismissible
             style="margin-top:0px; margin-bottom:0px; padding-right:2rem;">
-                <p 
+            <v-layout align-center justify-center>
+                <span 
                     style="cursor: pointer;"
                     @click="$router.push({ 
                         name: 'cam_details', 
                         params: { id: $cameraAlert.alertData.cameraId } 
                     })"
-                    class="text-xs-center mb-0 headline">{{ formatAlertText }}</p>
+                    class="text-xs-center mb-0 headline">{{ formatAlertText }}</span>
+                <a class="ml-3" style="text-decoration:underline; cursor:pointer;">Snooze alerts for 1 minute?</a>
+            </v-layout>
         </v-alert>
 
         <v-app id="inspire">
-            <v-toolbar app flat absolute v-if="$auth.status.loggedIn">
-                <v-toolbar-items style="position:relative; margin-right:60px;">
-                    <v-img 
-                        style="width:60px; height:50px; position:absolute; bottom:-1px; left:0px;"
-                        contain
-                        @click="$router.push('/')"
-                        :src="'/assets/images/wiley_demo_header_icon.png'"></v-img>
-                </v-toolbar-items>
-                <v-toolbar-items class="hidden-sm-and-down">
+            <v-toolbar 
+                app 
+                flat 
+                absolute 
+                v-if="$auth.status.loggedIn" 
+                :style="`background-color:${$vuetify.theme.primary}`">
+                <v-toolbar-title @click="$router.push('/')">Wiley</v-toolbar-title>
+                <!-- <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-sm-and-down">
@@ -45,7 +47,7 @@
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/history" flat >History</v-btn>
-                </v-toolbar-items>
+                </v-toolbar-items> -->
                 <v-spacer> </v-spacer>
 
                 <v-menu
@@ -56,12 +58,15 @@
                         <span>Status: </span>
                         <v-btn
                             v-on="on"
-                            color="white"
+                            flat
+                            color="secondary" 
+                            style="background-color:#FFF;"
                             @click="toggleOperationsStatus()"
                         >
                             {{ operationsStatus.name }}
                             <v-icon class="pl-1">fas fa-caret-down</v-icon>
                         </v-btn>
+                        <span>{{ currentDateTime }}</span>   
                     </template>
                     <!-- <v-list>
                         <v-list-tile @click="() => {toggleOperationsStatus()}" >
@@ -78,19 +83,21 @@
 
                     <v-menu open-on-hover bottom offset-y v-if="$auth.status.loggedIn">
                         <template v-slot:activator="{ on }">
-                            <v-btn v-on="on" flat >
+                            <v-btn v-on="on" flat>
                                 {{ $auth.user.email }}
                                 <v-icon class="pl-1">fas fa-caret-down</v-icon>
                             </v-btn>
                         </template>
 
                         <v-list>
-                            <v-list-tile
-                                v-for="(n) in 3"
-                                :key="n"
-                                @click="() => null"
-                            >
-                                <v-list-tile-title>{{ n }}</v-list-tile-title>
+                            <v-list-tile @click="$router.push('/')" >
+                                <v-list-tile-title>Home</v-list-tile-title>
+                            </v-list-tile>
+                            <v-list-tile @click="$router.push('/overview')" >
+                                <v-list-tile-title>Feed</v-list-tile-title>
+                            </v-list-tile>
+                            <v-list-tile @click="$router.push('/history')" >
+                                <v-list-tile-title>History</v-list-tile-title>
                             </v-list-tile>
                         </v-list>
                     </v-menu>
@@ -101,7 +108,7 @@
                 </v-toolbar-items>
             </v-toolbar>
             <v-content app>
-                <v-container fluid fill-height primary pa-0>
+                <v-container fluid fill-height pa-0>
 
                     <router-view></router-view>
 
@@ -131,6 +138,8 @@
     </div>
 </template>
 <script>
+import format from 'date-fns/format';
+
 import AlertData from '@/types/cameraAlertType';
 
 export default {
@@ -144,6 +153,9 @@ export default {
         formatAlertText() {
             let alert = this.$cameraAlert.alertData;
             return `1 ${alert.detectedObject} identified in ${alert.camName}`;
+        },
+        currentDateTime() {
+            return format(new Date(), 'MMM DD, YYYY - hh:mm;ss')
         }
     },
     methods: {

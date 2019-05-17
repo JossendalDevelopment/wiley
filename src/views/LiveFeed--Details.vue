@@ -6,7 +6,7 @@
         <V-flex xs3>
             <video--controls v-if="!working" :stream="stream" :events="parseEvents" />
         </V-flex>
-        <v-flex xs9>
+        <v-flex xs9 class="video-container">
 <!-- Above video -->
             <v-layout align-center justify-center>
                 <v-flex xs10>
@@ -29,18 +29,38 @@
                     <dummy-camera-image :source="stream.staticImage" />
                     <!-- <video-player :options="getVideoOptions"/> -->
                     <!-- video overlay -->
-                    <v-layout class="controls top" align-start justify-end>
-                        <div 
-                            style="display:flex; align-items:center; padding:10px; cursor:pointer;" 
-                            :style="`background-color:rgba(222,222,222,0.3)`">
+                    <v-layout class="controls-top" align-start justify-end>
+                        <div style="display:flex; align-items:center; padding:10px; cursor:pointer;" >
                             <v-icon>fas fa-search-plus</v-icon>
-                            <p 
-                                class="pl-2 mb-0 test-ref primary--text">
-                                Zoom
-                            </p>
+                            <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
                         </div>
                     </v-layout>
-                    <v-layout class="controls bottom" align-start justify-end>
+                    <v-layout 
+                        v-if="$route.fullPath !== '/overview'" 
+                        class="controls-bottom" 
+                        align-center>
+                        <v-flex grow class="slider">
+                            <v-layout justify-space-between align-center>
+                                <div class="back" @click="() => {}">
+                                    <v-icon>fas fa-step-backward</v-icon>
+                                </div>
+                                <div class="handle"></div>
+                                <div class="forward" @click="() => {}">
+                                    <v-icon>fas fa-step-forward</v-icon>
+                                </div>
+                            </v-layout>
+                        </v-flex>
+                        <v-flex shrink class="review ml-0">
+                            <p class="px-2 mb-0 secondary--text">
+                                Review Playback
+                            </p>
+                        </v-flex>
+                        <v-flex shrink class="live">
+                            <div class="live-icon"></div>
+                            <p class="px-2 mb-0 secondary--text">
+                                Live Feed
+                            </p>
+                        </v-flex>
                         <!-- Custom video controls UI -->
                         <!-- <div style="display:flex; align-items:center; padding:10px;" :style="`background-color:rgba(222,222,222,0.3)`">
                             <div class="live-icon"></div>
@@ -58,6 +78,7 @@
                         <v-btn 
                             v-for="button in mainButtons"
                             :key="button.type+1"
+                            flat
                             @click="classification = button.type" 
                             :class="classification === button.type ? 'secondary' : 'primary black--text'">
                             {{ button.type }}
@@ -70,6 +91,7 @@
                         <v-btn 
                             v-for="(sub, index) in activeCategory.subCats"
                             :key="sub+index"
+                            flat
                             @click="subClassification = sub" 
                             :class="subClassification === sub ? 'secondary' : 'primary black--text'">
                             {{ sub }}
@@ -218,10 +240,13 @@ export default {
 .video-feed-wrapper {
     position: relative;
 }
-.controls {
+.video-container {
+    background-color: var(--v-primaryLight-base);
+}
+.controls-top {
     position: absolute;
     top: 0px;
-    right: 0px;
+    right: 20px;
     left: 0px;
 }
 .live-icon {
@@ -230,5 +255,46 @@ export default {
     height: 20px;
     width: 20px;
     background-color: red;
+}
+.controls-bottom {
+    background-color:var(--v-primary-lighten1);
+    border: 1px solid var(--v-secondary-base);
+}
+.live-icon {
+    border: 1px solid;
+    border-radius: 100%;
+    height: 20px;
+    width: 20px;
+    background-color: red;
+}
+.slider {
+    background-color: var(--v-secondary-base);
+    height: 41px;
+}
+.handle {
+    width: 12px;
+    height: 41px;
+    background-color: var(--v-primary-base);
+    cursor: pointer;
+}
+.live, .review {
+    display: flex;
+    align-items:center; 
+    padding: 10px 5px;
+    margin: 0 10px;
+}
+.review {
+    background-color: var(--v-primary-base);
+    color: var(--v-secondary-base);
+    cursor: pointer;
+}
+.forward, .back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 41px;
+    background-color: #FFF;
+    cursor: pointer;
 }
 </style>

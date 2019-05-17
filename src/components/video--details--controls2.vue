@@ -4,6 +4,13 @@
 </notes>
 <template>
     <v-layout column style="height:100%; background-color:#FFF;">
+        <v-layout align-center justify-start style="max-height:40px; position:relative;">
+            <v-subheader @click="$router.go(-1)" style="position:absolute; left:5px; cursor:pointer;">
+                <v-icon style="font-size: 12px;">fas fa-arrow-left</v-icon>
+                &nbsp;Back
+            </v-subheader>
+            <span class="title mx-auto">Rail-EAST</span>
+        </v-layout>
         <v-layout justify-space-between align-center px-4 py-3 style="max-height:60px;">
 
             <date-picker />
