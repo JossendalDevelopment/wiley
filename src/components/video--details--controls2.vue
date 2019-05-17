@@ -48,9 +48,12 @@
                             :key="subItem.title"
                             @click="() => {}"
                             class="nested-list-item"
+                            :class="`${+subItem.id == '01' ? 'active-class' : ''}`"
                         >
                             <v-list-tile-action>
-                                <span :style="`color:${$vuetify.theme.error}`">{{ subItem.id }}</span>
+                                <span 
+                                    :class="`${+subItem.id == '01' ? 'active-class' : 'inactive-class'}`"
+                                >{{ subItem.id }}</span>
                             </v-list-tile-action>
 
                             <v-list-tile-content>
@@ -113,5 +116,12 @@ export default {
 /* overrides the nested list items default padding */
 .nested-list-item > a {
     padding-left: 1rem !important;
+}
+/* highlights the list item subclass when its being viewed */
+.active-class {
+    background-color: var(--v-error-base);
+}
+.inactive-class {
+    color: var(--v-error-base);
 }
 </style>
