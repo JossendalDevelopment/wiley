@@ -5,9 +5,9 @@
 <template>
     <v-layout column style="height:100%; background-color:#FFF;">
         <v-layout justify-space-between align-center px-4 py-3 style="max-height:60px;">
-            <v-icon @click="() => {}">fas fa-chevron-left</v-icon>
-            <span>May 31, 2019</span>
-            <v-icon @click="() => {}">fas fa-chevron-right</v-icon>
+
+            <date-picker />
+
         </v-layout>
         <v-tabs
             v-model="currentTab"
@@ -69,7 +69,12 @@
     </v-layout>
 </template>
 <script>
+import DatePicker from './date-picker';
+
 export default {
+    components: {
+        'date-picker': DatePicker
+    },
     props: {
         events: {
             type: Array,

@@ -39,16 +39,16 @@
                 <!-- below video -->
                 <v-flex xs10>
                     <v-layout justify-center>
-                        <h3 class="py-3">{{ formatProbabilityText }}</h3>
                     </v-layout>
                 </v-flex>
                 <v-flex xs10>
-                    <v-layout justify-center>
-                        <v-btn @click="openFalseAlarmModal()" large class="error btn">
+                    <v-layout justify-space-between align-center>
+                        <!-- <v-btn @click="openFalseAlarmModal()" large class="error btn">
                             False Alarm 
-                        </v-btn>
-                        <v-btn @click="openConfirmModal()" large class="success btn">
-                            Confirm Object
+                        </v-btn> -->
+                        <p class="pl-3 mb-0">{{ formatProbabilityText }}</p>
+                        <v-btn @click="openConfirmModal()" class="secondary btn">
+                            Categorize
                         </v-btn>
                     </v-layout>
                 </v-flex>
@@ -155,7 +155,7 @@ export default {
             return this.videoOptions;
         },
         formatProbabilityText() {
-            return `Wiley is ${this.$cameraAlert.alertData.probability} sure this is a ${this.$cameraAlert.alertData.detectedObject}. Please confirm.`
+            return `Identified: ${this.$cameraAlert.alertData.detectedObject} (confidence ${this.$cameraAlert.alertData.probability})`
         }
     }
 }
