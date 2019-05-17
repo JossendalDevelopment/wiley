@@ -1,6 +1,5 @@
 <template>
   <v-layout row wrap align-center>
-    <!-- <v-flex> -->
       <v-menu
         ref="menu"
         v-model="menu"
@@ -17,15 +16,6 @@
             <v-layout align-center justify-space-around>
                 <v-icon @click="decrementDay()">fas fa-chevron-left</v-icon>
                 <h4>{{ date }}</h4>
-                <!-- <v-text-field
-                    v-model="date"
-                    readonly
-                    solo
-                    flat
-                    class="mb-0"
-                    height="10px"
-                    v-on="on"
-                ></v-text-field> -->
                 <v-icon v-on="on">far fa-calendar-alt</v-icon>
                 <v-icon @click="incrementDay()">fas fa-chevron-right</v-icon>
             </v-layout>
@@ -36,7 +26,6 @@
           <v-btn flat color="secondary" @click="$refs.menu.save(date)">OK</v-btn>
         </v-date-picker>
       </v-menu>
-    <!-- </v-flex> -->
   </v-layout>
 </template>
 <script>
