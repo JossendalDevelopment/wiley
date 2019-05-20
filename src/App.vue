@@ -37,7 +37,7 @@
                 flat 
                 absolute 
                 v-if="$auth.status.loggedIn" 
-                :style="`background-color:${$vuetify.theme.primary}`">
+                :style="`background-color:${$vuetify.theme.primaryDark1}`">
                 <v-toolbar-title @click="$router.push('/')">Wiley</v-toolbar-title>
                 <!-- <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>
@@ -60,22 +60,27 @@
                             v-on="on"
                             flat
                             color="secondary" 
-                            style="background-color:#FFF;"
-                            @click="toggleOperationsStatus()"
+                            style="background-color:#FFF; width: 20rem;"
                         >
-                            {{ operationsStatus.name }}
+                            {{ currentStatus.name }}
                             <v-icon class="pl-1">fas fa-caret-down</v-icon>
                         </v-btn>
-                        <span>{{ currentDateTime }}</span>   
+                        <span>&nbsp;&nbsp;{{ currentDateTime }}</span>   
                     </template>
-                    <!-- <v-list>
-                        <v-list-tile @click="() => {toggleOperationsStatus()}" >
-                            <v-list-tile-title>{{ operationsStatus.name }}</v-list-tile-title>
+                    <v-list>
+                        <v-list-tile 
+                            v-for="stat in status" 
+                            :key="stat.code" 
+                            @click="() => {setOperationsStatus(stat.code)}" >
+                            <v-list-tile-title>{{ stat.name }}</v-list-tile-title>
                         </v-list-tile>
-                    </v-list> -->
+                    </v-list>
                 </v-menu>
 
-                <v-spacer> </v-spacer>
+                <!-- v-spacer works better when demo Simulate Alert button is removed -->
+                <!-- TODO also remove &nbsp; on date above -->
+                <div style="width: 8rem"></div>
+                <!-- <v-spacer> </v-spacer> -->
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
                 </v-toolbar-items>
@@ -114,9 +119,6 @@
 
                 </v-container>
             </v-content>
-            <!-- <v-footer app fixed>
-                <span>&copy; 2019 Footer?</span>
-            </v-footer> -->
 
             <!-- global notifications logic -->
             <notifications 
@@ -147,7 +149,12 @@ export default {
     props: { },
     data: () => ({
         alert: true,
-        operationsStatus: {code: 1, name: 'Normal Operations in Progress'}
+        status: [
+            { code: 1, name: 'Normal Operations in Progress' },
+            { code: 2, name: 'Option 2' },
+            { code: 3, name: 'Option 3' },
+        ],
+        currentStatus: { code: 1, name: 'Normal Operations in Progress' }, 
     }),
     computed: {
         formatAlertText() {
@@ -163,10 +170,8 @@ export default {
             await this.$auth.logout();
             this.$router.replace('/sign_in');
         },
-        toggleOperationsStatus() {
-            this.operationsStatus.code === 1 ?
-                this.operationsStatus = {code:2, name: 'Off Operations'} :
-                this.operationsStatus = {code:1, name: 'Normal Operations in Progress'}
+        setOperationsStatus(code) {
+            this.currentStatus = this.status.find(stat => stat.code === code)
         },
         simulateAlert() {
             const alertData = new AlertData({

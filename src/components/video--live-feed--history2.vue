@@ -32,6 +32,7 @@
                 <v-list-tile-action>
                     <p 
                         class="mb-0 title" 
+                        style="margin-left: 1.5rem;"
                         :style="`color:${item.count ? $vuetify.theme.error : 'black'}`">
                         {{ item.count }}
                     </p>

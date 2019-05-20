@@ -1,21 +1,23 @@
+<notes>
+    Only handles logging in, new accounts must be created manually for now or by temporarily switching the firebase method in auth.module login action to sign up
+</notes>
 <template>
-    <v-container fluid fill-height pa-0>
-        <v-layout align-center justify-center>
-
-            <v-flex xs1 style="height:100%;" :style="`background-color:${$vuetify.theme.primary}`">
-            </v-flex>
-
-            <v-flex xs4 style="background-color: #FFFFFF; height:100%;">
+    <!-- <v-container fluid fill-height pa-0> -->
+        <v-layout align-center justify-center fill-height>
+            <v-flex xs4 class="container-image" ml-0>
                 <v-layout align-center justify-center fill-height>
-                    <v-img max-width="80%" :src="'/assets/images/wiley_demo_logo.png'" />
+                    <v-img max-width="80%" :src="'/assets/images/wiley_logo_xl.png'" />
                 </v-layout>
             </v-flex>
-
-            <v-flex xs12 sm7 px-5>
-                <v-layout :class="$vuetify.breakpoint.smAndUp ? 'justify-start' : 'justify-center'">
+<!-- login form -->
+            <v-flex xs8 px-5 class="container-basic">
+                <v-layout 
+                    align-center 
+                    fill-height 
+                    :class="$vuetify.breakpoint.smAndUp ? 'justify-start' : 'justify-center'">
                     <v-flex sm12 md7>
-                        <v-card flat color="primary">
-                            <v-toolbar flat color="primary">
+                        <v-card flat color="primaryDark1">
+                            <v-toolbar flat color="primaryDark1">
                                 <v-toolbar-title class="title mx-auto">Welcome!</v-toolbar-title>
                             </v-toolbar>
                             <v-card-text class="py-0">
@@ -23,6 +25,7 @@
                                     <v-label>Company Email Address</v-label>
                                     <v-text-field 
                                         outline
+                                        class="text-input"
                                         color="primary darken-4"
                                         name="employeeEmail" 
                                         v-model="employeeEmail"
@@ -31,7 +34,9 @@
                                     </v-text-field>
                                     <v-label>Password</v-label>
                                     <v-text-field 
+                                        @keyup.enter="login()"
                                         outline
+                                        class="text-input"
                                         color="primary darken-4"
                                         name="password" 
                                         v-model="password"
@@ -60,15 +65,15 @@
                                     </v-flex>
                                 </v-layout>
                             </v-card-actions>
-                            <v-card-actions>
+                            <!-- <v-card-actions>
                                 <v-btn to="" flat>Forgot your password?</v-btn>
-                            </v-card-actions>
+                            </v-card-actions> -->
                         </v-card>
                     </v-flex>
                 </v-layout>
             </v-flex>
         </v-layout>
-    </v-container>
+    <!-- </v-container> -->
 </template>
 <script>
 
@@ -92,3 +97,18 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.container-basic {
+    height: 100%;
+    background-color: var(--v-primaryDark1-base);
+}
+.container-image {
+    height:100%;
+    background-color: #FFFFFF; 
+}
+.text-input > .v-input__control > .v-input__slot {
+    // override text-fields' background
+    background-color: #FFFFFF !important;
+}
+</style>
+
