@@ -38,22 +38,13 @@
                 absolute 
                 v-if="$auth.status.loggedIn" 
                 :style="`background-color:${$vuetify.theme.primaryDark1}`">
-                <v-toolbar-title @click="$router.push('/')">Wiley</v-toolbar-title>
-                <!-- <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" to="/" flat >Home</v-btn>
-                </v-toolbar-items>
-                <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" to="/overview" flat >Feed</v-btn>
-                </v-toolbar-items>
-                <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" to="/history" flat >History</v-btn>
-                </v-toolbar-items> -->
+                <v-toolbar-title style="cursor:pointer;" @click="$router.push('/overview')">
+                    Wiley
+                </v-toolbar-title>
+
                 <v-spacer> </v-spacer>
 
-                <v-menu
-                    transition="slide-y-transition"
-                    bottom
-                >
+                <v-menu transition="slide-y-transition" bottom>
                     <template v-slot:activator="{ on }">
                         <span>Status: </span>
                         <v-btn
@@ -65,7 +56,7 @@
                             {{ currentStatus.name }}
                             <v-icon class="pl-1">fas fa-caret-down</v-icon>
                         </v-btn>
-                        <span>&nbsp;&nbsp;{{ currentDateTime }}</span>   
+                        <span class="pl-2">{{ dateTime }}</span>
                     </template>
                     <v-list>
                         <v-list-tile 
@@ -85,7 +76,6 @@
                     <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
                 </v-toolbar-items>
                 <v-toolbar-items>
-
                     <v-menu open-on-hover bottom offset-y v-if="$auth.status.loggedIn">
                         <template v-slot:activator="{ on }">
                             <v-btn v-on="on" flat>
@@ -93,7 +83,6 @@
                                 <v-icon class="pl-1">fas fa-caret-down</v-icon>
                             </v-btn>
                         </template>
-
                         <v-list>
                             <v-list-tile @click="$router.push('/')" >
                                 <v-list-tile-title>Home</v-list-tile-title>
@@ -106,12 +95,12 @@
                             </v-list-tile>
                         </v-list>
                     </v-menu>
-
                 </v-toolbar-items>
                 <v-toolbar-items class="hidden-xs-and-down">
                     <v-btn v-if="$auth.status.loggedIn" flat @click="logout()">Logout</v-btn>
                 </v-toolbar-items>
             </v-toolbar>
+
             <v-content app>
                 <v-container fluid fill-height pa-0>
 
@@ -155,15 +144,20 @@ export default {
             { code: 3, name: 'Option 3' },
         ],
         currentStatus: { code: 1, name: 'Normal Operations in Progress' }, 
+        dateTime: null,
+        timer: null
     }),
+    created() {
+        this.startTime();
+    },
+    destroyed() {
+        clearInterval(this.timer)
+    },
     computed: {
         formatAlertText() {
             let alert = this.$cameraAlert.alertData;
             return `1 ${alert.detectedObject} identified in ${alert.camName}`;
         },
-        currentDateTime() {
-            return format(new Date(), 'MMM DD, YYYY - hh:mm;ss')
-        }
     },
     methods: {
         async logout() {
@@ -172,6 +166,10 @@ export default {
         },
         setOperationsStatus(code) {
             this.currentStatus = this.status.find(stat => stat.code === code)
+        },
+        startTime() {
+            this.dateTime = format(new Date(), 'MMM DD, YYYY - hh:mm;ss');
+            this.timer = setTimeout(this.startTime, 500);
         },
         simulateAlert() {
             const alertData = new AlertData({

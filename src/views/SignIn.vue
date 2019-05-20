@@ -91,7 +91,7 @@ export default {
                         this.$notifyError('Invalid email and/or password');
                         return;
                     }
-                    this.$router.replace('/');
+                    this.$router.replace('/overview');
                 })
         },
     }

@@ -24,8 +24,7 @@
 
 <script>
 import VideoLiveFeed from '@/components/video--live-feed.vue';
-// import VideoHistory from '@/components/video--live-feed--history.vue';
-import VideoHistory2 from '@/components/video--live-feed--history2.vue';
+import VideoHistory from '@/components/video--live-feed--history.vue';
 
 import CameraFeedsJson from '@/cameraFeeds.json';
 import EventsJson from '@/dummyEvents.json';
@@ -33,7 +32,7 @@ import EventsJson from '@/dummyEvents.json';
 export default {
     components: {
         'video-live-feed': VideoLiveFeed,
-        'video-history': VideoHistory2,
+        'video-history': VideoHistory,
     },
     data: () => ({
         captures: [],

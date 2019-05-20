@@ -1,5 +1,5 @@
 <notes>
-    The goal of this component is to display a singlular view of a camera feed after an alert has been triggered and allow for review, flagging, and possible manipulation of said feed. Will also display the AI object probability, type of object detected, employees in the vicinity, and an option to reclassify a detected object.
+    The goal of this component is to display a singular view of a camera feed after an alert has been triggered and allow for review, flagging, and possible manipulation of said feed. Will also display the AI's object probability, type of object detected, employees in the vicinity, and an option to reclassify a detected object.
 </notes>
 <template>
     <v-layout class="test-ref">
@@ -61,28 +61,30 @@
                                 Live Feed
                             </p>
                         </v-flex>
-                        <!-- Custom video controls UI -->
-                        <!-- <div style="display:flex; align-items:center; padding:10px;" :style="`background-color:rgba(222,222,222,0.3)`">
-                            <div class="live-icon"></div>
-                            <p 
-                                class="pl-2 mb-0 test-ref primary--text">
-                                Live Feed
-                            </p>
-                        </div> -->
                     </v-layout>
                 </v-flex>
 <!-- below video -->
                 <v-flex xs10 mt-2>
                     <v-layout justify-space-between align-center>
                         <p class="pl-3 mb-0">{{ formatProbabilityText }}</p>
-                        <v-btn 
-                            v-for="button in mainButtons"
-                            :key="button.type+1"
-                            flat
-                            @click="classification = button.type" 
-                            :class="classification === button.type ? 'secondary' : 'primary black--text'">
-                            {{ button.type }}
-                        </v-btn>
+                        <template v-for="button in mainButtons">
+                            <v-btn 
+                                v-if="button.type === 'false'"
+                                :key="button.type+1"
+                                flat
+                                @click="openFalseAlarmModal()" 
+                                :class="classification === button.type ? 'secondary' : 'primary black--text'">
+                                {{ button.type }}
+                            </v-btn>
+                            <v-btn 
+                                v-else
+                                :key="button.type+1"
+                                flat
+                                @click="classification = button.type" 
+                                :class="classification === button.type ? 'secondary' : 'primary black--text'">
+                                {{ button.type }}
+                            </v-btn>
+                        </template>
                         <!-- <v-btn @click="openConfirmModal()" class="secondary btn">
                             categorize
                         </v-btn> -->
@@ -115,15 +117,20 @@
                 Confirm?
             </template>
             <template slot="modalcontent">
-                <div>Register this event as a false alarm?</div>
+                <v-label>Please leave a reason for registering this event as a false alarm</v-label>
+                <v-textarea
+                    outline
+                    color="primaryDark"
+                    background-color="primaryDark2"
+                    label="Start typing here"                    
+                />
             </template>
             <v-btn slot="detailsButton" color="success" @click="falseAlarm()">Confirm</v-btn> 
         </app-dialog>
     </v-layout>
 </template>
 <script>
-import VideoControls from '@/components/video--details--controls2.vue';
-// import videoPlayer from '@/components/video-player';
+import VideoControls from '@/components/video--details--controls.vue';
 import DummyCameraImage from '@/components/dummy-camera-image';
 import Dialog from '@/components/app-dialog.vue';
 
@@ -171,7 +178,7 @@ export default {
             },
             {
                 type: 'false',
-                subCats: ['10','11','12']
+                subCats: [],
             },
         ]
     }),
