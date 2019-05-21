@@ -4,7 +4,7 @@
 <template>
     <v-layout class="test-ref">
         <V-flex xs3>
-            <video--controls v-if="!working" :stream="stream" :events="parseEvents" />
+            <video--details--controls v-if="!working" :stream="stream" :events="parseEvents" />
         </V-flex>
         <v-flex xs9 class="video-container">
 <!-- Above video -->
@@ -28,13 +28,15 @@
 
                     <dummy-camera-image :source="stream.staticImage" />
                     <!-- <video-player :options="getVideoOptions"/> -->
-                    <!-- video overlay -->
+
+                    <!-- video overlay top-->
                     <v-layout class="controls-top" align-start justify-end>
                         <div style="display:flex; align-items:center; padding:10px; cursor:pointer;" >
                             <v-icon>fas fa-search-plus</v-icon>
                             <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
                         </div>
                     </v-layout>
+                    <!-- video player slider control TODO should be part of video-player component if anything -->
                     <v-layout 
                         v-if="$route.fullPath !== '/overview'" 
                         class="controls-bottom" 
@@ -65,44 +67,13 @@
                 </v-flex>
 <!-- below video -->
                 <v-flex xs10 mt-2>
-                    <v-layout justify-space-between align-center>
-                        <p class="pl-3 mb-0">{{ formatProbabilityText }}</p>
-                        <template v-for="button in mainButtons">
-                            <v-btn 
-                                v-if="button.type === 'false'"
-                                :key="button.type+1"
-                                flat
-                                @click="openFalseAlarmModal()" 
-                                :class="classification === button.type ? 'secondary' : 'primary black--text'">
-                                {{ button.type }}
-                            </v-btn>
-                            <v-btn 
-                                v-else
-                                :key="button.type+1"
-                                flat
-                                @click="classification = button.type" 
-                                :class="classification === button.type ? 'secondary' : 'primary black--text'">
-                                {{ button.type }}
-                            </v-btn>
-                        </template>
-                        <!-- <v-btn @click="openConfirmModal()" class="secondary btn">
-                            categorize
-                        </v-btn> -->
-                    </v-layout>
-                    <v-layout justify-center align-center>
-                        <v-btn 
-                            v-for="(sub, index) in activeCategory.subCats"
-                            :key="sub+index"
-                            flat
-                            @click="subClassification = sub" 
-                            :class="subClassification === sub ? 'secondary' : 'primary black--text'">
-                            {{ sub }}
-                        </v-btn>
-                    </v-layout>
+
+                    <video--details--classifier v-on:openmodal="openFalseAlarmModal" />
+
                 </v-flex>
             </v-layout>
         </v-flex>
-        <!-- Confirm/Deny modals probably scrap these -->
+<!-- Confirm/Deny modals -->
         <app-dialog ref="confirm" max-width="500">
             <template slot="modaltitle">
                 Confirm?
@@ -112,9 +83,10 @@
             </template>
             <v-btn slot="detailsButton" color="success" @click="confirmObject()">Confirm</v-btn> 
         </app-dialog>
+
         <app-dialog ref="falsealarm" max-width="500">
             <template slot="modaltitle">
-                Confirm?
+                Confirm False Alarm?
             </template>
             <template slot="modalcontent">
                 <v-label>Please leave a reason for registering this event as a false alarm</v-label>
@@ -130,8 +102,10 @@
     </v-layout>
 </template>
 <script>
-import VideoControls from '@/components/video--details--controls.vue';
+import VideoDetailsClassifier from '@/components/live-feed--details--classifier.vue';
+import VideoDetailsControls from '@/components/live-feed--details--controls.vue';
 import DummyCameraImage from '@/components/dummy-camera-image';
+// import VideoPlayer from '@/components/video-player.vue';
 import Dialog from '@/components/app-dialog.vue';
 
 import format from 'date-fns/format';
@@ -141,17 +115,16 @@ import EventsJson from '@/dummyEvents.json';
 
 export default {
     components: {
-        'video--controls': VideoControls,
+        'video--details--controls': VideoDetailsControls,
+        'video--details--classifier': VideoDetailsClassifier,
         'dummy-camera-image': DummyCameraImage,
+        // 'video-player': VideoPlayer,
         'app-dialog': Dialog
-        // 'video-player': videoPlayer
     },
     data: () => ({
         stream: {},
         events: EventsJson,
         working: true,
-        classification: 'non-employee',
-        subClassification: '',
         videoOptions: {
             autoplay: true,
             controls: true,
@@ -163,24 +136,7 @@ export default {
             playbackRates: [0.5, 1.0, 1.5, 2.0],
             sources: [] // being set from setVideoOptions
         },
-        mainButtons: [
-            {
-                type: 'employee',
-                subCats: ['1','2','3']
-            },
-            {
-                type: 'non-employee',
-                subCats: ['4','5','6']
-            },
-            {
-                type: 'contractor',
-                subCats: ['7','8','9']
-            },
-            {
-                type: 'false',
-                subCats: [],
-            },
-        ]
+
     }),
     mounted() {
         // gets camera details from dummy json and route params that are being harcoded
@@ -221,9 +177,6 @@ export default {
         parseTime() {
             return format(new Date(), 'hh:mm:ss')
         },
-        activeCategory() {
-            return this.mainButtons.find(b => b.type === this.classification)
-        },
         parseEvents() {
             // cheese way to split dummy events off to their respective cameras
             // TODO this function is being duplicated in Overview.vue - Abstract it
@@ -234,9 +187,6 @@ export default {
         getVideoOptions() {
             return this.videoOptions;
         },
-        formatProbabilityText() {
-            return `Identified: ${this.$cameraAlert.alertData.detectedObject} (confidence ${this.$cameraAlert.alertData.probability})`
-        }
     }
 }
 </script>

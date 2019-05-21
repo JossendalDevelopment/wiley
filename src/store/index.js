@@ -2,9 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 
-import { cameraAlert } from './alert-camera.module';
+import { cameraAlert } from './alert.module';
 import { authentication } from './auth.module';
-import { eventHistory } from './event-history.module';
+import { eventHistory } from './event.module';
 
 Vue.use(Vuex);
 

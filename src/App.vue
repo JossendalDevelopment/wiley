@@ -13,7 +13,7 @@
     <div id="app">
         <!-- Page header alert -->
         <v-alert    
-            v-model="$cameraAlert.active"
+            :value="$cameraAlert.showHeader"
             color="error"
             light
             transition="slide-y-transition"
@@ -22,10 +22,7 @@
             <v-layout align-center justify-center>
                 <span 
                     style="cursor: pointer;"
-                    @click="$router.push({ 
-                        name: 'cam_details', 
-                        params: { id: $cameraAlert.alertData.cameraId } 
-                    })"
+                    @click="goToAlertDetails()"
                     class="text-xs-center mb-0 headline">{{ formatAlertText }}</span>
                 <a class="ml-3" style="text-decoration:underline; cursor:pointer;">Snooze alerts for 1 minute?</a>
             </v-layout>
@@ -151,7 +148,7 @@ export default {
         this.startTime();
     },
     destroyed() {
-        clearInterval(this.timer)
+        clearInterval(this.timer);
     },
     computed: {
         formatAlertText() {
@@ -165,7 +162,14 @@ export default {
             this.$router.replace('/sign_in');
         },
         setOperationsStatus(code) {
-            this.currentStatus = this.status.find(stat => stat.code === code)
+            this.currentStatus = this.status.find(stat => stat.code === code);
+        },
+        goToAlertDetails() {
+            this.$cameraAlert.hideAlertHeader();
+            this.$router.push({ 
+                name: 'cam_details', 
+                params: { id: this.$cameraAlert.alertData.cameraId } 
+            });
         },
         startTime() {
             this.dateTime = format(new Date(), 'MMM DD, YYYY - hh:mm;ss');

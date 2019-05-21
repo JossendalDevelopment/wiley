@@ -15,7 +15,7 @@
                         <span class="title mx-auto">{{ stream.camName }}</span>
                     </v-card-title>
                     <video-live-feed :stream="stream" />
-                    <video-history :stream="stream" :events="parseEvents(stream)"/>
+                    <overview--history :stream="stream" :events="parseEvents(stream)"/>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -24,7 +24,7 @@
 
 <script>
 import VideoLiveFeed from '@/components/video--live-feed.vue';
-import VideoHistory from '@/components/video--live-feed--history.vue';
+import VideoHistory from '@/components/overview--history.vue';
 
 import CameraFeedsJson from '@/cameraFeeds.json';
 import EventsJson from '@/dummyEvents.json';
@@ -32,20 +32,20 @@ import EventsJson from '@/dummyEvents.json';
 export default {
     components: {
         'video-live-feed': VideoLiveFeed,
-        'video-history': VideoHistory,
+        'overview--history': VideoHistory,
     },
     data: () => ({
         captures: [],
         streams: CameraFeedsJson,
-        events: EventsJson
+        events: EventsJson,
     }),
     methods: {
         parseEvents(stream) {
             // cheese way to split dummy events off to their respective cameras
             return this.events.events.filter((e) => {
-                return e.camId == stream.id
-            })
-        }
-    }
-}
+                return e.camId == stream.id;
+            });
+        },
+    },
+};
 </script>

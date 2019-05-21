@@ -6,7 +6,8 @@ export const cameraAlert = {
     namespaced: true,
     state: {
         alertData: {...new AlertData()},
-        active: false
+        active: false,
+        showHeader: false,
     },
     getters: {
         alert: (state) => {
@@ -14,21 +15,35 @@ export const cameraAlert = {
         },
     },
     mutations: {
-        createAlert(state, payload) {
+        createAlert: (state, payload) => {
             state.alertData = payload.alertData;
             state.active = true;
         },
-        clearAlert: (state) => {
+        clearAlert: state => {
             state.alertData = new AlertData();
             state.active = false;
+        },
+        showAlertHeader: state => {
+            state.showHeader = true;
+        },
+        hideAlertHeader: state => {
+            state.showHeader = false;
         }
     },
     actions: {
         createAlert({ commit }, payload) {
             commit('createAlert', payload);
+            commit('showAlertHeader');
         },
         clearAlert({ commit }) {
             commit('clearAlert');
-        }
+            commit('hideAlertHeader');
+        },
+        showAlertHeader({ commit }) {
+            commit('showAlertHeader');
+        },
+        hideAlertHeader({ commit }) {
+            commit('hideAlertHeader');
+        },
     },
 }
