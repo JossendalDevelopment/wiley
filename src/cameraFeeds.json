@@ -4,7 +4,8 @@
         "camNumber": 1,
         "camName": "Rail-EAST",
         "sourceData": {
-            "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
+            "src": "/assets/video/sample_rail_east.mp4",
+            "src2": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
             "type": "video/mp4"
         },
         "staticImage": "/assets/images/ref_raileast.jpg"
@@ -14,7 +15,7 @@
         "camNumber": 2,
         "camName": "Rail-WEST",
         "sourceData": {
-            "src": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
+            "src": "/assets/video/sample_rail_west.mp4",
             "type": "video/mp4"
         },
         "staticImage": "/assets/images/ref_railwest.jpg"

@@ -31,7 +31,7 @@ export const router = new Router({
             requiresAuth: true
         }
     },
-    { path: '*', redirect: '/' }
+    { path: '*', redirect: '/overview' } // this should ideally redirect to / or a 404 page
   ]
 });
 

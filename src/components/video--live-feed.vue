@@ -9,21 +9,21 @@
         <v-flex class="video-feed-wrapper pa-0">
 
             <!--  swap between for static image or video -->
-            <!-- <video-player :options="getVideoOptions()"/> -->
-            <dummy-camera-image :source="stream.staticImage" />
+            <video-player :options="getVideoOptions()"/>
+            <!-- <dummy-camera-image :source="stream.staticImage" /> -->
 
         </v-flex>
     </v-hover>
 </template>
 
 <script>
-// import VideoPlayer from '@/components/video-player';
-import DummyCameraImage from '@/components/dummy-camera-image';
+import VideoPlayer from '@/components/video-player';
+// import DummyCameraImage from '@/components/dummy-camera-image';
 
 export default {
     components: {
-        // 'video-player': VideoPlayer,
-        'dummy-camera-image': DummyCameraImage
+        'video-player': VideoPlayer,
+        // 'dummy-camera-image': DummyCameraImage
     },
     props: {
         stream: {

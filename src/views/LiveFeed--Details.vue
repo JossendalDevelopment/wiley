@@ -26,43 +26,15 @@
             <v-layout row wrap align-start justify-center>
                 <v-flex xs10 class="video-feed-wrapper">
 
-                    <dummy-camera-image :source="stream.staticImage" />
-                    <!-- <video-player :options="getVideoOptions"/> -->
+                    <!-- <dummy-camera-image :source="stream.staticImage" /> -->
+                    <video-player :options="getVideoOptions()"/>
 
-                    <!-- video overlay top-->
+                    <!-- video overlay top -->
                     <v-layout class="controls-top" align-start justify-end>
                         <div style="display:flex; align-items:center; padding:10px; cursor:pointer;" >
                             <v-icon>fas fa-search-plus</v-icon>
                             <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
                         </div>
-                    </v-layout>
-                    <!-- video player slider control TODO should be part of video-player component if anything -->
-                    <v-layout 
-                        v-if="$route.fullPath !== '/overview'" 
-                        class="controls-bottom" 
-                        align-center>
-                        <v-flex grow class="slider">
-                            <v-layout justify-space-between align-center>
-                                <div class="back" @click="() => {}">
-                                    <v-icon>fas fa-step-backward</v-icon>
-                                </div>
-                                <div class="handle"></div>
-                                <div class="forward" @click="() => {}">
-                                    <v-icon>fas fa-step-forward</v-icon>
-                                </div>
-                            </v-layout>
-                        </v-flex>
-                        <v-flex shrink class="review ml-0">
-                            <p class="px-2 mb-0 secondary--text">
-                                Review Playback
-                            </p>
-                        </v-flex>
-                        <v-flex shrink class="live">
-                            <div class="live-icon"></div>
-                            <p class="px-2 mb-0 secondary--text">
-                                Live Feed
-                            </p>
-                        </v-flex>
                     </v-layout>
                 </v-flex>
 <!-- below video -->
@@ -104,8 +76,8 @@
 <script>
 import VideoDetailsClassifier from '@/components/live-feed--details--classifier.vue';
 import VideoDetailsControls from '@/components/live-feed--details--controls.vue';
-import DummyCameraImage from '@/components/dummy-camera-image';
-// import VideoPlayer from '@/components/video-player.vue';
+// import DummyCameraImage from '@/components/dummy-camera-image';
+import VideoPlayer from '@/components/video-player.vue';
 import Dialog from '@/components/app-dialog.vue';
 
 import format from 'date-fns/format';
@@ -117,8 +89,8 @@ export default {
     components: {
         'video--details--controls': VideoDetailsControls,
         'video--details--classifier': VideoDetailsClassifier,
-        'dummy-camera-image': DummyCameraImage,
-        // 'video-player': VideoPlayer,
+        // 'dummy-camera-image': DummyCameraImage,
+        'video-player': VideoPlayer,
         'app-dialog': Dialog
     },
     data: () => ({
@@ -127,7 +99,7 @@ export default {
         working: true,
         videoOptions: {
             autoplay: true,
-            controls: true,
+            controls: false,
             responsive: true,
             aspectRatio: '16:9',
             fill: true,
@@ -142,9 +114,15 @@ export default {
         // gets camera details from dummy json and route params that are being harcoded
         this.stream = CameraFeedsJson.find(stream => stream.id == this.$route.params.id);
         this.working = false;
-        // this.setVideoOptions();
     },
     methods: {
+        getVideoOptions() {
+            this.setVideoOptions();
+            // add the stream url or filepath to video options
+            // required for video-player component
+            this.videoOptions.sources = [this.stream.sourceData];
+            return this.videoOptions;
+        },
         setVideoOptions() {
             this.videoOptions.sources = [this.stream.sourceData];
         },
@@ -184,9 +162,12 @@ export default {
                 return e.camId == this.stream.id
             })
         },
-        getVideoOptions() {
-            return this.videoOptions;
-        },
+        // getVideoOptions() {
+        //     // add the stream url or filepath to video options
+        //     // required for video-player component
+        //     this.videoOptions.sources = [this.stream.sourceData];
+        //     return this.videoOptions;
+        // },
     }
 }
 </script>
@@ -199,6 +180,7 @@ export default {
 }
 .video-container {
     background-color: var(--v-primaryLight-base);
+    box-shadow: -15px 0px 60px 25px #ffffff inset, 5px 0px 10px -5px #000000 inset;
 }
 .controls-top {
     position: absolute;
@@ -206,52 +188,5 @@ export default {
     right: 20px;
     left: 0px;
 }
-.live-icon {
-    border: 1px solid;
-    border-radius: 100%;
-    height: 20px;
-    width: 20px;
-    background-color: red;
-}
-.controls-bottom {
-    background-color:var(--v-primary-lighten1);
-    border: 1px solid var(--v-secondary-base);
-}
-.live-icon {
-    border: 1px solid;
-    border-radius: 100%;
-    height: 20px;
-    width: 20px;
-    background-color: red;
-}
-.slider {
-    background-color: var(--v-secondary-base);
-    height: 41px;
-}
-.handle {
-    width: 12px;
-    height: 41px;
-    background-color: var(--v-primary-base);
-    cursor: pointer;
-}
-.live, .review {
-    display: flex;
-    align-items:center; 
-    padding: 10px 5px;
-    margin: 0 10px;
-}
-.review {
-    background-color: var(--v-primary-base);
-    color: var(--v-secondary-base);
-    cursor: pointer;
-}
-.forward, .back {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 41px;
-    background-color: #FFF;
-    cursor: pointer;
-}
+
 </style>

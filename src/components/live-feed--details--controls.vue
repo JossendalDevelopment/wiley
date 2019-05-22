@@ -3,7 +3,7 @@
     TODO needs a custom date picker - or rather a day incrementer/decrementer
 </notes>
 <template>
-    <v-layout column style="height:100%; background-color:#FFF;">
+    <v-layout column class="container-details-controls">
         <v-layout align-center justify-start style="max-height:40px; position:relative;">
             <v-subheader @click="$router.go(-1)" style="position:absolute; left:5px; cursor:pointer;">
                 <v-icon style="font-size: 12px;">fas fa-arrow-left</v-icon>
@@ -120,6 +120,10 @@ export default {
 }
 </script>
 <style>
+.container-details-controls {
+    height:100%; 
+    background-color:#FFF;
+}
 /* overrides the nested list items default padding */
 .nested-list-item > a {
     padding-left: 1rem !important;
