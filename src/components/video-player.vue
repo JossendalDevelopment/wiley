@@ -6,7 +6,7 @@
 
     <!-- video overlay top -->
     <v-layout class="controls-top" align-start justify-end>
-        <div class="zoom-button" @click="isZoomed = !isZoomed">
+        <div class="zoom-button" @click="isZoomed ? zoomOut() : zoomIn()">
             <v-icon>fas fa-search-plus</v-icon>
             <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
         </div>
@@ -36,12 +36,12 @@
         <div class="forward" @mousedown="forward()" @mouseleave="stop()" @mouseup="stop()">
             <v-icon>fas fa-step-forward</v-icon>
         </div>
-        <div class="review ml-0" @click="() => {}">
+        <v-flex class="review" justify-center @click="() => {}">
             <p class="px-2 mb-0 secondary--text">
                 Review Playback
             </p>
-        </div>
-        <v-flex class="live" @click="() => {}">
+        </v-flex>
+        <v-flex class="live" justify-center @click="() => {}">
             <div class="live-icon"></div>
             <p class="px-2 mb-0 secondary--text">
                 Live Feed
@@ -54,6 +54,7 @@
 import VideoPlayerSlider from '@/components/video-player--slider.vue';
 
 import videojs from 'video.js';
+import '../../node_modules/videojs-rotatezoom/src/videojs.zoomrotate';
 
 export default {
     name: "VideoPlayer",
@@ -85,6 +86,8 @@ export default {
             this.$nextTick(() => {
                 this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
                     console.log('onPlayerReady', this);
+
+
                 })
                 this.player.on('timeupdate', () => {
                     // console.log('time update!', self.player.currentTime());
@@ -137,15 +140,24 @@ export default {
         stop(){
             clearInterval(this.interval);
             this.interval = null;
-            console.log('stop')
-        }
+        },
+        zoomIn() {
+            this.player.zoomrotate({
+                zoom: 2,
+                rotate: 0
+            });
+        },
+        zoomOut() {
+            this.player.zoomrotate({
+                zoom: 0,
+                rotate: 0
+            });
+        },
     }
 }
 </script>
 <style lang="scss" scoped>
 .player-wrapper {
-    // height: auto;
-    // width: auto;
     overflow: hidden;
 }
 video {
@@ -162,7 +174,7 @@ video {
     cursor: pointer;
 }
 .zoom {
-    transform: scale(0.1);
+    transform: scale(2);
 }
 .video-js > button.vjs-big-play-button {
     display: none;
@@ -187,23 +199,23 @@ video {
 .live-icon {
     border: 1px solid;
     border-radius: 100%;
-    height: 20px;
-    width: 20px;
+    min-height: 20px;
+    min-width: 20px;
     background-color: red;
 }
 .live, .review {
     display: flex;
     align-items:center; 
-    padding: 9px 5px;
+    height: 100%;
     margin: 0 10px;
 }
 .review {
-    background-color: var(--v-primary-base);
+    background-color: var(--v-primary-darken2);
     color: var(--v-secondary-base);
     cursor: pointer;
 }
 .review > p {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 .forward, .back {
     display: flex;
