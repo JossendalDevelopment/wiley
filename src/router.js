@@ -6,7 +6,7 @@ import CameraDetailsPage from '@/views/LiveFeed--Details.vue';
 import Overview from '@/views/Overview.vue';
 import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
-import Home from '@/views/Home.vue';
+// import Home from '@/views/Home.vue';
 
 Vue.use(Router);
 
@@ -14,10 +14,10 @@ export const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', name: 'home', component: Home, meta: {
-            requiresAuth: true
-        } 
-    },
+    // { path: '/', name: 'home', component: Home, meta: {
+    //         requiresAuth: true
+    //     } 
+    // },
     { path: '/sign_in', name: 'signIn', component: SignIn },
     { path: '/overview', name: 'overview', component: Overview, meta: {
             requiresAuth: true

@@ -46,7 +46,8 @@ export default {
             language: 'en',
             playbackRates: [0.5, 1.0, 1.5, 2.0],
             sources: [] // being set from overview and source prop
-        }
+        },
+        plugins: {}
     }),
     beforeDestroy() {
         this.video = null;

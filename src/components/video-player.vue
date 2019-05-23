@@ -3,17 +3,29 @@
 </notes>
 <template>
 <span>
-    <video ref="videoPlayer" @click="togglePause()" class="video-js"></video>
+
+    <!-- video overlay top -->
+    <v-layout class="controls-top" align-start justify-end>
+        <div class="zoom-button" @click="isZoomed = !isZoomed">
+            <v-icon>fas fa-search-plus</v-icon>
+            <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
+        </div>
+    </v-layout>
+    <!-- player -->
+    <div class="player-wrapper">
+        <video ref="videoPlayer" @click="togglePause()" class="video-js" :class="{zoom: isZoomed}"></video>
+    </div>
+    <!-- control bar -->
     <v-layout 
         v-if="$route.fullPath !== '/overview'" 
         class="controls-bottom" 
         align-center>
-        <div class="back" @click="() => {}">
+        <div class="back" @mousedown="backward()" @mouseleave="stop()" @mouseup="stop()">
             <v-icon>fas fa-step-backward</v-icon>
         </div>
-        <v-flex class="slider pa-0 mx-2">
+        <v-flex class="slider pa-0 mx-0">
             <v-layout align-center>
-                <div style="width:100%;">
+                <div style="width:100%; margin-left:8px; margin-right:6px;">
                     <video-player--slider 
                         :duration="duration" 
                         :currentTime="currentTime"
@@ -21,15 +33,15 @@
                 </div>
             </v-layout>
         </v-flex>
-        <div class="forward" @click="() => {}">
+        <div class="forward" @mousedown="forward()" @mouseleave="stop()" @mouseup="stop()">
             <v-icon>fas fa-step-forward</v-icon>
         </div>
-        <div class="review ml-0">
+        <div class="review ml-0" @click="() => {}">
             <p class="px-2 mb-0 secondary--text">
                 Review Playback
             </p>
         </div>
-        <v-flex class="live">
+        <v-flex class="live" @click="() => {}">
             <div class="live-icon"></div>
             <p class="px-2 mb-0 secondary--text">
                 Live Feed
@@ -60,7 +72,9 @@ export default {
         return {
             player: null,
             duration: 0,
-            currentTime: 0
+            currentTime: 0,
+            interval: null,
+            isZoomed: false,
         }
     },
     mounted() {
@@ -93,7 +107,6 @@ export default {
     },
     methods: {
         handleSliderChange(event) {
-            console.log("E", event)
             this.player.currentTime(event);
         },
         togglePause() {
@@ -103,10 +116,38 @@ export default {
                 this.player.pause();
             }
         },
+        backward() {
+            if (this.currentTime >= 3) {
+                this.currentTime = this.currentTime - 3;
+                this.player.currentTime(this.currentTime);
+            }
+        },
+        forward() {
+            if(!this.interval) {
+                this.interval = setInterval(() => {
+                    if (this.currentTime >= this.duration - 1) {
+                        this.stop();
+                    } else {
+                        this.currentTime = this.currentTime + 1;
+                        this.player.currentTime(this.currentTime);
+                    }
+                }, 100)	
+            }
+        },
+        stop(){
+            clearInterval(this.interval);
+            this.interval = null;
+            console.log('stop')
+        }
     }
 }
 </script>
 <style lang="scss" scoped>
+.player-wrapper {
+    // height: auto;
+    // width: auto;
+    overflow: hidden;
+}
 video {
     outline: none !important;
     cursor: pointer;
@@ -114,8 +155,24 @@ video {
 .video-js {
     outline: none;
 }
+.zoom-button {
+    display:flex; 
+    align-items:center; 
+    padding:10px; 
+    cursor: pointer;
+}
+.zoom {
+    transform: scale(0.1);
+}
 .video-js > button.vjs-big-play-button {
     display: none;
+}
+.controls-top {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    left: 0px;
+    z-index: 20;
 }
 .controls-bottom {
     height: 42px;

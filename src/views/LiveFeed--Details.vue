@@ -29,13 +29,6 @@
                     <!-- <dummy-camera-image :source="stream.staticImage" /> -->
                     <video-player :options="getVideoOptions()"/>
 
-                    <!-- video overlay top -->
-                    <v-layout class="controls-top" align-start justify-end>
-                        <div style="display:flex; align-items:center; padding:10px; cursor:pointer;" >
-                            <v-icon>fas fa-search-plus</v-icon>
-                            <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
-                        </div>
-                    </v-layout>
                 </v-flex>
 <!-- below video -->
                 <v-flex xs10 mt-2>
@@ -182,11 +175,4 @@ export default {
     background-color: var(--v-primaryLight-base);
     box-shadow: -15px 0px 60px 25px #ffffff inset, 5px 0px 10px -5px #000000 inset;
 }
-.controls-top {
-    position: absolute;
-    top: 0px;
-    right: 20px;
-    left: 0px;
-}
-
 </style>
