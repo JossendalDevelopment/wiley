@@ -2,39 +2,39 @@
     The goal of this component is to display a singular view of a camera feed after an alert has been triggered and allow for review, flagging, and possible manipulation of said feed. Will also display the AI's object probability, type of object detected, employees in the vicinity, and an option to reclassify a detected object.
 </notes>
 <template>
-    <v-layout class="test-ref">
-        <V-flex xs3>
-            <video--details--controls v-if="!working" :stream="stream" :events="parseEvents" />
-        </V-flex>
-        <v-flex xs9 class="video-container">
+    <v-layout class="video-container test-ref" justify-center v-if="!working">
+        <v-flex xs10>
 <!-- Above video -->
-            <v-layout align-center justify-center>
-                <v-flex xs10>
-                    <v-layout justify-space-between align-center>
-                        <p class="mb-0">Event #{{ $cameraAlert.alertData.id }}</p>
-                        <p class="mb-0 ml-3">{{ parseDate }}</p>
-                        <p class="mb-0 ml-3">{{ parseTime }}</p>
-                        <p class="mb-0 ml-3">({{ $cameraAlert.alertData.duration }} secs)</p>
-                        <v-layout justify-end>
-                            <!-- <v-icon>fas fa-flag</v-icon> -->
-                            <v-btn flat style="background-color:#FFF;">Mark as Reviewed</v-btn>
-                        </v-layout>
-                    </v-layout>
-                </v-flex>
+            <v-layout align-center justify-space-between>
+                <v-btn flat @click="goBack()">Previous</v-btn>
+                <span style="color:white; font-family: Open Sans Condensed; font-size: 35px;">{{`${currentEventIndex + 1}/${events.events.length}`}}</span>
+                <v-btn flat @click="goNext()">Next/Skip</v-btn>
             </v-layout>
 <!-- video -->
-            <v-layout row wrap align-start justify-center>
+            <v-layout row wrap align-center justify-center>
                 <v-flex xs10 class="video-feed-wrapper">
-
-                    <dummy-camera-image :source="stream.staticImage" />
+                    <div class="red-border">
+                        <!-- <span class=""> -->
+                    <dummy-camera-image :source="currentEvent.staticImage" />
                     <!-- <video-player :options="getVideoOptions()"/> -->
+                        <!-- </span> -->
+                        </div>
 
                 </v-flex>
+            </v-layout>
 <!-- below video -->
-                <v-flex xs10 mt-2>
-
-                    <video--details--classifier v-on:openmodal="openFalseAlarmModal" />
-
+            <v-layout column align-center justify-center>
+                <v-flex xs8 class="text--center white--text">
+                    <p style="font-family: Montserrat; font-size:14px;">Select or use your keyboard</p>
+                </v-flex>
+                <v-flex xs12>
+                    <v-layout justify-center>
+                        <v-btn flat class="control-btn" large>1 employee</v-btn>
+                        <v-btn flat class="control-btn" large>2 non-employee</v-btn>
+                        <v-btn flat class="control-btn" large>3 contractor</v-btn>
+                        <v-btn flat class="control-btn" large>4 coyote</v-btn>
+                        <v-btn flat class="control-btn" large>5 false alarm</v-btn>
+                    </v-layout>
                 </v-flex>
             </v-layout>
         </v-flex>
@@ -67,8 +67,6 @@
     </v-layout>
 </template>
 <script>
-import VideoDetailsClassifier from '@/components/live-feed--details--classifier.vue';
-import VideoDetailsControls from '@/components/live-feed--details--controls.vue';
 import DummyCameraImage from '@/components/dummy-camera-image';
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from '@/components/app-dialog.vue';
@@ -80,8 +78,6 @@ import EventsJson from '@/dummyEvents.json';
 
 export default {
     components: {
-        'video--details--controls': VideoDetailsControls,
-        'video--details--classifier': VideoDetailsClassifier,
         'dummy-camera-image': DummyCameraImage,
         // 'video-player': VideoPlayer,
         'app-dialog': Dialog
@@ -90,6 +86,8 @@ export default {
         stream: {},
         events: EventsJson,
         working: true,
+        currentEventIndex: 0,
+        currentEvent: {},
         videoOptions: {
             autoplay: true,
             controls: false,
@@ -106,9 +104,23 @@ export default {
     mounted() {
         // gets camera details from dummy json and route params that are being harcoded
         this.stream = CameraFeedsJson.find(stream => stream.id == this.$route.params.id);
-        this.working = false;
+        setTimeout(() => {
+            this.currentEvent = this.events.events[0];
+            this.working = false;
+        }, 500)
     },
     methods: {
+        goBack() {
+            this.currentEventIndex = this.crawlArray(this.events.events, this.currentEventIndex, -1);
+            this.currentEvent = this.events.events[this.currentEventIndex];
+        },
+        goNext() {
+            this.currentEventIndex = this.crawlArray(this.events.events, this.currentEventIndex, 1);
+            this.currentEvent = this.events.events[this.currentEventIndex];
+        },
+        crawlArray(array, index, n) {
+            return ((index + n) % array.length + array.length) % array.length;
+        },
         getVideoOptions() {
             this.setVideoOptions();
             // add the stream url or filepath to video options
@@ -142,6 +154,10 @@ export default {
         },
     },
     computed: {
+        getCurrentEvent() {
+            console.log(this.events.events)
+            return this.events.events[this.currentEventIndex].staticImage;
+        },
         parseDate() {
             return format(new Date(), 'MM/DD/YYYY')
         },
@@ -165,14 +181,38 @@ export default {
 }
 </script>
 <style scoped>
-.btn {
-    width: 40%;
+.v-btn {
+    font-family: 'Open Sans Condensed';
+    font-size: 18px;
+    letter-spacing: 3.5px;
+    border: 1px solid var(--v-border-base);
+    background-color: black;
+    color: #FFF;
+}
+.v-btn.control-btn {
+    width: 20%;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    /* padding: 5px 12px; */
+    /* font-weight: 300; */
 }
 .video-feed-wrapper {
     position: relative;
 }
 .video-container {
-    background-color: var(--v-primaryLight-base);
-    box-shadow: -15px 0px 60px 25px #ffffff inset, 5px 0px 10px -5px #000000 inset;
+    background-color: var(--v-secondaryDark-base);
+}
+/* border corners */
+
+.red-border {
+    background-image: url("/assets/images/red_border.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 200;
+    padding: 20px 10px;
 }
 </style>

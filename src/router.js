@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import firebase from 'firebase';
 
-import CameraDetailsPage from '@/views/LiveFeed--Details.vue';
+// import CameraDetailsPage from '@/views/LiveFeed--Details.vue';
+import CameraDetailsPage from '@/views/Details.vue';
 import Overview from '@/views/Overview.vue';
 import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
