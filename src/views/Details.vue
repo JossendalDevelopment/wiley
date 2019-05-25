@@ -15,10 +15,13 @@
                 <v-flex xs10 class="video-feed-wrapper">
                     <div class="red-border">
                         <!-- <span class=""> -->
-                    <dummy-camera-image :source="currentEvent.staticImage" />
+
+                        <dummy-camera-image 
+                            :boundary="currentEvent.boundary" 
+                            :source="currentEvent.staticImage" />
                     <!-- <video-player :options="getVideoOptions()"/> -->
                         <!-- </span> -->
-                        </div>
+                    </div>
 
                 </v-flex>
             </v-layout>
@@ -29,11 +32,11 @@
                 </v-flex>
                 <v-flex xs12>
                     <v-layout justify-center>
-                        <v-btn flat class="control-btn" large>1 employee</v-btn>
-                        <v-btn flat class="control-btn" large>2 non-employee</v-btn>
-                        <v-btn flat class="control-btn" large>3 contractor</v-btn>
-                        <v-btn flat class="control-btn" large>4 coyote</v-btn>
-                        <v-btn flat class="control-btn" large>5 false alarm</v-btn>
+                        <v-btn @click="() => {}" flat class="control-btn" large>1 employee</v-btn>
+                        <v-btn @click="() => {}" flat class="control-btn" large>2 non-employee</v-btn>
+                        <v-btn @click="() => {}" flat class="control-btn" large>3 contractor</v-btn>
+                        <v-btn @click="() => {}" flat class="control-btn" large>4 coyote</v-btn>
+                        <v-btn @click="() => {}" flat class="control-btn" large>5 false alarm</v-btn>
                     </v-layout>
                 </v-flex>
             </v-layout>
@@ -102,6 +105,20 @@ export default {
 
     }),
     mounted() {
+        window.addEventListener("keypress", (e) => {
+            console.log(String.fromCharCode(e.keyCode));
+            if (String.fromCharCode(e.keyCode) == 1) {
+                // employee
+            } else if (String.fromCharCode(e.keyCode) == 2) {
+                // non-employee
+            } else if (String.fromCharCode(e.keyCode) == 3) {
+                // contractor
+            } else if (String.fromCharCode(e.keyCode) == 4) {
+                // coyote
+            } else if (String.fromCharCode(e.keyCode) == 5) {
+                // false alarm
+            } 
+        });
         // gets camera details from dummy json and route params that are being harcoded
         this.stream = CameraFeedsJson.find(stream => stream.id == this.$route.params.id);
         setTimeout(() => {

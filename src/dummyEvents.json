@@ -16,7 +16,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 220,
+            "y": 160,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "02",
@@ -34,7 +40,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_railwest.jpg",
+        "boundary": {
+            "x": 280,
+            "y": 180,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "03",
@@ -52,7 +64,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
     },
     {
         "id": "04",
@@ -70,7 +88,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 220,
+            "y": 160,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "05",
@@ -88,7 +112,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_railwest.jpg",
+        "boundary": {
+            "x": 280,
+            "y": 180,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "06",
@@ -106,7 +136,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
     },
     {
         "id": "07",
@@ -124,7 +160,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 220,
+            "y": 160,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "08",
@@ -142,7 +184,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_railwest.jpg",
+        "boundary": {
+            "x": 280,
+            "y": 180,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "09",
@@ -160,7 +208,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
     },
     {
         "id": "10",
@@ -178,7 +232,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 220,
+            "y": 160,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "11",
@@ -196,7 +256,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg"
+        "staticImage": "/assets/images/ref_railwest.jpg",
+        "boundary": {
+            "x": 280,
+            "y": 180,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "12",
@@ -214,7 +280,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
     },
     {
         "id": "13",
@@ -232,7 +304,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 220,
+            "y": 160,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "14",
@@ -250,7 +328,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_railwest.jpg",
+        "boundary": {
+            "x": 280,
+            "y": 180,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "15",
@@ -268,7 +352,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
     },
     {
         "id": "16",
@@ -286,7 +376,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 220,
+            "y": 160,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "17",
@@ -304,7 +400,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_railwest.jpg",
+        "boundary": {
+            "x": 280,
+            "y": 180,
+            "width": 100,
+            "height": 75
+        }
     },
     {
         "id": "18",
@@ -322,7 +424,13 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg"
+        "staticImage": "/assets/images/ref_raileast.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
     }
 ]
 }
