@@ -2,13 +2,13 @@
     This component contains the dummy video control bar as well.
 </notes>
 <template>
-    <span>
-        <v-img :src="getPath()">
+    <div style="overflow:hidden;">
+        <v-img ref="dummyImage" :src="getPath()" :style="setScale()" @click="getClick($event)">
             <canvas ref="myCanvas" id="myCanvas" style="position:absolute;">
                 Your browser does not support the HTML5 canvas tag.
             </canvas>
         </v-img>
-    </span>
+    </div>
 </template>
 <script>
 export default {
@@ -29,7 +29,8 @@ export default {
         }
     },
     data: () => ({
-        canvas: null
+        canvas: null,
+        zoomed: false
     }),
     methods: {
         getPath() {
@@ -44,9 +45,39 @@ export default {
             ctx.rect(this.boundary.x, this.boundary.y, this.boundary.width, this.boundary.height);
             ctx.stroke();
         },
+        zoom() {
+            this.zoomed = !this.zoomed;
+            // this.setScale();
+            // let ctx = this.canvas.getContext("2d");
+            // //current image
+            // let currImg = ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            // ctx.translate(this.boundary.x, this.boundary.y);
+            // ctx.scale(2, 2);
+            // ctx.translate(-this.boundary.x, -this.boundary.y);
+
+        },
+        getClick() {
+            let img = this.$refs.dummyImage.$el.getBoundingClientRect();
+            console.log("IMAGE CENTER", img, img.width / 2, img.height / 2)
+            console.log("BOUNDARY", this.boundary)
+            let x = img.width / 2 - (this.boundary.x + this.boundary.width / 2);
+            let y = img.height / 2 - (this.boundary.y + this.boundary.height / 2);
+            this.$refs.dummyImage.$el.style = `transform: scale(3) translate(${x}px, ${y}px)`
+        },
+        setScale() {
+            if(this.zoomed) {
+                let img = this.$refs.dummyImage.$el.getBoundingClientRect();
+                let x = img.width / 2 - (this.boundary.x + this.boundary.width / 2);
+                let y = img.height / 2 - (this.boundary.y + this.boundary.height / 2);
+                return `transform: scale(3) translate(${x}px, ${y}px)`;
+            }
+            return ``;
+        }
+    },
+    computed: {
     },
     mounted() {
-        this.$nextTick(() => {
+        setTimeout(() => {
             this.canvas = this.$refs.myCanvas;
             var canvas = this.$refs.myCanvas;
             // Make it visually fill the positioned parent
@@ -56,7 +87,7 @@ export default {
             canvas.width  = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
             this.drawBoundary();
-        })
+        },500)
     },
     watch: {
         boundary() {
@@ -65,3 +96,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+#dummy-image {
+    
+}
+</style>
