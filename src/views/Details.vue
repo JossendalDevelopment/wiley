@@ -142,7 +142,6 @@ export default {
     },
     created() {
         const db = firebase.firestore();
-        // TODO this needs to be destroyed
         this.eventWatcher = db.collection("event_log")
             .onSnapshot(
                 querySnapshot => {

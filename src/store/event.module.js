@@ -20,13 +20,10 @@ export const eventHistory = {
     },
     actions: {
         createEvent({ commit }, payload) {
-            console.log('event store action', payload)
             commit('createEvent', payload);
             return api.createEvent(payload.event)
                 .then(resp => {
-                    console.log(resp)
                     return resp;
-                    // show popup of some kind on success
                 })
         },
         getAllEvents() {
