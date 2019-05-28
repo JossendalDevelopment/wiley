@@ -14,6 +14,9 @@ export default {
                     event.getAllEvents = () => {
                         return store.dispatch('eventHistory/getAllEvents', { })
                     }
+                    event.listenForEventsChanges = () => {
+                        return store.dispatch('eventHistory/listenForEventsChanges', { })
+                    }
                     return event;
                 }
             }

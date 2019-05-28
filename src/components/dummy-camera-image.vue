@@ -2,12 +2,13 @@
     This component contains the dummy video control bar as well.
 </notes>
 <template>
-    <div style="overflow:hidden;">
+    <div style="overflow:hidden; position:relative;">
         <v-img ref="dummyImage" :src="getPath()" :style="setScale()" @click="getClick($event)">
             <canvas ref="myCanvas" id="myCanvas" style="position:absolute;">
                 Your browser does not support the HTML5 canvas tag.
             </canvas>
         </v-img>
+        <v-img ref="zoomIcon" :src="require('../../public/assets/images/icon-zoom.svg')" :style="setIconStyle" />
     </div>
 </template>
 <script>
@@ -47,14 +48,6 @@ export default {
         },
         zoom() {
             this.zoomed = !this.zoomed;
-            // this.setScale();
-            // let ctx = this.canvas.getContext("2d");
-            // //current image
-            // let currImg = ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-            // ctx.translate(this.boundary.x, this.boundary.y);
-            // ctx.scale(2, 2);
-            // ctx.translate(-this.boundary.x, -this.boundary.y);
-
         },
         getClick() {
             let img = this.$refs.dummyImage.$el.getBoundingClientRect();
@@ -72,9 +65,18 @@ export default {
                 return `transform: scale(3) translate(${x}px, ${y}px)`;
             }
             return ``;
-        }
+        },
     },
     computed: {
+        setIconStyle() {
+            return `
+                position:absolute; 
+                height:15px; 
+                width:15px; 
+                top:${this.boundary.y - 15}px; 
+                left:${this.boundary.x + this.boundary.width}px; 
+            `
+        }
     },
     mounted() {
         setTimeout(() => {

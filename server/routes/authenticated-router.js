@@ -25,15 +25,30 @@ router.post('/create_event', (req, res) => {
 
 router.get('/get_all_events', (req, res) => {
     let result = [];
-    db.collection("event_log").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-            let newDoc = doc.data();
-            newDoc.id = doc.id;
-            result.push(newDoc)
-        });
-        formatResponse(res, 'success', result)
-    });
+    // db.collection("event_log").get().then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //         console.log(`${doc.id} => ${doc.data()}`);
+    //         let newDoc = doc.data();
+    //         newDoc.id = doc.id;
+    //         result.push(newDoc)
+    //     });
+    //     formatResponse(res, 'success', result)
+    // });
+    db.collection("event_log")
+        .onSnapshot(
+            querySnapshot => {
+                querySnapshot.forEach((doc) => {
+                    console.log(`${doc.id} => ${doc.data()}`);
+                    let newDoc = doc.data();
+                    newDoc.id = doc.id;
+                    result.push(newDoc)
+                });
+            formatResponse(res, 'success', result)
+            },
+            (error) => {
+                formatResponse(res, 'error', error)
+            }
+        )
 })
 
 

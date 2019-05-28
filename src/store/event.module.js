@@ -1,3 +1,4 @@
+import 'firebase/firestore';
 import api from '../services/event.service';
 
 api.new('/api');
@@ -21,9 +22,10 @@ export const eventHistory = {
         createEvent({ commit }, payload) {
             console.log('event store action', payload)
             commit('createEvent', payload);
-            api.createEvent(payload.event)
+            return api.createEvent(payload.event)
                 .then(resp => {
                     console.log(resp)
+                    return resp;
                     // show popup of some kind on success
                 })
         },
@@ -32,6 +34,6 @@ export const eventHistory = {
                 .then(resp => {
                     return resp;
                 })
-        }
+        },
     },
 }

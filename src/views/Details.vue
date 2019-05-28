@@ -1,5 +1,5 @@
 <notes>
-    The goal of this component is to display a singular view of a camera feed after an alert has been triggered and allow for review, flagging, and possible manipulation of said feed. Will also display the AI's object probability, type of object detected, employees in the vicinity, and an option to reclassify a detected object.
+    This component handles the logic for classifying an event. 
 </notes>
 <template>
     <v-layout class="video-container test-ref" justify-center v-if="!working">
@@ -30,23 +30,23 @@
                 <v-layout justify-space-between>
                     <v-flex xs2>
                         <v-btn @click="setClassification('employee')" flat class="control-btn" large>1 employee</v-btn>
-                        <p class="control-text text-xs-center">12</p>
+                        <p class="control-text text-xs-center">{{ getTotalByType('employee') }}</p>
                     </v-flex>
                     <v-flex xs2>
                         <v-btn @click="setClassification('non-employee')" flat class="control-btn" large>2 non-employee</v-btn>
-                        <p class="control-text text-xs-center">12</p>
+                        <p class="control-text text-xs-center">{{ getTotalByType('non-employee') }}</p>
                     </v-flex>
                     <v-flex xs2>
                         <v-btn @click="setClassification('contractor')" flat class="control-btn" large>3 contractor</v-btn>
-                        <p class="control-text text-xs-center">12</p>
+                        <p class="control-text text-xs-center">{{ getTotalByType('contractor') }}</p>
                     </v-flex>
                     <v-flex xs2>
                         <v-btn @click="setClassification('coyote')" flat class="control-btn" large>4 coyote</v-btn>
-                        <p class="control-text text-xs-center">12</p>
+                        <p class="control-text text-xs-center">{{ getTotalByType('coyote') }}</p>
                     </v-flex>
                     <v-flex xs2>
                         <v-btn @click="setClassification('false-alarm')" flat class="control-btn" large>5 false alarm</v-btn>
-                        <p class="control-text text-xs-center">12</p>
+                        <p class="control-text text-xs-center">{{ getTotalByType('false-alarm') }}</p>
                     </v-flex>
                 </v-layout>
             </v-layout>
@@ -80,12 +80,14 @@
     </v-layout>
 </template>
 <script>
+import firebase from 'firebase';
 import DummyCameraImage from '@/components/dummy-camera-image';
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from '@/components/app-dialog.vue';
 
 import CameraFeedsJson from '@/cameraFeeds.json';
 import EventsJson from '@/dummyEvents.json';
+
 
 export default {
     components: {
@@ -96,6 +98,8 @@ export default {
     data: () => ({
         stream: {},
         events: EventsJson,
+        eventTotals: [],
+        eventWatcher: null,
         working: true,
         currentEventIndex: 0,
         currentEvent: {},
@@ -125,7 +129,6 @@ export default {
             } else if (String.fromCharCode(e.keyCode) === '5') {
                 this.setClassification('false-alarm');
             } else if (e.keyCode === 32) {
-                console.log("Zoom feature")
                 // space bar zoom in/out
                 this.$refs.cameraImage.zoom();
             }
@@ -136,6 +139,28 @@ export default {
             this.currentEvent = this.events.events[0];
             this.working = false;
         }, 500)
+    },
+    created() {
+        const db = firebase.firestore();
+        // TODO this needs to be destroyed
+        this.eventWatcher = db.collection("event_log")
+            .onSnapshot(
+                querySnapshot => {
+                    let result = [];
+                    querySnapshot.forEach((doc) => { 
+                        let newDoc = doc.data();
+                        newDoc.id = doc.id;
+                        result.push(newDoc)
+                        this.eventTotals = result;
+                    });
+                },
+                (error) => {
+                    console.log("Error in listenForEventChange:", error)
+                }
+            )
+    },
+    destroyed() {
+        this.eventWatcher()
     },
     methods: {
         goBack() {
@@ -151,6 +176,26 @@ export default {
         },
         setClassification(type) {
             this.currentEvent.classifiedAs = type;
+            // could interrupt with a confirmation of some kind here
+            this.confirmObject(this.currentEvent);
+        },
+        confirmObject(event) {
+            this.$eventHistory.createEvent(event)
+                .then(() => {
+                    this.$notifySuccess("Created")
+                    this.goNext();
+                })
+                .catch(() => {
+                    this.$notifyError("Failed")
+                })
+        },
+        getTotalByType(type) {
+            return this.eventTotals.reduce((prev, next) => {
+                if(next.classifiedAs === type) {
+                    prev++;
+                }
+                return prev;
+            }, 0);
         },
         openConfirmModal() {
             this.$refs.confirm.open();
@@ -158,25 +203,9 @@ export default {
         openFalseAlarmModal() {
             this.$refs.falsealarm.open();
         },
-        falseAlarm() {
-            // clear alertData state
-            this.$cameraAlert.clearAlert();
-            // send event log to history queue of some kind
-            // this.$eventHistory.addEvent(this.$cameraAlert.alertData);
-            // route somewhere?
-            this.$router.replace('/overview')
-        },
-        confirmObject() {
-            // TODO change alert status to closed/confirmed before submitting
-            this.$eventHistory.createEvent(this.$cameraAlert.alertData)
-            // send alertData to a broadcasting message queue
-            // send event log to history queue
-            // clear active event
-        },
     },
     computed: {
         getCurrentEvent() {
-            console.log(this.events.events)
             return this.events.events[this.currentEventIndex].staticImage;
         },
     }
@@ -191,13 +220,6 @@ export default {
     background-color: black;
     color: #FFF;
 }
-// .v-btn.control-btn {
-//     width: 20%;
-//     font-size: 20px;
-//     letter-spacing: 1.5px;
-//     /* padding: 5px 12px; */
-//     /* font-weight: 300; */
-// }
 .control {
     &-btn {
         width: 100%;
