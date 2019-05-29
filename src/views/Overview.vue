@@ -3,49 +3,83 @@
     Assumption is that any live streaming data and corresponding alerts will come in through here.
 </notes>
 <template>
-    <v-container grid-list-md fill-height>
-        <v-layout row wrap align-start>
-            <v-flex
-                v-for="stream in streams"
-                :key="stream.id"
-                xs6
-                >
-                <v-card>
-                    <v-card-title>
-                        <span class="title mx-auto">{{ stream.camName }}</span>
-                    </v-card-title>
-                    <video-live-feed :stream="stream" />
-                    <overview--history :stream="stream" :events="parseEvents(stream)"/>
-                </v-card>
-            </v-flex>
+    <v-container grid-list-xl fill-height class="overview-container">
+        <v-layout column>
+            <v-layout row wrap align-start>
+                <v-flex
+                    v-for="stream in streams"
+                    :key="stream.id"
+                    xs6
+                    >
+                    <v-card class="card-container" flat>
+                        <video-live-feed :stream="stream" />
+                        <v-card-title>
+                            <span class="title mr-auto">{{ stream.camName.toUpperCase() }}</span>
+                        </v-card-title>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+            <v-layout align-end>
+                <v-flex xs12>
+                    <v-layout justify-space-between>
+                        <v-flex>
+                            <p class="white--text">Total active alerts</p>
+                        </v-flex>
+                        <v-flex>
+                            <v-layout justify-end>
+                                <p class="app-timer">{{ dateTime }}</p>
+                            </v-layout>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
         </v-layout>
     </v-container>
 </template>
 
 <script>
 import VideoLiveFeed from '@/components/video--live-feed.vue';
-import VideoHistory from '@/components/overview--history.vue';
+
+import format from 'date-fns/format';
 
 import CameraFeedsJson from '@/cameraFeeds.json';
-import EventsJson from '@/dummyEvents.json';
 
 export default {
     components: {
         'video-live-feed': VideoLiveFeed,
-        'overview--history': VideoHistory,
     },
     data: () => ({
-        captures: [],
         streams: CameraFeedsJson,
-        events: EventsJson,
+        dateTime: null,
+        timer: null
     }),
+    created() {
+        this.startTime();
+    },
+    destroyed() {
+        clearInterval(this.timer);
+    },
     methods: {
-        parseEvents(stream) {
-            // cheese way to split dummy events off to their respective cameras
-            return this.events.events.filter((e) => {
-                return e.camId == stream.id;
-            });
+        startTime() {
+            this.dateTime = format(new Date(), 'hh:mm;ss');
+            this.timer = setTimeout(this.startTime, 1000);
         },
     },
 };
 </script>
+<style lang="scss" scoped>
+.overview-container {
+    background-color: var(--v-secondaryDark-base);
+}
+.card-container {
+    background-color: var(--v-secondaryDark-base);
+    color: #FFF;
+}
+.app-timer {
+    color: #FFF;
+    font-family: 'Montserrat';
+    font-size: 64px;
+    margin-right: 20px;
+}
+</style>
+

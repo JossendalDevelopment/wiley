@@ -40,14 +40,20 @@
                 <v-spacer> </v-spacer>
 
                 <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
-                <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat>Model Training</v-btn>
+                <v-badge bottom color="red" style="margin: 0 20px;">
+                    <template v-slot:badge>
+                        <span>{{ $events.events.length }}</span>
+                    </template>
+                    <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat>Model Training</v-btn>
+                </v-badge>
                 <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
 
                 <v-spacer></v-spacer>
                 <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:20px; top:0px;">NEW</v-btn>
+
             </v-toolbar>
 
-            <v-content app>
+            <v-content app  class="app-container">
                 <v-container fluid fill-height pa-0>
 
                     <router-view></router-view>
@@ -107,13 +113,21 @@ export default {
     },
 }
 </script>
-<style>
+<style lang="scss" scoped>
 #app > div.v-alert.error > a > i {
     /* overrides alert header bars' cancel icon color to white */
     color:white;
 }
+.v-btn {
+    font-family: 'Montserrat';
+    font-size: 16px;
+}
 .v-btn--active {
+    /* header button overrides */
     background-color:#FFF !important;
     color: black !important;
+}
+.app-container {
+    background-color: var(--v-secondaryDark-base);
 }
 </style>

@@ -44,9 +44,9 @@
         },
         "staticImage": "/assets/images/ref_railwest.jpg",
         "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
+            "x": 480,
+            "y": 280,
+            "width": 50,
             "height": 75
         }
     },

@@ -22,11 +22,13 @@
                 </v-flex>
                 <v-flex xs8 class="video-feed-wrapper">
                     <div class="red-border">
+
                         <dummy-camera-image 
                             ref="cameraImage"
                             :boundary="currentEvent.boundary" 
-                            :source="currentEvent.staticImage" />
+                            :source="currentEvent" />
                     <!-- <video-player :options="getVideoOptions()"/> -->
+
                     </div>
                 </v-flex>
                 <v-flex xs2>
