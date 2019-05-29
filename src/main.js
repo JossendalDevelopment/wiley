@@ -13,6 +13,7 @@ import EventHistoryPlugin from '@/plugins/event.js';
 
 import 'vuetify/dist/vuetify.min.css';
 import 'video.js/dist/video-js.css';
+import './scss/global.scss';
 
 firebase.initializeApp({
     apiKey: process.env.VUE_APP_API_KEY,

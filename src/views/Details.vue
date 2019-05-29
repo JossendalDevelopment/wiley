@@ -11,13 +11,13 @@
         <v-flex xs12>
 <!-- Above video -->
             <v-layout align-center justify-center>
-                <span style="color:white; font-family: Open Sans Condensed; font-size: 30px;">{{`${currentEventIndex + 1}/${$events.events.length}`}}</span>
+                <span style="color:white; font-family: 'DIN Condensed'; font-size: 28px;">{{`${currentEventIndex + 1}/${$events.events.length}`}}</span>
             </v-layout>
 <!-- video -->
             <v-layout row wrap align-center justify-center>
                 <v-flex xs2>
                     <v-layout justify-center>
-                        <v-btn flat @click="goBack()">Previous</v-btn>
+                        <v-btn flat large @click="goBack()">Previous</v-btn>
                     </v-layout>
                 </v-flex>
                 <v-flex xs8 class="video-feed-wrapper">
@@ -33,14 +33,14 @@
                 </v-flex>
                 <v-flex xs2>
                     <v-layout justify-center>
-                        <v-btn flat @click="goNext()">Next/Skip</v-btn>
+                        <v-btn flat large @click="goNext()">Next/Skip</v-btn>
                     </v-layout>
                 </v-flex>
             </v-layout>
 <!-- below video -->
             <v-layout column align-center justify-center>
                 <v-flex xs10 class="text--center white--text">
-                    <p style="font-family: Montserrat; font-size:14px;">Select or use your keyboard</p>
+                    <p style="font-family: Montserrat; font-size:14px; font-weight:700;">SELECT OR USE YOUR KEYBOARD</p>
                 </v-flex>
                 <v-layout justify-space-between>
                     <v-flex xs2>
@@ -67,16 +67,6 @@
             </v-layout>
         </v-flex>
 <!-- Confirm/Deny modals -->
-        <app-dialog ref="confirm" max-width="500">
-            <template slot="modaltitle">
-                Confirm?
-            </template>
-            <template slot="modalcontent">
-                <div>Confirm this is a {{ $cameraAlert.alertData.detectedObject }}?</div>
-            </template>
-            <v-btn slot="detailsButton" color="success" @click="confirmObject()">Confirm</v-btn> 
-        </app-dialog>
-
         <app-dialog ref="falsealarm" max-width="500">
             <template slot="modaltitle">
                 CONFIRM FALSE ALARM?
@@ -142,6 +132,12 @@ export default {
             } else if (e.keyCode === 32) {
                 // space bar zoom in/out
                 this.$refs.cameraImage.zoom();
+            } else if (e.keyCode === 39) {
+                // arrow right
+                this.goNext();
+            } else if (e.keyCode === 37) {
+                // arrow left
+                this.goBack();
             }
         });
         this.$events.getAllEvents()
@@ -192,25 +188,17 @@ export default {
         },
         setClassification(type) {
             // could interrupt with a confirmation of some kind here
-            // if event was previously classified then 
-            // get record from firestore and update existing classification during confirmation
             // find current event in this.$events.events and update it
             let curr = this.$events.events.find(event => {
                 return event.eventId === this.currentEvent.eventId
             })
-            // if(this.currentEvent.classifiedAs) {
             curr.classifiedAs = type;
             this.updateConfirmedEvent(curr);
-            // } else {
-            //     this.currentEvent.classifiedAs = type;
-            //     this.confirmEvent(this.currentEvent);
-            // }
         },
         confirmEvent(event) {
             this.$events.createEvent(event)
                 .then(() => {
                     this.$notifySuccess("Done!")
-                    this.finish();
                 })
                 .catch(() => {
                     this.$notifyError("Failed")
@@ -225,10 +213,6 @@ export default {
                     this.$notifyError("Failed")
                 })
         },
-        finish() {
-            this.$notifySuccess("Done!")
-            // this.goNext();
-        },
         getTotalByType(type) {
             return this.$events.events.reduce((prev, next) => {
                 if(next.classifiedAs === type) {
@@ -238,15 +222,10 @@ export default {
             }, 0);
         },
         selected(type) {
-            // TODO need a mutatable copy of events
-            // if(this.currentEvent.classifiedAs === type) {
             if(this.$events.events[this.currentEventIndex] && this.$events.events[this.currentEventIndex].classifiedAs === type) {
-                return `background-color: ${this.$vuetify.theme.accent};`
+                return `background-color: #FFF; color: black;`
             }
             return '';
-        },
-        openConfirmModal() {
-            this.$refs.confirm.open();
         },
         openFalseAlarmModal() {
             this.$refs.falsealarm.open();
@@ -261,7 +240,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .v-btn {
-    font-family: 'Open Sans Condensed';
+    padding-top:5px;
+    font-family: 'DIN Condensed';
     font-size: 18px;
     letter-spacing: 3.5px;
     border: 1px solid var(--v-border-base);

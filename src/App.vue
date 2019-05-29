@@ -33,14 +33,11 @@
                 app 
                 flat 
                 absolute 
-                dense
                 v-if="$auth.status.loggedIn" 
                 :style="`background-color:${$vuetify.theme.secondaryDark}`">
 
-                <v-spacer> </v-spacer>
-
                 <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
-                <v-badge bottom color="red" style="margin: 0 20px;">
+                <v-badge bottom color="red" style="margin: 0 10px;">
                     <template v-slot:badge>
                         <span>{{ $events.events.length }}</span>
                     </template>
@@ -49,7 +46,9 @@
                 <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
 
                 <v-spacer></v-spacer>
-                <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:20px; top:0px;">NEW</v-btn>
+
+                <v-btn @click="logout()" dark flat class="logout-btn">logout</v-btn>
+                <!-- <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:20px; top:0px;">NEW</v-btn> -->
 
             </v-toolbar>
 
@@ -119,8 +118,13 @@ export default {
     color:white;
 }
 .v-btn {
-    font-family: 'Montserrat';
-    font-size: 16px;
+    font-family: 'DIN Condensed';
+    font-size: 18px;
+    padding-top:5px;
+    letter-spacing: 2.5px;
+}
+.logout-btn {
+    border: 1px solid var(--v-border-base);
 }
 .v-btn--active {
     /* header button overrides */
