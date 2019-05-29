@@ -129,13 +129,13 @@ export default {
             // clear alertData state
             this.$cameraAlert.clearAlert();
             // send event log to history queue of some kind
-            // this.$eventHistory.addEvent(this.$cameraAlert.alertData);
+            // this.$events.addEvent(this.$cameraAlert.alertData);
             // route somewhere?
             this.$router.replace('/overview')
         },
         confirmObject() {
             // TODO change alert status to closed/confirmed before submitting
-            this.$eventHistory.createEvent(this.$cameraAlert.alertData)
+            this.$events.createEvent(this.$cameraAlert.alertData)
             // send alertData to a broadcasting message queue
             // send event log to history queue
             // clear active event

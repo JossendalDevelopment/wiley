@@ -7,7 +7,7 @@
     $notifyWarn(<message>)
 
     Also all the 'simulated alert' logic is being handled here.
-    Cleanup required.
+    Cleanup required!!!!!.
 </notes>
 <template>
     <div id="app">
@@ -33,69 +33,18 @@
                 app 
                 flat 
                 absolute 
+                dense
                 v-if="$auth.status.loggedIn" 
-                :style="`background-color:${$vuetify.theme.primaryDark1}`">
-                <v-toolbar-title style="cursor:pointer;" @click="$router.push('/overview')">
-                    Wiley
-                </v-toolbar-title>
+                :style="`background-color:${$vuetify.theme.secondaryDark}`">
 
                 <v-spacer> </v-spacer>
 
-                <v-menu transition="slide-y-transition" bottom>
-                    <template v-slot:activator="{ on }">
-                        <span>Status: </span>
-                        <v-btn
-                            v-on="on"
-                            flat
-                            color="secondary" 
-                            style="background-color:#FFF; width: 20rem;"
-                        >
-                            {{ currentStatus.name }}
-                            <v-icon class="pl-1">fas fa-caret-down</v-icon>
-                        </v-btn>
-                        <span class="pl-2">{{ dateTime }}</span>
-                    </template>
-                    <v-list>
-                        <v-list-tile 
-                            v-for="stat in status" 
-                            :key="stat.code" 
-                            @click="() => {setOperationsStatus(stat.code)}" >
-                            <v-list-tile-title>{{ stat.name }}</v-list-tile-title>
-                        </v-list-tile>
-                    </v-list>
-                </v-menu>
+                <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
+                <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat>Model Training</v-btn>
+                <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
 
-                <!-- v-spacer works better when demo Simulate Alert button is removed -->
-                <!-- TODO also remove &nbsp; on date above -->
-                <div style="width: 8rem"></div>
-                <!-- <v-spacer> </v-spacer> -->
-                <v-toolbar-items class="hidden-xs-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" color="accent" @click="simulateAlert()">Simulate alert</v-btn>
-                </v-toolbar-items>
-                <v-toolbar-items>
-                    <v-menu open-on-hover bottom offset-y v-if="$auth.status.loggedIn">
-                        <template v-slot:activator="{ on }">
-                            <v-btn v-on="on" flat>
-                                {{ $auth.user.email }}
-                                <v-icon class="pl-1">fas fa-caret-down</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-list>
-                            <v-list-tile @click="$router.push('/')" >
-                                <v-list-tile-title>Home</v-list-tile-title>
-                            </v-list-tile>
-                            <v-list-tile @click="$router.push('/overview')" >
-                                <v-list-tile-title>Feed</v-list-tile-title>
-                            </v-list-tile>
-                            <v-list-tile @click="$router.push('/history')" >
-                                <v-list-tile-title>History</v-list-tile-title>
-                            </v-list-tile>
-                        </v-list>
-                    </v-menu>
-                </v-toolbar-items>
-                <v-toolbar-items class="hidden-xs-and-down">
-                    <v-btn v-if="$auth.status.loggedIn" flat @click="logout()">Logout</v-btn>
-                </v-toolbar-items>
+                <v-spacer></v-spacer>
+                <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:20px; top:0px;">NEW</v-btn>
             </v-toolbar>
 
             <v-content app>
@@ -110,7 +59,7 @@
             <notifications 
                 :max="1"
                 position="bottom right"
-                :duration="4000"
+                :duration="3000"
                 group="app-notifications">
                 <div slot="body" slot-scope="props">
                     <v-alert    
@@ -126,30 +75,18 @@
     </div>
 </template>
 <script>
-import format from 'date-fns/format';
+import EventsJson from './dummyEvents.json';
+// import format from 'date-fns/format';
 
-import AlertData from '@/types/cameraAlertType';
+// import AlertData from '@/types/cameraAlertType';
 
 export default {
     name: 'App',
     props: { },
     data: () => ({
         alert: true,
-        status: [
-            { code: 1, name: 'Normal Operations in Progress' },
-            { code: 2, name: 'Option 2' },
-            { code: 3, name: 'Option 3' },
-        ],
-        currentStatus: { code: 1, name: 'Normal Operations in Progress' }, 
-        dateTime: null,
-        timer: null
+        events: EventsJson.events
     }),
-    created() {
-        this.startTime();
-    },
-    destroyed() {
-        clearInterval(this.timer);
-    },
     computed: {
         formatAlertText() {
             let alert = this.$cameraAlert.alertData;
@@ -161,45 +98,11 @@ export default {
             await this.$auth.logout();
             this.$router.replace('/sign_in');
         },
-        setOperationsStatus(code) {
-            this.currentStatus = this.status.find(stat => stat.code === code);
-        },
-        goToAlertDetails() {
-            this.$cameraAlert.hideAlertHeader();
-            this.$router.push({ 
-                name: 'cam_details', 
-                params: { id: this.$cameraAlert.alertData.cameraId } 
-            });
-        },
-        startTime() {
-            this.dateTime = format(new Date(), 'MMM DD, YYYY - hh:mm;ss');
-            this.timer = setTimeout(this.startTime, 500);
-        },
-        simulateAlert() {
-            const alertData = new AlertData({
-                'id': '01',
-                'type': 'motion',
-                'detectedObject': 'coyote',
-                'probability': '95%',
-                'startTime': Date.now(),
-                'endTime': (() => {
-                    // create an end time a minute after start time just for demo purpose
-                    var now = new Date();
-                    now.setMinutes(now.getMinutes() + 1); // timestamp
-                    return new Date(now); // Date object
-                })(),
-                'duration': 60, // in seconds
-                'cameraId': 100,
-                'camNumber': 1,
-                'camName': 'Rail-EAST',
-                'status': 'active',
-                'sourceData': {
-                    'src': "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
-                    'type': "video/mp4"
-                },
-                "staticImage": "/assets/images/ref_raileast.jpg"
-            })
-            this.$cameraAlert.createAlert(alertData)
+        getNewEvents() {
+            this.$events.setNewEvents(this.events)
+                .then(() => {
+                    this.$notifySuccess("New events received!")
+                })
         }
     },
 }
@@ -208,5 +111,9 @@ export default {
 #app > div.v-alert.error > a > i {
     /* overrides alert header bars' cancel icon color to white */
     color:white;
+}
+.v-btn--active {
+    background-color:#FFF !important;
+    color: black !important;
 }
 </style>

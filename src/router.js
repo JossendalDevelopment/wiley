@@ -24,10 +24,14 @@ export const router = new Router({
             requiresAuth: true
         } 
     },
-    { path: '/cam_details/:id', name: 'cam_details', component: CameraDetailsPage, meta: {
+    { path: '/training', name: 'training', component: CameraDetailsPage, meta: {
             requiresAuth: true
-        } 
+        }
     },
+    // { path: '/cam_details/:id', name: 'cam_details', component: CameraDetailsPage, meta: {
+    //         requiresAuth: true
+    //     } 
+    // },
     { path: '/history', name: 'history', component: History, meta: {
             requiresAuth: true
         }

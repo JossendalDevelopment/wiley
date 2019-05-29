@@ -8,7 +8,8 @@
                 Your browser does not support the HTML5 canvas tag.
             </canvas>
         </v-img>
-        <v-img ref="zoomIcon" :src="require('../../public/assets/images/icon-zoom.svg')" :style="setIconStyle" />
+        <!-- icon floats when image is zoomed, removed until fix is found -->
+        <!-- <v-img ref="zoomIcon" :src="require('../../public/assets/images/icon-zoom.svg')" :style="setIconStyle" /> -->
     </div>
 </template>
 <script>
@@ -98,8 +99,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-#dummy-image {
-    
-}
-</style>

@@ -4,19 +4,34 @@ export default {
     install(Vue) {
         Vue.mixin({
             computed: {
-                "$eventHistory"() {
+                "$events"() {
                     var event = store.getters['eventHistory/history'];
                     event.createEvent = (event) => {
                         return store.dispatch('eventHistory/createEvent', {
                             event
                         });
-                    }
+                    };
+                    event.setEvents = events => {
+                        return store.dispatch('eventHistory/setEvents', {
+                            events
+                        });
+                    };
+                    event.setNewEvents = events => {
+                        return store.dispatch('eventHistory/setNewEvents', {
+                            events
+                        });
+                    };
+                    event.updateEvent = event => {
+                        return store.dispatch('eventHistory/updateEvent', {
+                            event
+                        });
+                    };
                     event.getAllEvents = () => {
-                        return store.dispatch('eventHistory/getAllEvents', { })
-                    }
+                        return store.dispatch('eventHistory/getAllEvents', { });
+                    };
                     event.listenForEventsChanges = () => {
-                        return store.dispatch('eventHistory/listenForEventsChanges', { })
-                    }
+                        return store.dispatch('eventHistory/listenForEventsChanges', { });
+                    };
                     return event;
                 }
             }

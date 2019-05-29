@@ -15,6 +15,7 @@ export default(new Vuex.Store({
             modules: [
                 'authentication',
                 'cameraAlert',
+                'eventHistory'
             ]
         }).plugin
     ],

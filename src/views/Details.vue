@@ -1,18 +1,26 @@
 <notes>
-    This component handles the logic for classifying an event. 
+    This component handles all the heavy lifting for classifying an event. Will need abstraction  
 </notes>
 <template>
-    <v-layout class="video-container test-ref" justify-center v-if="!working">
-        <v-flex xs10>
+    <v-layout justify-center v-if="$events.events.length === 0" class="video-container test-ref">
+        <span style="color:white; font-family: Open Sans Condensed; font-size: 30px;">
+            There are no events
+        </span>
+    </v-layout>
+    <v-layout v-else-if="!working" class="video-container test-ref" justify-center>
+        <v-flex xs12>
 <!-- Above video -->
-            <v-layout align-center justify-space-between>
-                <v-btn flat @click="goBack()">Previous</v-btn>
-                <span style="color:white; font-family: Open Sans Condensed; font-size: 32px;">{{`${currentEventIndex + 1}/${events.events.length}`}}</span>
-                <v-btn flat @click="goNext()">Next/Skip</v-btn>
+            <v-layout align-center justify-center>
+                <span style="color:white; font-family: Open Sans Condensed; font-size: 30px;">{{`${currentEventIndex + 1}/${$events.events.length}`}}</span>
             </v-layout>
 <!-- video -->
             <v-layout row wrap align-center justify-center>
-                <v-flex xs10 class="video-feed-wrapper">
+                <v-flex xs2>
+                    <v-layout justify-center>
+                        <v-btn flat @click="goBack()">Previous</v-btn>
+                    </v-layout>
+                </v-flex>
+                <v-flex xs8 class="video-feed-wrapper">
                     <div class="red-border">
                         <dummy-camera-image 
                             ref="cameraImage"
@@ -20,6 +28,11 @@
                             :source="currentEvent.staticImage" />
                     <!-- <video-player :options="getVideoOptions()"/> -->
                     </div>
+                </v-flex>
+                <v-flex xs2>
+                    <v-layout justify-center>
+                        <v-btn flat @click="goNext()">Next/Skip</v-btn>
+                    </v-layout>
                 </v-flex>
             </v-layout>
 <!-- below video -->
@@ -29,23 +42,23 @@
                 </v-flex>
                 <v-layout justify-space-between>
                     <v-flex xs2>
-                        <v-btn @click="setClassification('employee')" flat class="control-btn" large>1 employee</v-btn>
+                        <v-btn @click="setClassification('employee')" flat class="control-btn" :style="selected('employee')" large>1 employee</v-btn>
                         <p class="control-text text-xs-center">{{ getTotalByType('employee') }}</p>
                     </v-flex>
                     <v-flex xs2>
-                        <v-btn @click="setClassification('non-employee')" flat class="control-btn" large>2 non-employee</v-btn>
+                        <v-btn @click="setClassification('non-employee')" flat class="control-btn" :style="selected('non-employee')" large>2 non-employee</v-btn>
                         <p class="control-text text-xs-center">{{ getTotalByType('non-employee') }}</p>
                     </v-flex>
                     <v-flex xs2>
-                        <v-btn @click="setClassification('contractor')" flat class="control-btn" large>3 contractor</v-btn>
+                        <v-btn @click="setClassification('contractor')" flat class="control-btn" :style="selected('contractor')" large>3 contractor</v-btn>
                         <p class="control-text text-xs-center">{{ getTotalByType('contractor') }}</p>
                     </v-flex>
                     <v-flex xs2>
-                        <v-btn @click="setClassification('coyote')" flat class="control-btn" large>4 coyote</v-btn>
+                        <v-btn @click="setClassification('coyote')" flat class="control-btn" :style="selected('coyote')" large>4 coyote</v-btn>
                         <p class="control-text text-xs-center">{{ getTotalByType('coyote') }}</p>
                     </v-flex>
                     <v-flex xs2>
-                        <v-btn @click="setClassification('false-alarm')" flat class="control-btn" large>5 false alarm</v-btn>
+                        <v-btn @click="openFalseAlarmModal()" flat class="control-btn" :style="selected('false-alarm')" large>5 false alarm</v-btn>
                         <p class="control-text text-xs-center">{{ getTotalByType('false-alarm') }}</p>
                     </v-flex>
                 </v-layout>
@@ -64,30 +77,28 @@
 
         <app-dialog ref="falsealarm" max-width="500">
             <template slot="modaltitle">
-                Confirm False Alarm?
+                CONFIRM FALSE ALARM?
             </template>
             <template slot="modalcontent">
-                <v-label>Please leave a reason for registering this event as a false alarm</v-label>
                 <v-textarea
-                    outline
-                    color="primaryDark"
-                    background-color="primaryDark2"
-                    label="Start typing here"                    
+                    dark
+                    rows="7"
+                    auto-grow
+                    class="textarea"
+                    value="Please leave a reason for registering this event as a false alarm"                    
                 />
             </template>
-            <v-btn slot="detailsButton" color="success" @click="falseAlarm()">Confirm</v-btn> 
+            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" @click="setClassification('false-alarm')">Confirm</v-btn> 
         </app-dialog>
     </v-layout>
 </template>
 <script>
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import DummyCameraImage from '@/components/dummy-camera-image';
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from '@/components/app-dialog.vue';
 
-import CameraFeedsJson from '@/cameraFeeds.json';
-import EventsJson from '@/dummyEvents.json';
-
+// import CameraFeedsJson from '@/cameraFeeds.json';
 
 export default {
     components: {
@@ -96,9 +107,7 @@ export default {
         'app-dialog': Dialog
     },
     data: () => ({
-        stream: {},
-        events: EventsJson,
-        eventTotals: [],
+        classifiedEvents: [],
         eventWatcher: null,
         working: true,
         currentEventIndex: 0,
@@ -133,68 +142,106 @@ export default {
                 this.$refs.cameraImage.zoom();
             }
         });
-        // gets camera details from dummy json and route params that are being harcoded
-        this.stream = CameraFeedsJson.find(stream => stream.id == this.$route.params.id);
-        setTimeout(() => {
-            this.currentEvent = this.events.events[0];
-            this.working = false;
-        }, 500)
+        this.$events.getAllEvents()
+            .then(async resp => {
+                await this.$events.setEvents(resp.data)
+                this.currentEvent = resp.data[0];
+                this.working = false;
+            })
+            // this.$events.setEvents(this.events.events);
     },
     created() {
-        const db = firebase.firestore();
-        this.eventWatcher = db.collection("event_log")
-            .onSnapshot(
-                querySnapshot => {
-                    let result = [];
-                    querySnapshot.forEach((doc) => { 
-                        let newDoc = doc.data();
-                        newDoc.id = doc.id;
-                        result.push(newDoc)
-                        this.eventTotals = result;
-                    });
-                },
-                (error) => {
-                    console.log("Error in listenForEventChange:", error)
-                }
-            )
+        // watcher on all classified events
+        // TODO limit this to the most recent 25 events?
+        // const db = firebase.firestore();
+        // this.eventWatcher = db.collection("classified_events").limit(25)
+        //     .onSnapshot(
+        //         querySnapshot => {
+        //             let result = [];
+        //             querySnapshot.forEach((doc) => { 
+        //                 let newDoc = doc.data();
+        //                 newDoc.id = doc.id;
+        //                 result.push(newDoc);
+        //             });
+        //             // this.classifiedEvents = result;
+        //             // this.$events.setEvents(result);
+        //             // this.currentEvent = result[0];
+        //             this.working = false;
+        //         },
+        //         (error) => {
+        //             console.log("Error in listenForEventChange:", error)
+        //         }
+        //     )
     },
     destroyed() {
-        this.eventWatcher()
+        // this.eventWatcher()
     },
     methods: {
         goBack() {
-            this.currentEventIndex = this.crawlArray(this.events.events, this.currentEventIndex, -1);
-            this.currentEvent = this.events.events[this.currentEventIndex];
+            this.currentEventIndex = this.crawlArray(this.$events.events, this.currentEventIndex, -1);
+            this.currentEvent = this.$events.events[this.currentEventIndex];
         },
         goNext() {
-            this.currentEventIndex = this.crawlArray(this.events.events, this.currentEventIndex, 1);
-            this.currentEvent = this.events.events[this.currentEventIndex];
+            this.currentEventIndex = this.crawlArray(this.$events.events, this.currentEventIndex, 1);
+            this.currentEvent = this.$events.events[this.currentEventIndex];
         },
         crawlArray(array, index, n) {
             return ((index + n) % array.length + array.length) % array.length;
         },
         setClassification(type) {
-            this.currentEvent.classifiedAs = type;
             // could interrupt with a confirmation of some kind here
-            this.confirmObject(this.currentEvent);
+            // if event was previously classified then 
+            // get record from firestore and update existing classification during confirmation
+            // find current event in this.$events.events and update it
+            let curr = this.$events.events.find(event => {
+                return event.eventId === this.currentEvent.eventId
+            })
+            // if(this.currentEvent.classifiedAs) {
+            curr.classifiedAs = type;
+            this.updateConfirmedEvent(curr);
+            // } else {
+            //     this.currentEvent.classifiedAs = type;
+            //     this.confirmEvent(this.currentEvent);
+            // }
         },
-        confirmObject(event) {
-            this.$eventHistory.createEvent(event)
+        confirmEvent(event) {
+            this.$events.createEvent(event)
                 .then(() => {
-                    this.$notifySuccess("Created")
-                    this.goNext();
+                    this.$notifySuccess("Done!")
+                    this.finish();
                 })
                 .catch(() => {
                     this.$notifyError("Failed")
                 })
         },
+        updateConfirmedEvent(event) {
+            this.$events.updateEvent(event)
+                .then(() => {
+                    this.$notifySuccess("Done!")
+                })
+                .catch(() => {
+                    this.$notifyError("Failed")
+                })
+        },
+        finish() {
+            this.$notifySuccess("Done!")
+            // this.goNext();
+        },
         getTotalByType(type) {
-            return this.eventTotals.reduce((prev, next) => {
+            return this.$events.events.reduce((prev, next) => {
                 if(next.classifiedAs === type) {
                     prev++;
                 }
                 return prev;
             }, 0);
+        },
+        selected(type) {
+            // TODO need a mutatable copy of events
+            // if(this.currentEvent.classifiedAs === type) {
+            if(this.$events.events[this.currentEventIndex] && this.$events.events[this.currentEventIndex].classifiedAs === type) {
+                return `background-color: ${this.$vuetify.theme.accent};`
+            }
+            return '';
         },
         openConfirmModal() {
             this.$refs.confirm.open();
@@ -249,5 +296,13 @@ export default {
     height: 100%;
     z-index: 200;
     padding: 20px 10px;
+}
+
+/* modal */
+.textarea {
+    // border: 1px solid #FFF;
+    background-color: var(--v-secondaryDark-base);
+    color: #FFF;
+    padding: 20px;
 }
 </style>

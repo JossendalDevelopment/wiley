@@ -15,25 +15,46 @@ instance.new = function(url = '/') {
     }
 };
 
-instance.createEvent = function(event) {
-    return this.post('/create_event', { event })
-        .then(resp => {
-            console.log("event service created event", resp)
-            return resp.data;
-        })
-        .catch(err => {
-            return err;
-        })
+instance.createEvent = async function(event) {
+    try {
+        const resp = await this.post('/create_event', { event });
+        console.log("event service created event", resp);
+        return resp.data;
+    }
+    catch (err) {
+        return err;
+    }
 };
 
-instance.getAllEvents = function() {
-    return this.get('/get_all_events')
-        .then(resp => {
-            return resp.data;
-        })
-        .catch(err => {
-            return err;
-        })
+instance.updateEvent = async function(event) {
+    try {
+        const resp = await this.post('/update_event', { event });
+        console.log("event service updated event", resp);
+        return resp.data;
+    }
+    catch (err) {
+        return err;
+    }
+};
+
+instance.getAllEvents = async function() {
+    try {
+        const resp = await this.get('/get_all_events');
+        return resp.data;
+    }
+    catch (err) {
+        return err;
+    }
+};
+
+instance.setNewEvents = async function(events) {
+    try {
+        const resp = await this.post('/set_new_events', { events });
+        return resp.data;
+    }
+    catch (err) {
+        return err;
+    }
 }
 
 export default instance;

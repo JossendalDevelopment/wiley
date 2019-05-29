@@ -2,6 +2,7 @@
     "events": [
     {
         "id": "01",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -26,6 +27,7 @@
     },
     {
         "id": "02",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -50,6 +52,7 @@
     },
     {
         "id": "03",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -74,6 +77,7 @@
     },
     {
         "id": "04",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -98,6 +102,7 @@
     },
     {
         "id": "05",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -122,6 +127,7 @@
     },
     {
         "id": "06",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -146,6 +152,7 @@
     },
     {
         "id": "07",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -170,6 +177,7 @@
     },
     {
         "id": "08",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -194,6 +202,7 @@
     },
     {
         "id": "09",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -218,6 +227,7 @@
     },
     {
         "id": "10",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -242,6 +252,7 @@
     },
     {
         "id": "11",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -266,6 +277,7 @@
     },
     {
         "id": "12",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -290,6 +302,7 @@
     },
     {
         "id": "13",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -314,6 +327,7 @@
     },
     {
         "id": "14",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "person",
@@ -338,6 +352,7 @@
     },
     {
         "id": "15",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -362,6 +377,7 @@
     },
     {
         "id": "16",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -386,6 +402,7 @@
     },
     {
         "id": "17",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",
@@ -410,6 +427,7 @@
     },
     {
         "id": "18",
+        "eventId": "",
         "status": "active",
         "classifiedAs": "",
         "detectedObject": "coyote",

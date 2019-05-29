@@ -20,37 +20,42 @@
                 color="white"
             /></p>
         </v-dialog>
-        <slot><v-card :style="{backgroundColor: $vuetify.theme.primary}">
-            <v-icon 
-                v-if="!isLoading && !persistent" 
-                class="right mt-3 mr-3" 
-                large 
-                @click.stop="close"
-            >
-                far fa-times-circle
-            </v-icon>
-            <span class="right mt-3 mr-3" style="display:inline-block;">
-                <slot name="leftofclose" />
-            </span>
-            <v-card-title>
-                <h2 style="display:inline;"><slot name="modaltitle"/></h2>
-            </v-card-title>
-            <v-card-text>
-                <slot name="modalcontent"/>
-            </v-card-text>
-            <v-card-actions>
-                <slot name="cancelbutton">
-                    <!-- <v-btn v-if="!isLoading" :disabled="persistent" @click.stop="close">close</v-btn> -->
-                </slot>
-                <span class="ml-2">
-                    <slot v-if="!isLoading" name="actionbuttons" />
-                </span>
-                <v-spacer/>
-                <span right>
-                    <slot name="detailsButton" />
-                </span>
-            </v-card-actions>
-        </v-card></slot>
+        <slot>
+            <!-- <v-card :style="{backgroundColor: $vuetify.theme.primary}"> -->
+            <!-- <v-card style="background-color: transparent;" flat dark> -->
+                <v-layout align-center justify-space-between>
+                    <!-- <span class="right mt-3 mr-3" style="display:inline-block;">
+                        <slot name="leftofclose" />
+                    </span> -->
+                    <!-- <v-card-title> -->
+                        <h2 class="mt-3 ml-3" style="display:inline; color:#FFF; font-family:Open Sans Condensed; font-weight:700; letter-spacing:5px;"><slot name="modaltitle"/></h2>
+                    <!-- </v-card-title> -->
+                    <v-icon 
+                        v-if="!isLoading && !persistent" 
+                        class="right mt-3 mr-3" 
+                        @click.stop="close"
+                        dark
+                    >
+                        far fa-times-circle
+                    </v-icon>
+                </v-layout>
+                <v-card-text>
+                    <slot name="modalcontent"/>
+                </v-card-text>
+                <v-card-actions>
+                    <slot name="cancelbutton">
+                        <!-- <v-btn v-if="!isLoading" :disabled="persistent" @click.stop="close">close</v-btn> -->
+                    </slot>
+                    <span class="ml-2">
+                        <slot v-if="!isLoading" name="actionbuttons" />
+                    </span>
+                    <v-spacer/>
+                    <span right>
+                        <slot name="detailsButton" />
+                    </span>
+                </v-card-actions>
+            <!-- </v-card> -->
+        </slot>
     </v-dialog>
 </template>
 <script>
@@ -94,3 +99,4 @@ export default {
     }
 }
 </script>
+

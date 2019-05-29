@@ -34,7 +34,7 @@ export default {
         events: []
     }),
     mounted() {
-        this.$eventHistory.getAllEvents()
+        this.$events.getAllEvents()
             .then(resp => {
                 this.events = resp.data
             })
