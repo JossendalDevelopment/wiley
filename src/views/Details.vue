@@ -198,7 +198,7 @@ export default {
         confirmEvent(event) {
             this.$events.createEvent(event)
                 .then(() => {
-                    this.$notifySuccess("Done!")
+                    this.$notifyClassification(event.classifiedAs.toUpperCase())
                 })
                 .catch(() => {
                     this.$notifyError("Failed")
@@ -207,7 +207,8 @@ export default {
         updateConfirmedEvent(event) {
             this.$events.updateEvent(event)
                 .then(() => {
-                    this.$notifySuccess("Done!")
+                    this.$notifyClassification(event.classifiedAs.toUpperCase());
+                    this.goNext();
                 })
                 .catch(() => {
                     this.$notifyError("Failed")
@@ -240,12 +241,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .v-btn {
-    padding-top:5px;
-    font-family: 'DIN Condensed';
-    font-size: 18px;
     letter-spacing: 3.5px;
     border: 1px solid var(--v-border-base);
-    background-color: black;
+    background-color: var(--v-buttonBlack-base);
     color: #FFF;
 }
 .control {

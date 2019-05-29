@@ -1,10 +1,11 @@
 import '@babel/polyfill';
 import Vue from 'vue';
-import firebase from 'firebase';
 import './plugins/vuetify';
+import firebase from 'firebase';
 import App from './App.vue';
 import { router } from './router';
 import store from './store/index';
+
 
 import AuthPlugin from '@/plugins/auth.js';
 import Notifications from '@/plugins/notifications.js';
@@ -32,7 +33,7 @@ Vue.use(EventHistoryPlugin);
 Vue.use(Notifications);
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

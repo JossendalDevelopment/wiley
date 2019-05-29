@@ -8,6 +8,7 @@
 
     Also all the 'simulated alert' logic is being handled here.
     Cleanup required!!!!!.
+    TODO redo the badge in css only, the numerals aren't centering properly with v-badge
 </notes>
 <template>
     <div id="app">
@@ -37,12 +38,12 @@
                 :style="`background-color:${$vuetify.theme.secondaryDark}`">
 
                 <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
-                <v-badge bottom color="red" style="margin: 0 10px;">
-                    <template v-slot:badge>
-                        <span>{{ $events.events.length }}</span>
-                    </template>
-                    <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat>Model Training</v-btn>
-                </v-badge>
+                <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat style="position:relative;">
+                    Model Training
+                    <v-badge color="red" style="position:absolute; top:3px; right:-5px;">
+                        <span slot="badge" style="margin-left:2px; margin-top:1px;">{{ $events.events.length }}</span>
+                    </v-badge>
+                </v-btn>
                 <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
 
                 <v-spacer></v-spacer>
@@ -62,16 +63,34 @@
 
             <!-- global notifications logic -->
             <notifications 
+                group="classification-notifications"
                 :max="1"
-                position="bottom right"
-                :duration="3000"
-                group="app-notifications">
+                :speed="200"
+                :width="250"
+                :duration="1000"
+                animation-type="velocity"
+                style="top:20%;"
+                :animation="animation"
+                position="center center"
+                >
+                <div slot="body" slot-scope="props">
+                    <div style="display:flex; font-family:'DIN Condensed'; font-size:30px; background-color:red; color:#FFF; padding:20px; letter-spacing:2.5px;">
+                        <p class="mb-0 mx-auto">{{ props.item.text }}</p>    
+                    </div>
+                </div>
+            </notifications>
+            <notifications 
+                group="app-notifications"
+                :max="1"
+                :duration="1000"
+                style="bottom:5%; right:5%;"
+                position="right bottom"
+                >
                 <div slot="body" slot-scope="props">
                     <v-alert    
                         v-model="alert"
                         :color="props.item.type"
-                        dismissible
-                        style="border-radius:10px; margin-right:5%; margin-bottom:5%;">
+                        style="font-family:'DIN Condensed'; font-size:18px; letter-spacing:2px;">
                         {{ props.item.text }}
                     </v-alert>
                 </div>
@@ -90,7 +109,29 @@ export default {
     props: { },
     data: () => ({
         alert: true,
-        events: EventsJson.events
+        events: EventsJson.events,
+        animation: {
+            enter (element) {
+                /*
+                *  "element" - is a notification element
+                *    (before animation, meaning that you can take it's initial height, width, color, etc)
+                */
+                let height = element.clientHeight
+
+                return {
+                    // Animates from 0px to "height"
+                    height: [height, 0],
+
+                    // Animates from 0 to random opacity (in range between 0.5 and 1)
+                    opacity: [1, 0]
+                }  
+            },
+            leave: {
+                translateY: -200,
+                height: 0,
+                opacity: 0
+            }
+        }
     }),
     computed: {
         formatAlertText() {
@@ -118,10 +159,7 @@ export default {
     color:white;
 }
 .v-btn {
-    font-family: 'DIN Condensed';
-    font-size: 18px;
-    padding-top:5px;
-    letter-spacing: 2.5px;
+    background-color: var(--v-secondaryDark-base);
 }
 .logout-btn {
     border: 1px solid var(--v-border-base);

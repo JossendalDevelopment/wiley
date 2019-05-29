@@ -1,6 +1,14 @@
 @font-face {
     font-family: 'Din Condensed';
-    src: url('/assets/fonts/DIN-Condensed-Bold.woff');
+    src: url('/assets/fonts/DINCondensed-Bold.woff');
     font-weight: bold;
     font-style: normal;
+}
+
+.v-btn {
+    font-family: 'DIN Condensed';
+    font-size: 18px;
+    letter-spacing: 2.5px;
+    background-color: black;
+    color: #FFF;
 }

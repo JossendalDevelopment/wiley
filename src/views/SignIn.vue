@@ -2,78 +2,75 @@
     Only handles logging in, new accounts must be created manually for now or by temporarily switching the firebase method in auth.module login action to sign up
 </notes>
 <template>
-    <!-- <v-container fluid fill-height pa-0> -->
-        <v-layout align-center justify-center fill-height>
-            <v-flex xs4 class="container-image" ml-0>
-                <v-layout align-center justify-center fill-height>
-                    <v-img max-width="80%" :src="'/assets/images/wiley_logo_xl.png'" />
-                </v-layout>
-            </v-flex>
+    <v-layout align-center justify-center fill-height>
 <!-- login form -->
-            <v-flex xs8 px-5 class="container-basic">
-                <v-layout 
-                    align-center 
-                    fill-height 
-                    :class="$vuetify.breakpoint.smAndUp ? 'justify-start' : 'justify-center'">
-                    <v-flex sm12 md7>
-                        <v-card flat color="primaryDark1">
-                            <v-toolbar flat color="primaryDark1">
-                                <v-toolbar-title class="title mx-auto">Welcome!</v-toolbar-title>
-                            </v-toolbar>
-                            <v-card-text class="py-0">
-                                <v-form>
-                                    <v-label>Company Email Address</v-label>
-                                    <v-text-field 
-                                        outline
-                                        class="text-input"
-                                        color="primary darken-4"
-                                        name="employeeEmail" 
-                                        v-model="employeeEmail"
-                                        label="admin@email.com" 
-                                        type="text">
-                                    </v-text-field>
-                                    <v-label>Password</v-label>
-                                    <v-text-field 
-                                        @keyup.enter="login()"
-                                        outline
-                                        class="text-input"
-                                        color="primary darken-4"
-                                        name="password" 
-                                        v-model="password"
-                                        label="password" 
-                                        id="password" 
-                                        type="password">
-                                    </v-text-field>
-                                </v-form>
-                            </v-card-text>
-                            <v-card-actions class="px-3 text-xs-center">
-                                <v-layout wrap align-center justify-center>
-                                    <v-flex xs12 sm6 order-sm2>
-                                        <v-btn 
-                                            :loading="$auth.status.loggingIn" 
-                                            class="px-5" 
-                                            style="width:100%;"
-                                            color="secondary" 
-                                            @click="login()">Sign In</v-btn>
-                                    </v-flex>
-                                    <v-flex xs12 sm6>
-                                        <v-checkbox v-model="remember" color="accent" >
-                                            <template v-slot:label>
-                                                <div> Remember Me </div>
-                                            </template>
-                                        </v-checkbox>
-                                    </v-flex>
-                                </v-layout>
-                            </v-card-actions>
-                            <!-- <v-card-actions>
-                                <v-btn to="" flat>Forgot your password?</v-btn>
-                            </v-card-actions> -->
-                        </v-card>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
-        </v-layout>
-    <!-- </v-container> -->
+        <v-flex xs6 px-5 class="container-form">
+            <v-layout 
+                row wrap
+                align-center
+                fill-height 
+                :class="$vuetify.breakpoint.smAndUp ? 'justify-start' : 'justify-center'">
+                <v-flex xs12>
+                    <v-layout justify-center>
+                        <div class="red-border">
+                            <span class="welcome">WELCOME</span>
+                        </div>
+                    </v-layout>
+                </v-flex>
+                <v-flex sm10 offset-xs1>
+                    <v-card flat color="secondaryDark">
+                        <v-card-text class="py-0">
+                            <v-form class="app-form">
+                                <span class="app-form-label">COMPANY EMAIL ADDRESS</span>
+                                <v-text-field 
+                                    background-color="#FFF"
+                                    height="40px"
+                                    name="employeeEmail" 
+                                    v-model="employeeEmail"
+                                    placeholder="admin@email.com" 
+                                    type="text">
+                                </v-text-field>
+                                <span class="app-form-label">PASSWORD</span>
+                                <v-text-field 
+                                    @keyup.enter="login()"
+                                    background-color="#FFF"
+                                    height="40px"
+                                    name="password" 
+                                    v-model="password"
+                                    placeholder="password" 
+                                    type="password">
+                                </v-text-field>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions class="px-3 text-xs-center">
+                            <v-layout wrap align-center justify-space-between>
+                                <v-checkbox v-model="remember" dark color="accent" >
+                                    <template v-slot:label>
+                                        <div style="color:#FFF; font-family: 'DIN Condensed; letter-spacing:2px;'"> REMEMBER ME </div>
+                                    </template>
+                                </v-checkbox>
+                                <v-btn 
+                                    :loading="$auth.status.loggingIn" 
+                                    color="accent" 
+                                    @click="login()">Sign In</v-btn>
+                            </v-layout>
+                        </v-card-actions>
+                    </v-card>
+                </v-flex>
+                <v-flex xs12>
+                    <v-layout justify-center>
+                        <router-link to="" class="password-reset" flat>FORGOT YOUR PASSWORD?</router-link>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+        </v-flex>
+
+        <v-flex xs6 class="container-image" ml-0>
+            <v-layout align-center justify-center fill-height>
+                <v-img max-width="55%" :src="'/assets/images/wiley_logo_xl.png'" />
+            </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 <script>
 
@@ -98,9 +95,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.container-basic {
+.container-form {
     height: 100%;
-    background-color: var(--v-primaryDark1-base);
+    background-color: var(--v-secondaryDark2-base);
 }
 .container-image {
     height:100%;
@@ -108,7 +105,32 @@ export default {
 }
 .text-input > .v-input__control > .v-input__slot {
     // override text-fields' background
-    background-color: #FFFFFF !important;
+    // background-color: #FFFFFF !important;
+}
+.app-form-label {
+    font-family: 'DIN Condensed';
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #FFF;
+}
+.red-border {
+    background-image: url("/assets/images/red_border.png");
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    z-index: 200;
+    padding: 0px 20px 0px;
+}
+.welcome {
+    font-size: 48px;
+    font-family: 'DIN Condensed';
+    letter-spacing: 3px;
+    color: #FFF;
+}
+.password-reset {
+    font-family: 'DIN Condensed'; 
+    font-size: 18px;
+    letter-spacing:2px;
+    color: #FFF;
 }
 </style>
 
