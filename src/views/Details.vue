@@ -16,7 +16,7 @@
 <!-- video -->
             <v-layout row wrap align-center justify-center>
                 <v-flex xs2>
-                    <v-layout justify-center>
+                    <v-layout justify-start>
                         <v-btn flat large @click="goBack()">Previous</v-btn>
                     </v-layout>
                 </v-flex>
@@ -32,7 +32,7 @@
                     </div>
                 </v-flex>
                 <v-flex xs2>
-                    <v-layout justify-center>
+                    <v-layout justify-end>
                         <v-btn flat large @click="goNext()">Next/Skip</v-btn>
                     </v-layout>
                 </v-flex>

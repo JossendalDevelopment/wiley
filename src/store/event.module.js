@@ -46,6 +46,12 @@ export const eventHistory = {
                     return resp;
                 })
         },
+        getAllClassifiedEvents() {
+            return api.getAllClassifiedEvents()
+                .then(resp => {
+                    return resp;
+                })
+        },
         setEvents({ commit }, payload) {
             commit('setEvents', payload);
         },

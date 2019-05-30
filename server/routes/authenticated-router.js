@@ -31,7 +31,8 @@ router.post('/update_event', (req, res) => {
     const event = req.body.event;
     db.collection('classified_events').doc(event.eventId).update({
         classifiedAs: event.classifiedAs,
-        timestamp: admin.firestore.FieldValue.serverTimestamp()
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        classified: true
     })
     .then(docRef => {
         console.log("NEW DOC", docRef)
@@ -46,6 +47,23 @@ router.get('/get_all_events', (req, res) => {
         (querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${doc.data()}`);
+                let newDoc = doc.data();
+                newDoc.id = doc.id;
+                result.push(newDoc)
+            });
+            formatResponse(res, 'success', result);
+        },
+        (error) => {
+            formatResponse(res, 'error', error);
+        }
+    );
+});
+
+router.get('/get_all_classified_events', (req, res) => {
+    let result = [];
+    db.collection("classified_events").where("classified", "==", true).get().then(
+        (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
                 let newDoc = doc.data();
                 newDoc.id = doc.id;
                 result.push(newDoc)

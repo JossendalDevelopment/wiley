@@ -35,7 +35,10 @@
                 flat 
                 absolute 
                 v-if="$auth.status.loggedIn" 
-                :style="`background-color:${$vuetify.theme.secondaryDark}`">
+                class="app-toolbar"
+            >
+
+                <v-spacer></v-spacer>
 
                 <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
                 <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat style="position:relative;">
@@ -158,10 +161,17 @@ export default {
     /* overrides alert header bars' cancel icon color to white */
     color:white;
 }
+.app-toolbar {
+    background-color: var(--v-secondaryDark-base);
+}
 .v-btn {
     background-color: var(--v-secondaryDark-base);
 }
 .logout-btn {
+    position: absolute;
+    top: 5px;
+    right: 12px;
+
     border: 1px solid var(--v-border-base);
 }
 .v-btn--active {

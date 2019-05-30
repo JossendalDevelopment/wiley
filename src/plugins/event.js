@@ -29,6 +29,9 @@ export default {
                     event.getAllEvents = () => {
                         return store.dispatch('eventHistory/getAllEvents', { });
                     };
+                    event.getAllClassifiedEvents = () => {
+                        return store.dispatch('eventHistory/getAllClassifiedEvents', { });
+                    };
                     event.listenForEventsChanges = () => {
                         return store.dispatch('eventHistory/listenForEventsChanges', { });
                     };

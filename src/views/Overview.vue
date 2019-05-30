@@ -15,13 +15,14 @@
                     <v-card class="card-container" flat>
                         <video-live-feed :stream="stream" />
                         <v-card-title>
-                            <span class="title mr-auto">{{ stream.camName.toUpperCase() }}</span>
+                            <span class="cam-name">{{ stream.camName.toUpperCase() }}</span>
                         </v-card-title>
                     </v-card>
                 </v-flex>
             </v-layout>
-            <v-layout align-center justify-end>
-                <p class="app-timer">{{ dateTime }}</p>
+            <v-layout column align-end justify-end>
+                <p class="clock label">TIME</p>
+                <p class="clock timer">{{ dateTime }}</p>
             </v-layout>
         </v-layout>
     </v-container>
@@ -60,16 +61,26 @@ export default {
 <style lang="scss" scoped>
 .overview-container {
     background-color: var(--v-secondaryDark2-base);
+    letter-spacing: 2.5px;
+    font-family: 'DIN Condensed';
 }
 .card-container {
     background-color: var(--v-secondaryDark2-base);
     color: #FFF;
 }
-.app-timer {
+.cam-name {
+    font-size: 24px;
+}
+.clock {
     color: #FFF;
-    font-family: 'DIN Condensed';
-    font-size: 64px;
     margin-right: 20px;
+    &.label {
+        font-size: 28px;
+        margin-bottom: -20px;
+    }
+    &.timer {
+        font-size: 64px;
+    }
 }
 </style>
 
