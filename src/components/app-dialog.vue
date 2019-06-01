@@ -5,6 +5,7 @@
         :persistent="isLoading || persistent"
         :lazy="lazy"
         :max-width="maxWidth"
+        flat
     >
         <v-dialog
             v-model="isLoading"
@@ -21,25 +22,24 @@
             /></p>
         </v-dialog>
         <slot>
-            <!-- <v-card :style="{backgroundColor: $vuetify.theme.primary}"> -->
-            <!-- <v-card style="background-color: transparent;" flat dark> -->
+            <v-card color="transparent" flat >
                 <v-layout align-center justify-space-between>
                     <!-- <span class="right mt-3 mr-3" style="display:inline-block;">
                         <slot name="leftofclose" />
                     </span> -->
-                    <!-- <v-card-title> -->
-                        <h2 class="mt-3 ml-3" style="display:inline; color:#FFF; font-family:Open Sans Condensed; font-weight:700; letter-spacing:5px;"><slot name="modaltitle"/></h2>
-                    <!-- </v-card-title> -->
+                    <v-card-title class="mb-0 pb-0">
+                        <h2 class="ml-1" style="display:inline; color:#FFF; font-family:DIN Condensed; font-weight:700; letter-spacing:5px;"><slot name="modaltitle"/></h2>
+                    </v-card-title>
                     <v-icon 
                         v-if="!isLoading && !persistent" 
                         class="right mt-3 mr-3" 
                         @click.stop="close"
                         dark
                     >
-                        far fa-times-circle
+                        fas fa-times
                     </v-icon>
                 </v-layout>
-                <v-card-text>
+                <v-card-text class="modal-content">
                     <slot name="modalcontent"/>
                 </v-card-text>
                 <v-card-actions>
@@ -50,11 +50,11 @@
                         <slot v-if="!isLoading" name="actionbuttons" />
                     </span>
                     <v-spacer/>
-                    <span right>
+                    <span right class="mr-2">
                         <slot name="detailsButton" />
                     </span>
                 </v-card-actions>
-            <!-- </v-card> -->
+            </v-card>
         </slot>
     </v-dialog>
 </template>
@@ -99,4 +99,24 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.v-overlay:before {
+    background-color: black !important;
+}
+.v-overlay--active:before {
+    opacity: 0.90 !important;
+}
+.v-dialog__content {
+    height: 70% !important;
+}
+.modal-content {
+    background-color: transparent;
+    padding-top: 0px;
+}
+#inspire > div.v-dialog__content.v-dialog__content--active > div > div.v-card.v-card--flat.v-sheet.theme--light.transparent > div.v-card__text.modal-content > div > div > div.v-input__slot.transparent:before {
+    // override little border bar on textarea
+    border: none;
+}
+</style>
+
 

@@ -5,7 +5,7 @@
     Also handling the floating zoom icon doesn't reposition itself when zoomed.
 </notes>
 <template>
-    <div style="overflow:hidden; position:relative; padding-bottom: 56%;">
+    <div style="overflow:hidden; position:relative; padding-bottom: 55.65%;">
         <!-- <transition name="fade" mode="out-in" :duration="100"> -->
             <v-img 
                 v-if="!zoomed" 
@@ -90,7 +90,7 @@ export default {
         },
         drawBoundary() {
             let ctx = this.$refs.myCanvas.getContext("2d");
-            // ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+            ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
             ctx.beginPath();
             ctx.lineWidth = "3";
             ctx.strokeStyle = "red";
@@ -131,7 +131,6 @@ export default {
         },
         getPath() {
             if(this.zoomed) {
-                console.log(this.source)
                 return this.source.staticImageZoomed;
             } else {
                 return this.source.staticImage;
@@ -139,7 +138,6 @@ export default {
         },
     },
     mounted() {
-        this.dynamicSource = this.source.staticImage;
         setTimeout(() => {
             // this.drawCanvas();
         }, 400)

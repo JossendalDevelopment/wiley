@@ -3,7 +3,7 @@
         <v-layout row wrap>
             <v-flex xs6 d-flex v-for="x in 12" :key="x" class="app-list-item-container">
                 <v-card flat class="app-list-item">
-                <v-layout row>
+                <v-layout row  align-center>
                     <v-flex xs4>
                         <v-img
                             src="/assets/images/wiley_logo_xl.png"
@@ -11,7 +11,7 @@
                         ></v-img> 
                     </v-flex>
                     <v-flex xs8>
-                        <v-layout column>
+                        <v-layout column justify-center>
                             <v-flex xs12>
                                 <v-layout justify-space-between align-center ma-2>
                                     <span>CAMERA</span>
@@ -33,10 +33,20 @@
     </v-container>
 </template>
 <script>
+export default {
+    props: {
+        data: {
+            type: Object,
+            required: true
+        }
+    },
+    mounted() {
+        console.log("TODO: SET THIS UP!!!!!!!!!", this.data)
+    }
+}
 </script>
 <style lang="scss" scoped>
 .app-list-item-container {
-    // background-color: var(--v-buttonBlack-base);
     padding: 10px;
 }
 .app-list-item {

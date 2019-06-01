@@ -18,8 +18,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/test.jpg",
-        "staticImageZoomed": "/assets/images/test-zoom.jpg",
+        "staticImage": "/assets/images/demo-images/test.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/test-zoom.jpg",
         "boundary": {
             "yMin": "0.19369137287139893",
             "xMin": "0.4157434105873108",
@@ -49,7 +49,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg",
+        "staticImage": "/assets/images/demo-images/e1.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e1-zoom.jpg",
         "boundary": {
             "x": 480,
             "y": 280,
@@ -75,7 +76,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/e2.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e2-zoom.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -101,7 +103,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/e3.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e3-zoom.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -127,7 +130,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg",
+        "staticImage": "/assets/images/demo-images/e4.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e4-zoom.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -153,7 +157,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/e5.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e5-zoom.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -179,7 +184,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/e6.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e6-zoom.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -205,7 +211,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg",
+        "staticImage": "/assets/images/demo-images/e7.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e7-zoom.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -231,7 +238,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/e8.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/e8-zoom.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -257,7 +265,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/p1.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p1-zoom.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -283,7 +292,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg",
+        "staticImage": "/assets/images/demo-images/p2.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p2-zoom.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -309,7 +319,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/p3.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p3-zoom.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -335,7 +346,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/p4.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p4-zoom.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -361,7 +373,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg",
+        "staticImage": "/assets/images/demo-images/p5.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p5-zoom.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -387,7 +400,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/p6.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p6-zoom.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -413,7 +427,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/p7.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p7-zoom.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -439,7 +454,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_railwest.jpg",
+        "staticImage": "/assets/images/demo-images/p8.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p8-zoom.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -465,7 +481,8 @@
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/ref_raileast.jpg",
+        "staticImage": "/assets/images/demo-images/p8.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/p8-zoom.jpg",
         "boundary": {
             "x": 340,
             "y": 200,

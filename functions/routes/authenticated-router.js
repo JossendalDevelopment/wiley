@@ -81,7 +81,7 @@ router.get('/get_all_classified_events', (req, res) => {
         })
 });
 
-router.post('/set_new_events', (req, res) => {
+router.post('/add_new_events', (req, res) => {
     const events = req.body.events;
     events.forEach(event => {
         let batch = db.batch();

@@ -21,27 +21,27 @@
                 </v-flex>
                     <!-- sub header bar -->
                 <v-flex xs8 offset-xs2 my-4>
-                    <v-layout align-center justify-space-between>
+                    <v-layout row wrap align-center :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'">
                         <h3 class="sort-bar-text">{{ selectedEvent.name.toUpperCase() }}S THIS WEEK  ({{ eventTypes['false-alarm'].count }})</h3>
                         <div>
-                        <div class="select-container">
-                            <span class="text">SHOW ONLY</span>
-                            <select class="select" @change="filterBy($event)">
-                                <option v-for="item in filterOptions" :key="item">{{ item }}</option>
-                            </select>
-                        </div>
-                        <div class="select-container">
-                            <span class="text">ARRANGE BY</span>
-                            <select class="select" @change="sortBy($event)">
-                                <option v-for="item in sortOptions" :key="item">{{ item }}</option>
-                            </select>
-                        </div>
+                            <div class="select-container">
+                                <span class="text">SHOW ONLY</span>
+                                <select class="select" @change="filterBy($event)">
+                                    <option v-for="item in filterOptions" :key="item">{{ item }}</option>
+                                </select>
+                            </div>
+                            <div class="select-container">
+                                <span class="text">ARRANGE BY</span>
+                                <select class="select" @change="sortBy($event)">
+                                    <option v-for="item in sortOptions" :key="item">{{ item }}</option>
+                                </select>
+                            </div>
                         </div>
                     </v-layout>
                 </v-flex>
                     <!-- dynamic component -->
                 <v-flex xs8 offset-xs2 class="list-container">
-                    <component :is="getComponent" />
+                    <component :is="getComponent" :key="selectedEvent.type" :data="eventTypes[selectedEvent.type]"/>
                 </v-flex>
             </v-layout>
         </template>
@@ -56,11 +56,11 @@ export default {
         events: [],
         working: true,
         eventTypes: { 
-            'employee': {name: 'Employee', type: 'employee', count:0},
-            'non-employee': {name: 'Non-Employee', type: 'non-employee', count:0},
-            'contractor': {name: 'Contractor', type: 'contractor', count:0},
-            'coyote': {name: 'Coyote', type: 'coyote', count:0},
-            'false-alarm': {name: 'False Alarm', type: 'false-alarm', count:0},
+            'employee': {name: 'Employee', type: 'employee', count:0, events: [] },
+            'non-employee': {name: 'Non-Employee', type: 'non-employee', count:0, events: [] },
+            'contractor': {name: 'Contractor', type: 'contractor', count:0, events: [] },
+            'coyote': {name: 'Coyote', type: 'coyote', count:0, events: [] },
+            'false-alarm': {name: 'False Alarm', type: 'false-alarm', count:0, events: [] },
         },
         selectedEvent: {name: 'Coyote', type: 'coyote', count:0},
         filterOptions: ['This Week', 'Today', 'Last Week', 'All'],
@@ -77,7 +77,9 @@ export default {
                     this.eventTypes[cls] = {
                         ...this.eventTypes[cls],
                         count: this.eventTypes[cls].count ? this.eventTypes[cls].count += 1 : 1,
+                        events: this.eventTypes[cls].events.push(item)
                     };
+
                 })
                 this.working = false;
             })
@@ -98,7 +100,6 @@ export default {
     },
     computed: {
         getComponent() {
-            console.log("T", this.selectedEvent)
             if(this.selectedEvent.type === 'false-alarm') {
                 return FalseAlarmList;
             } 
@@ -199,6 +200,20 @@ select::-ms-expand {
     &:hover {
         &::-webkit-scrollbar-thumb {
             background: #888; 
+        }
+    }
+}
+@media only screen and (max-width: 1100px) {
+    .app-card {
+        .name {
+            font-size: 20px;
+        }
+    }
+}
+@media only screen and (max-width: 920px) {
+    .app-card {
+        .name {
+            font-size: 18px;
         }
     }
 }

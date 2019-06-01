@@ -74,13 +74,15 @@
             <template slot="modalcontent">
                 <v-textarea
                     dark
-                    rows="7"
+                    background-color="transparent"
+                    rows="6"
                     auto-grow
                     class="textarea"
-                    value="Please leave a reason for registering this event as a false alarm"                    
+                    placeholder="Please leave a reason for registering this event as a false alarm"                    
+                    v-model="falseAlarmReason"                    
                 />
             </template>
-            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" @click="setClassification('false-alarm')">Confirm</v-btn> 
+            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" :disabled="!falseAlarmReason" @click="setFalseAlarmClassification('false-alarm')">Confirm</v-btn> 
         </app-dialog>
     </v-layout>
 </template>
@@ -104,6 +106,7 @@ export default {
         working: true,
         currentEventIndex: 0,
         currentEvent: {},
+        falseAlarmReason: '',
         videoOptions: {
             autoplay: true,
             controls: false,
@@ -118,6 +121,21 @@ export default {
 
     }),
     mounted() {
+        // May or may not want to fetch all events here to ensure latest data
+        // for dev purposes, just assuming data and grabbing first record
+        this.currentEvent = this.$events.events[0];
+        // this.$events.getAllEvents()
+        //     .then(resp => {
+        //             this.currentEvent = resp.data[0];
+        //             // this.$events.setEvents(resp.data)
+                    this.working = false;
+        //     })
+        //     .catch(err => {
+        //         this.$notifyError("ERROR FETCHING NEW EVENTS")
+        //     })
+            // this.$events.setEvents(this.events.events);
+    },
+    created() {
         window.addEventListener("keyup", (e) => {
             if (String.fromCharCode(e.keyCode) === '1') {
                 this.setClassification('employee');
@@ -140,23 +158,8 @@ export default {
                 this.goBack();
             }
         });
-        this.$events.getAllEvents()
-            .then(async resp => {
-                try {
-                    console.log("SETTING NEW EVENTS", resp)
-                    await this.$events.setEvents(resp.data)
-                    this.currentEvent = resp.data[0];
-                    this.working = false;
-                }
-                catch (err) {
-                    this.$notifyError("ERROR FETCHING NEW EVENTS")
-                }
-            })
-            // this.$events.setEvents(this.events.events);
-    },
-    created() {
-        // watcher on all classified events
-        // TODO limit this to the most recent 25 events?
+        // watcher on all classified events. this will update all events in real time
+
         // const db = firebase.firestore();
         // this.eventWatcher = db.collection("classified_events").limit(25)
         //     .onSnapshot(
@@ -192,23 +195,18 @@ export default {
         crawlArray(array, index, n) {
             return ((index + n) % array.length + array.length) % array.length;
         },
+        setFalseAlarmClassification(type) {
+            // special handling of false alarm confirmations?
+            this.setClassification(type)
+        },
         setClassification(type) {
             // could interrupt with a confirmation of some kind here
-            // find current event in this.$events.events and update it
+            // find current event in this.$events.events and update any required props
             let curr = this.$events.events.find(event => {
                 return event.eventId === this.currentEvent.eventId
             })
             curr.classifiedAs = type;
             this.updateConfirmedEvent(curr);
-        },
-        confirmEvent(event) {
-            this.$events.createEvent(event)
-                .then(() => {
-                    this.$notifyClassification(event.classifiedAs.toUpperCase())
-                })
-                .catch(() => {
-                    this.$notifyError("Failed")
-                })
         },
         updateConfirmedEvent(event) {
             this.$events.updateEvent(event)

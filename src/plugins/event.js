@@ -16,8 +16,8 @@ export default {
                             events
                         });
                     };
-                    event.setNewEvents = events => {
-                        return store.dispatch('eventHistory/setNewEvents', {
+                    event.addNewEvents = events => {
+                        return store.dispatch('eventHistory/addNewEvents', {
                             events
                         });
                     };

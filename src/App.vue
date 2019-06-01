@@ -52,7 +52,7 @@
                 <v-spacer></v-spacer>
 
                 <v-btn @click="logout()" dark flat class="logout-btn">logout</v-btn>
-                <!-- <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:120px; top:5px;">NEW</v-btn> -->
+                <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:120px; top:5px;">NEW</v-btn>
 
             </v-toolbar>
 
@@ -148,9 +148,12 @@ export default {
             this.$router.replace('/sign_in');
         },
         getNewEvents() {
-            this.$events.setNewEvents(this.events)
+            this.$events.addNewEvents(this.events)
                 .then(() => {
                     this.$notifySuccess("New events received!")
+                })
+                .catch(() => {
+                    this.$notifyError("Error getting new events!")
                 })
         }
     },

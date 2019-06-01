@@ -57,9 +57,9 @@ instance.getAllClassifiedEvents = async function() {
     }
 };
 
-instance.setNewEvents = async function(events) {
+instance.addNewEvents = async function(events) {
     try {
-        const resp = await this.post('/set_new_events', { events });
+        const resp = await this.post('/add_new_events', { events });
         return resp.data;
     }
     catch (err) {

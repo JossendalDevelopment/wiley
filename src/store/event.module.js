@@ -19,7 +19,10 @@ export const eventHistory = {
             state.history.push(payload.event);
         },
         setEvents(state, payload) {
-            state.events = payload.events
+            state.events = payload.events;
+        },
+        addEvents(state, payload) {
+            state.events = [...state.events, ...payload.events];
         },
         deleteEvents(state) {
             state.events = [];
@@ -62,16 +65,16 @@ export const eventHistory = {
             context.commit('deleteEvents');
             return api.deleteEvents()
                 .then(() => {
-                    context.dispatch('setNewEvents', payload)
+                    context.dispatch('addNewEvents', payload)
                         .then((resp) => {
                             payload.cb('/training')
                             return resp;
                         })
                 })
         },
-        setNewEvents({ commit }, payload) {
-            commit('setEvents', payload.events);
-            return api.setNewEvents(payload.events)
+        addNewEvents({ commit }, payload) {
+            commit('addEvents', payload);
+            return api.addNewEvents(payload.events)
                 .then(resp => {
                     return resp;
                 })
