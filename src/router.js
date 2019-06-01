@@ -9,6 +9,9 @@ import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
 // import Home from '@/views/Home.vue';
 
+import store from '@/store';
+import EventsJson from './dummyEvents.json';
+
 Vue.use(Router);
 
 export const router = new Router({
@@ -40,7 +43,21 @@ export const router = new Router({
   ]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach( async (to, from, next) => {
+    // a url based method to reset dummy data for purpose of demo
+    if(to.redirectedFrom && to.redirectedFrom.includes('clear')) {
+        let events = EventsJson.events
+        try {
+            await store.dispatch('eventHistory/deleteEvents', { 
+                cb: next, 
+                events: events 
+            })
+        }
+        catch (err) {
+            console.log("Error in router.js", err)
+        }
+        return;
+    }
     if (to.matched.some(record => record.meta.requiresAuth)) {
         firebase.auth().onAuthStateChanged(function(user) {
             if (!user) {

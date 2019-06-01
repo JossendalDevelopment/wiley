@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         startTime() {
-            this.dateTime = format(new Date(), 'hh:mm;ss');
+            this.dateTime = format(new Date(), 'hh:mm:ss');
             this.timer = setTimeout(this.startTime, 1000);
         },
     },

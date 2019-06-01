@@ -41,6 +41,7 @@ export default {
             controls: false,
             responsive: true,
             aspectRatio: '16:9',
+            loop: true,
             fill: true,
             muted: true,
             language: 'en',

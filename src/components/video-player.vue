@@ -6,10 +6,10 @@
 
     <!-- video overlay top -->
     <v-layout class="controls-top" align-start justify-end>
-        <div class="zoom-button" @click="isZoomed ? zoomOut() : zoomIn()">
+        <!-- <div class="zoom-button" @click="isZoomed ? zoomOut() : zoomIn()">
             <v-icon>fas fa-search-plus</v-icon>
             <p class="pl-2 mb-0 test-ref" style="font-size:16px; font-weight:800;">Zoom</p>
-        </div>
+        </div> -->
     </v-layout>
     <!-- player -->
     <div class="player-wrapper">

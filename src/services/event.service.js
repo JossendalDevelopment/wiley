@@ -65,6 +65,16 @@ instance.setNewEvents = async function(events) {
     catch (err) {
         return err;
     }
+};
+
+instance.deleteEvents = async function(events) {
+    try {
+        const resp = await this.post('/delete_events', { events });
+        return resp.data;
+    }
+    catch (err) {
+        return err;
+    }
 }
 
 export default instance;

@@ -21,6 +21,9 @@ export const eventHistory = {
         setEvents(state, payload) {
             state.events = payload.events
         },
+        deleteEvents(state) {
+            state.events = [];
+        }
     },
     actions: {
         createEvent({ commit }, payload) {
@@ -55,12 +58,23 @@ export const eventHistory = {
         setEvents({ commit }, payload) {
             commit('setEvents', payload);
         },
+        deleteEvents(context, payload) {
+            context.commit('deleteEvents');
+            return api.deleteEvents()
+                .then(() => {
+                    context.dispatch('setNewEvents', payload)
+                        .then((resp) => {
+                            payload.cb('/training')
+                            return resp;
+                        })
+                })
+        },
         setNewEvents({ commit }, payload) {
-            commit('setEvents', payload);
+            commit('setEvents', payload.events);
             return api.setNewEvents(payload.events)
                 .then(resp => {
                     return resp;
                 })
-        }
-    },
-}
+        },
+    }
+};

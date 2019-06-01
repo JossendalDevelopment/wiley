@@ -2,7 +2,7 @@
     This component handles all the heavy lifting for classifying an event. Will need abstraction  
 </notes>
 <template>
-    <v-layout justify-center v-if="$events.events.length === 0" class="video-container test-ref">
+    <v-layout justify-center v-if="$events.events && $events.events.length === 0" class="video-container test-ref">
         <span style="color:white; font-family: Open Sans Condensed; font-size: 30px;">
             There are no events
         </span>
@@ -11,12 +11,12 @@
         <v-flex xs12>
 <!-- Above video -->
             <v-layout align-center justify-center>
-                <span style="color:white; font-family: 'DIN Condensed'; font-size: 28px;">{{`${currentEventIndex + 1}/${$events.events.length}`}}</span>
+                <span style="color:white; font-family: 'DIN Condensed'; font-size: 28px;">{{`${currentEventIndex + 1}/${ $events.events && $events.events.length}`}}</span>
             </v-layout>
 <!-- video -->
             <v-layout row wrap align-center justify-center>
                 <v-flex xs2>
-                    <v-layout justify-start>
+                    <v-layout justify-start align-center>
                         <v-btn flat large @click="goBack()">Previous</v-btn>
                     </v-layout>
                 </v-flex>
@@ -142,9 +142,15 @@ export default {
         });
         this.$events.getAllEvents()
             .then(async resp => {
-                await this.$events.setEvents(resp.data)
-                this.currentEvent = resp.data[0];
-                this.working = false;
+                try {
+                    console.log("SETTING NEW EVENTS", resp)
+                    await this.$events.setEvents(resp.data)
+                    this.currentEvent = resp.data[0];
+                    this.working = false;
+                }
+                catch (err) {
+                    this.$notifyError("ERROR FETCHING NEW EVENTS")
+                }
             })
             // this.$events.setEvents(this.events.events);
     },

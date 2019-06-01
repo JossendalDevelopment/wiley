@@ -44,7 +44,7 @@
                 <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat style="position:relative;">
                     Model Training
                     <v-badge color="red" style="position:absolute; top:3px; right:-5px;">
-                        <span slot="badge" style="margin-left:2px; margin-top:1px;">{{ $events.events.length }}</span>
+                        <span slot="badge" style="margin-left:2px; margin-top:1px;">{{ $events.events ? $events.events.length : 0 }}</span>
                     </v-badge>
                 </v-btn>
                 <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
@@ -52,7 +52,7 @@
                 <v-spacer></v-spacer>
 
                 <v-btn @click="logout()" dark flat class="logout-btn">logout</v-btn>
-                <!-- <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:20px; top:0px;">NEW</v-btn> -->
+                <!-- <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:120px; top:5px;">NEW</v-btn> -->
 
             </v-toolbar>
 
