@@ -13,7 +13,6 @@
                 :key="source.id" 
                 :src="source.staticImage" 
                 style="position:absolute; width:100%;"
-                :style="setScale()" 
                 @click="zoom()">
 
                 <!-- <canvas ref="myCanvas" id="myCanvas" style="position:absolute; top:0; bottom:0; right:0; left:0;">
@@ -41,8 +40,6 @@
             </v-img>
 
         <!-- </transition> -->
-            <!-- icon floats when image is zoomed, removed until fix is found -->
-            <!-- <v-img ref="zoomIcon" :src="require('../../public/assets/images/icon-zoom.svg')" :style="setIconStyle" /> -->
     </div>
 </template>
 <script>
@@ -103,6 +100,11 @@ export default {
             this.zoomed = !this.zoomed;
             this.getPath;
         },
+        zoomOut() {
+            if (this.zoomed) {
+                this.zoomed = false;
+            }
+        },
         getClick() {
             let img = this.$refs.dummyImage.$el.getBoundingClientRect();
             let x = img.width / 2 - (this.boundary.x + this.boundary.width / 2);
@@ -120,15 +122,6 @@ export default {
         },
     },
     computed: {
-        setIconStyle() {
-            return `
-                position:absolute; 
-                height:15px; 
-                width:15px; 
-                top:${this.boundary.y - 15}px; 
-                left:${this.boundary.x + this.boundary.width}px; 
-            `
-        },
         getPath() {
             if(this.zoomed) {
                 return this.source.staticImageZoomed;

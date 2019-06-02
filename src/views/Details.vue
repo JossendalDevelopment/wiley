@@ -67,7 +67,7 @@
             </v-layout>
         </v-flex>
 <!-- Confirm/Deny modals -->
-        <app-dialog ref="falsealarm" max-width="500" lazy>
+        <app-dialog ref="falsealarm" max-width="500" lazy v-on:closed="addListeners()">
             <template slot="modaltitle">
                 CONFIRM FALSE ALARM?
             </template>
@@ -82,12 +82,13 @@
                     v-model="confirmationDescription"                    
                 />
             </template>
-            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" :disabled="!confirmationDescription" @click="setClassification('false-alarm')">Confirm</v-btn> 
+            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" :disabled="!confirmationDescription" @click="setFalseAlarmClassification('false-alarm')">Confirm</v-btn> 
         </app-dialog>
     </v-layout>
 </template>
 <script>
-// import firebase from 'firebase';
+import firebase from 'firebase';
+import "firebase/firestore";
 import DummyCameraImage from '@/components/dummy-camera-image';
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from '@/components/app-dialog.vue';
@@ -101,8 +102,8 @@ export default {
         'app-dialog': Dialog
     },
     data: () => ({
-        classifiedEvents: [],
         eventWatcher: null,
+        listeners: null,
         working: true,
         currentEventIndex: 0,
         currentEvent: {},
@@ -136,7 +137,7 @@ export default {
             // this.$events.setEvents(this.events.events);
     },
     created() {
-        window.addEventListener("keyup", (e) => {
+        this.listeners = (e) => {
             if (String.fromCharCode(e.keyCode) === '1') {
                 this.setClassification('employee');
             } else if (String.fromCharCode(e.keyCode) === '2') {
@@ -157,53 +158,66 @@ export default {
                 // arrow left
                 this.goBack();
             }
-        });
+        };
+        this.addListeners();
         // watcher on all classified events. this will update all events in real time
 
-        // const db = firebase.firestore();
-        // this.eventWatcher = db.collection("classified_events").limit(25)
-        //     .onSnapshot(
-        //         querySnapshot => {
-        //             let result = [];
-        //             querySnapshot.forEach((doc) => { 
-        //                 let newDoc = doc.data();
-        //                 newDoc.id = doc.id;
-        //                 result.push(newDoc);
-        //             });
-        //             // this.classifiedEvents = result;
-        //             // this.$events.setEvents(result);
-        //             // this.currentEvent = result[0];
-        //             this.working = false;
-        //         },
-        //         (error) => {
-        //             console.log("Error in listenForEventChange:", error)
-        //         }
-        //     )
+        const db = firebase.firestore();
+        this.eventWatcher = db.collection("classified_events").limit(25)
+            .onSnapshot(
+                querySnapshot => {
+                    let result = [];
+                    querySnapshot.forEach((doc) => { 
+                        let newDoc = doc.data();
+                        newDoc.id = doc.id;
+                        result.push(newDoc);
+                    });
+                    this.$events.setEvents(result);
+                    this.working = false;
+                },
+                (error) => {
+                    console.log("Error in EventWatcher:", error)
+                }
+            )
     },
     destroyed() {
-        // this.eventWatcher()
+        this.eventWatcher();
     },
     methods: {
+        addListeners() {
+            window.addEventListener("keyup", this.listeners);
+        },
+        removeListeners() {
+            window.removeEventListener("keyup", this.listeners);
+        },
         goBack() {
             this.currentEventIndex = this.crawlArray(this.$events.events, this.currentEventIndex, -1);
             this.currentEvent = this.$events.events[this.currentEventIndex];
+            this.$refs.cameraImage.zoomOut();
         },
         goNext() {
             this.currentEventIndex = this.crawlArray(this.$events.events, this.currentEventIndex, 1);
             this.currentEvent = this.$events.events[this.currentEventIndex];
+            this.$refs.cameraImage.zoomOut();
         },
         crawlArray(array, index, n) {
             return ((index + n) % array.length + array.length) % array.length;
         },
-        setClassification(type) {
+        setFalseAlarmClassification(type) {
             this.$refs.falsealarm.close();
-            // get copy of current event
-            let curr = this.$events.events.find(event => {
-                return event.eventId === this.currentEvent.eventId
-            });
-            curr.classifiedAs = type;
-            curr.confirmationDescription = this.confirmationDescription;
-            this.updateConfirmedEvent(curr);
+            this.addListeners();
+            this.setClassification(type);
+        },
+        setClassification(type) {
+            // get copy of current event - could probably just use this.currentEvent
+            // let curr = this.$events.events.find(event => {
+            //     return event.eventId === this.currentEvent.eventId
+            // });
+            // curr.classifiedAs = type;
+            // curr.confirmationDescription = this.confirmationDescription;
+            this.currentEvent.classifiedAs = type;
+            this.currentEvent.confirmationDescription = this.confirmationDescription;
+            this.updateConfirmedEvent(this.currentEvent);
         },
         updateConfirmedEvent(event) {
             this.$events.updateEvent(event)
@@ -230,6 +244,7 @@ export default {
             return '';
         },
         openFalseAlarmModal() {
+            this.removeListeners();
             this.$refs.falsealarm.open();
         },
     },

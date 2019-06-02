@@ -1,18 +1,22 @@
-<notes>
-    create some ui for empty lists
-</notes>
 <template>
-    <v-layout row wrap>
-        <v-flex xs12 v-for="(evt, index) in data.events" :key="index" class="app-list-item-container">
-            <v-card flat class="app-list-item">
-                <v-layout row justify-space-between pt-3 px-4>
-                    <p class="app-list-item-username">{{ $auth.user.email }}</p>
-                    <p class="app-list-item-username">{{ getDate(evt) }}</p>
-                </v-layout>
-                <v-card-text class="app-list-item-content">{{ evt.confirmationDescription }}</v-card-text>
-            </v-card>
-        </v-flex>
-    </v-layout>
+    <div>
+        <v-layout justify-center v-if="data.events.length === 0">
+            <span style="color:white; font-family: DIN Condensed; font-size: 30px;">
+            THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S
+            </span>
+        </v-layout>
+        <v-layout v-else row wrap>
+            <v-flex xs12 v-for="(evt) in data.events" :key="evt.eventId" class="app-list-item-container">
+                <v-card flat class="app-list-item">
+                    <v-layout row justify-space-between pt-3 px-4>
+                        <p class="app-list-item-username">{{ $auth.user.email }}</p>
+                        <p class="app-list-item-username">{{ getDate(evt) }}</p>
+                    </v-layout>
+                    <v-card-text class="app-list-item-content">{{ evt.confirmationDescription }}</v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </div>
 </template>
 <script>
 import format from 'date-fns/format';

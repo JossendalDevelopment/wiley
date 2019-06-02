@@ -113,11 +113,12 @@ export default {
             this.player.currentTime(event);
         },
         togglePause() {
-            if (this.player.paused()) {
-                this.player.play();
-            } else {
-                this.player.pause();
-            }
+            // disabled for demo
+            // if (this.player.paused()) {
+            //     this.player.play();
+            // } else {
+            //     this.player.pause();
+            // }
         },
         backward() {
             if (this.currentTime >= 3) {

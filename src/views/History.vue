@@ -22,7 +22,7 @@
                     <!-- sub header bar -->
                 <v-flex xs8 offset-xs2 my-4>
                     <v-layout row wrap align-center :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'">
-                        <h3 class="sort-bar-text">{{ selectedEvent.name.toUpperCase() }}S THIS WEEK  ({{ eventTypes['false-alarm'].count }})</h3>
+                        <h3 class="sort-bar-text">{{ selectedEvent.name.toUpperCase() }}S THIS WEEK  ({{ eventTypes[selectedEvent.type].count }})</h3>
                         <div>
                             <div class="select-container">
                                 <span class="text">SHOW ONLY</span>
@@ -64,7 +64,7 @@ export default {
         },
         selectedEvent: {name: 'Coyote', type: 'coyote', count:0},
         filterOptions: ['This Week', 'Today', 'Last Week', 'All'],
-        sortOptions: ['Last Added', 'Today', 'Last Week', 'All'],
+        sortOptions: ['Recent', 'User', 'Camera', 'All'],
     }),
     mounted() {
         // TODO cache this response

@@ -52,7 +52,7 @@
                 <v-spacer></v-spacer>
 
                 <v-btn @click="logout()" dark flat class="logout-btn">logout</v-btn>
-                <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:120px; top:5px;">NEW</v-btn>
+                <!-- <v-btn @click="getNewEvents()" color="accent" style="position:absolute; right:120px; top:5px;">NEW</v-btn> -->
 
             </v-toolbar>
 
@@ -70,7 +70,7 @@
                 :max="1"
                 :speed="200"
                 :width="250"
-                :duration="1000"
+                :duration="500"
                 animation-type="velocity"
                 style="top:20%;"
                 :animation="animation"
