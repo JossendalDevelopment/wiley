@@ -8,7 +8,7 @@
 
     Also all the 'simulated alert' logic is being handled here.
     Cleanup required!!!!!.
-    TODO redo the badge in css only, the numerals aren't centering properly with v-badge
+    TODO redo the badge in css only, the numerals aren't centering properly with v-badge and are being cheesed a bit
 </notes>
 <template>
     <div id="app">
@@ -103,7 +103,6 @@
 </template>
 <script>
 import EventsJson from './dummyEvents.json';
-// import format from 'date-fns/format';
 
 // import AlertData from '@/types/cameraAlertType';
 
@@ -125,11 +124,12 @@ export default {
                     // Animates from 0px to "height"
                     height: [height, 0],
 
-                    // Animates from 0 to random opacity (in range between 0.5 and 1)
+                    // Animates from 0 to 1 opacity
                     opacity: [1, 0]
                 }  
             },
             leave: {
+                // Animates height, opacity, and y-position upwards
                 translateY: -200,
                 height: 0,
                 opacity: 0
@@ -147,14 +147,16 @@ export default {
             await this.$auth.logout();
             this.$router.replace('/sign_in');
         },
-        getNewEvents() {
-            this.$events.addNewEvents(this.events)
-                .then(() => {
-                    this.$notifySuccess("New events received!")
-                })
-                .catch(() => {
-                    this.$notifyError("Error getting new events!")
-                })
+        async getNewEvents() {
+            try {
+                await this.$events.addNewEvents(this.events);
+                let resp = await this.$events.getAllEvents();
+                await this.$events.setEvents(resp.data);
+                this.$notifySuccess("New events received!");
+            } catch(error) {
+                this.$notifyError("Error getting new events!");
+                throw new Error(error);
+            }
         }
     },
 }

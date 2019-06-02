@@ -18,7 +18,6 @@ instance.new = function(url = '/') {
 instance.createEvent = async function(event) {
     try {
         const resp = await this.post('/create_event', { event });
-        console.log("event service created event", resp);
         return resp.data;
     }
     catch (err) {
@@ -29,7 +28,6 @@ instance.createEvent = async function(event) {
 instance.updateEvent = async function(event) {
     try {
         const resp = await this.post('/update_event', { event });
-        console.log("event service updated event", resp);
         return resp.data;
     }
     catch (err) {

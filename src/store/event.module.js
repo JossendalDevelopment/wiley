@@ -35,9 +35,6 @@ export const eventHistory = {
                 .then(resp => {
                     return resp;
                 })
-                .catch(err => {
-                    console.log("ERROR creating event", err)
-                })
         },
         // eslint-disable-next-line no-unused-vars
         updateEvent({ commit }, payload) {
@@ -65,15 +62,14 @@ export const eventHistory = {
             context.commit('deleteEvents');
             return api.deleteEvents()
                 .then(() => {
-                    context.dispatch('addNewEvents', payload)
+                    return context.dispatch('addNewEvents', payload)
                         .then((resp) => {
-                            payload.cb('/training')
                             return resp;
                         })
                 })
         },
+        // eslint-disable-next-line no-unused-vars
         addNewEvents({ commit }, payload) {
-            commit('addEvents', payload);
             return api.addNewEvents(payload.events)
                 .then(resp => {
                     return resp;

@@ -3,7 +3,7 @@
 </notes>
 <template>
     <v-layout justify-center v-if="$events.events && $events.events.length === 0" class="video-container test-ref">
-        <span style="color:white; font-family: Open Sans Condensed; font-size: 30px;">
+        <span style="color:white; font-family: DIN Condensed; font-size: 30px;">
             There are no events
         </span>
     </v-layout>
@@ -67,7 +67,7 @@
             </v-layout>
         </v-flex>
 <!-- Confirm/Deny modals -->
-        <app-dialog ref="falsealarm" max-width="500">
+        <app-dialog ref="falsealarm" max-width="500" lazy>
             <template slot="modaltitle">
                 CONFIRM FALSE ALARM?
             </template>
@@ -79,10 +79,10 @@
                     auto-grow
                     class="textarea"
                     placeholder="Please leave a reason for registering this event as a false alarm"                    
-                    v-model="falseAlarmReason"                    
+                    v-model="confirmationDescription"                    
                 />
             </template>
-            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" :disabled="!falseAlarmReason" @click="setFalseAlarmClassification('false-alarm')">Confirm</v-btn> 
+            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" :disabled="!confirmationDescription" @click="setClassification('false-alarm')">Confirm</v-btn> 
         </app-dialog>
     </v-layout>
 </template>
@@ -106,7 +106,7 @@ export default {
         working: true,
         currentEventIndex: 0,
         currentEvent: {},
-        falseAlarmReason: '',
+        confirmationDescription: '',
         videoOptions: {
             autoplay: true,
             controls: false,
@@ -195,17 +195,14 @@ export default {
         crawlArray(array, index, n) {
             return ((index + n) % array.length + array.length) % array.length;
         },
-        setFalseAlarmClassification(type) {
-            // special handling of false alarm confirmations?
-            this.setClassification(type)
-        },
         setClassification(type) {
-            // could interrupt with a confirmation of some kind here
-            // find current event in this.$events.events and update any required props
+            this.$refs.falsealarm.close();
+            // get copy of current event
             let curr = this.$events.events.find(event => {
                 return event.eventId === this.currentEvent.eventId
-            })
+            });
             curr.classifiedAs = type;
+            curr.confirmationDescription = this.confirmationDescription;
             this.updateConfirmedEvent(curr);
         },
         updateConfirmedEvent(event) {

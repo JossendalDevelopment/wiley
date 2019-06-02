@@ -31,6 +31,7 @@ router.post('/update_event', (req, res) => {
     const event = req.body.event;
     COLLECTION_REF.doc(event.eventId).update({
         classifiedAs: event.classifiedAs,
+        confirmationDescription: event.confirmationDescription,
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
         classified: true
     })

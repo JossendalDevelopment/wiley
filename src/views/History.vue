@@ -77,9 +77,8 @@ export default {
                     this.eventTypes[cls] = {
                         ...this.eventTypes[cls],
                         count: this.eventTypes[cls].count ? this.eventTypes[cls].count += 1 : 1,
-                        events: this.eventTypes[cls].events.push(item)
                     };
-
+                    this.eventTypes[cls].events.push(item)
                 })
                 this.working = false;
             })

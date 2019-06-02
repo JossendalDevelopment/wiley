@@ -49,12 +49,14 @@ router.beforeEach( async (to, from, next) => {
         let events = EventsJson.events
         try {
             await store.dispatch('eventHistory/deleteEvents', { 
-                cb: next, 
                 events: events 
             })
+            let resp = await store.dispatch('eventHistory/getAllEvents');
+            await store.dispatch('eventHistory/setEvents', { events: resp.data });
+            next('/training')
         }
-        catch (err) {
-            console.log("Error in router.js", err)
+        catch (error) {
+            throw new Error(error);
         }
         return;
     }

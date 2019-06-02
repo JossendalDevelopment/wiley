@@ -24,9 +24,6 @@
         <slot>
             <v-card color="transparent" flat >
                 <v-layout align-center justify-space-between>
-                    <!-- <span class="right mt-3 mr-3" style="display:inline-block;">
-                        <slot name="leftofclose" />
-                    </span> -->
                     <v-card-title class="mb-0 pb-0">
                         <h2 class="ml-1" style="display:inline; color:#FFF; font-family:DIN Condensed; font-weight:700; letter-spacing:5px;"><slot name="modaltitle"/></h2>
                     </v-card-title>
