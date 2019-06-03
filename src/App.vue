@@ -43,8 +43,8 @@
                 <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
                 <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat style="position:relative;">
                     Model Training
-                    <v-badge color="red" style="position:absolute; top:3px; right:-5px;">
-                        <span slot="badge" style="margin-left:2px; margin-top:1px;">{{ $events.events ? $events.events.length : 0 }}</span>
+                    <v-badge v-if="!!unclassifiedEventCount" color="red" style="position:absolute; top:3px; right:-5px;">
+                        <span slot="badge" style="margin-left:2px; margin-top:1px;">{{ unclassifiedEventCount }}</span>
                     </v-badge>
                 </v-btn>
                 <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
@@ -56,7 +56,7 @@
 
             </v-toolbar>
 
-            <v-content app  class="app-container">
+            <v-content app class="app-container">
                 <v-container fluid fill-height pa-0>
 
                     <router-view></router-view>
@@ -68,7 +68,7 @@
             <notifications 
                 group="classification-notifications"
                 :max="1"
-                :speed="200"
+                :speed="500"
                 :width="250"
                 :duration="500"
                 animation-type="velocity"
@@ -113,16 +113,17 @@ export default {
         alert: true,
         events: EventsJson.events,
         animation: {
-            enter (element) {
+            enter () {
                 /*
                 *  "element" - is a notification element
                 *    (before animation, meaning that you can take it's initial height, width, color, etc)
                 */
-                let height = element.clientHeight
+                // let height = element.clientHeight
 
                 return {
                     // Animates from 0px to "height"
-                    height: [height, 0],
+                    // height: [height, 0],
+                    translateY: [0, 200],
 
                     // Animates from 0 to 1 opacity
                     opacity: [1, 0]
@@ -130,7 +131,7 @@ export default {
             },
             leave: {
                 // Animates height, opacity, and y-position upwards
-                translateY: -200,
+                translateY: -30,
                 height: 0,
                 opacity: 0
             }
@@ -141,6 +142,14 @@ export default {
             let alert = this.$cameraAlert.alertData;
             return `1 ${alert.detectedObject} identified in ${alert.camName}`;
         },
+        unclassifiedEventCount() {
+            return this.$events.events.reduce((prev, next) => {
+                if (!next.classified) {
+                    prev++;
+                }
+                return prev;
+            }, 0)
+        }
     },
     methods: {
         async logout() {

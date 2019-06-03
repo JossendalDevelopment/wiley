@@ -8,25 +8,24 @@
         <v-layout v-else row wrap>
             <v-flex xs6 d-flex v-for="(evt) in data.events" :key="evt.eventId">
                 <v-card flat class="app-list-item">
-                    <v-layout row  align-center>
+                    <v-layout row align-center>
                         <v-flex xs4 class="app-list-item-image-container">
-                            <v-layout justify-center>
-                                <v-img
-                                    :aspect-ratio="1/1"
-                                    class="app-list-item-image"
-                                    :src="evt.staticImageZoomed"
-                                ></v-img> 
-                            </v-layout>
+                            <v-img
+                                contain
+                                :aspect-ratio="1/1"
+                                class="app-list-item-image"
+                                :src="evt.staticImageThumb"
+                            ></v-img> 
                         </v-flex>
                         <v-flex xs8 class="app-list-item-info-container">
-                            <v-layout column justify-center>
-                                <v-flex xs12>
+                            <v-layout row wrap justify-space-between>
+                                <v-flex xs12 pb-0>
                                     <v-layout justify-space-between align-center ma-2>
                                         <span>{{ evt.camName.toUpperCase() }}</span>
                                         <span>{{ getTime(evt) }}</span>
                                     </v-layout>
                                 </v-flex>
-                                <v-flex xs12>
+                                <v-flex xs12 pt-0>
                                     <v-layout justify-space-between align-center ma-2>
                                         <span class="app-list-item-username">{{ $auth.user.email.toUpperCase() }}</span>
                                         <span class="app-list-item-date">{{ getDate(evt) }}</span>
@@ -48,7 +47,7 @@ export default {
         data: {
             type: Object,
             required: true
-        }
+        },
     },
     methods: {
         getDate(evt) {
@@ -66,21 +65,28 @@ export default {
     background-color: var(--v-buttonBlack-base);
     color: #FFF;
     &-image-container {
-        margin: 8px 0px 8px 8px;
+        border-right: 1px solid var(--v-border-base);
+        margin: 8px;
     }
     &-info-container {
-        border-left: 1px solid var(--v-border-base);
-        margin: 8px 8px 8px 0;
+        margin: 8px 16px 8px 0px;
+        font-size: 20px;
     }
     &-image {
         margin: 0 auto;
-        padding: 10px;
     }
     &-username {
         color: var(--v-border-base);
     }
     &-date {
         color: var(--v-border-base);
+    }
+}
+@media only screen and (max-width: 1050px) {
+    .app-list-item {
+        &-info-container {
+            font-size: 16px;
+        }
     }
 }
 </style>

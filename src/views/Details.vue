@@ -2,19 +2,19 @@
     This component handles all the heavy lifting for classifying an event. Will need abstraction  
 </notes>
 <template>
-    <v-layout justify-center v-if="$events.events && $events.events.length === 0" class="video-container test-ref">
-        <span style="color:white; font-family: DIN Condensed; font-size: 30px;">
-            There are no events
+    <v-layout justify-center fill-height align-center v-if="unclassifiedEvents.length === 0" class="video-container test-ref">
+        <span style="color:white; font-family: DIN Condensed; font-size: 30px; letter-spacing2px;">
+            THERE ARE NO UNCLASSIFIED EVENTS
         </span>
     </v-layout>
     <v-layout v-else-if="!working" class="video-container test-ref" justify-center>
         <v-flex xs12>
 <!-- Above video -->
             <v-layout align-center justify-center>
-                <span style="color:white; font-family: 'DIN Condensed'; font-size: 28px;">{{`${currentEventIndex + 1}/${ $events.events && $events.events.length}`}}</span>
+                <span style="color:white; font-family: 'DIN Condensed'; font-size: 28px;">{{`${currentEventIndex + 1}/${ $events.events && unclassifiedEvents.length}`}}</span>
             </v-layout>
 <!-- video -->
-            <v-layout row wrap align-center justify-center>
+            <v-layout align-center justify-center>
                 <v-flex xs2>
                     <v-layout justify-start align-center>
                         <v-btn flat large @click="goBack()">Previous</v-btn>
@@ -32,7 +32,7 @@
                     </div>
                 </v-flex>
                 <v-flex xs2>
-                    <v-layout justify-end>
+                    <v-layout justify-end align-center>
                         <v-btn flat large @click="goNext()">Next/Skip</v-btn>
                     </v-layout>
                 </v-flex>
@@ -67,7 +67,12 @@
             </v-layout>
         </v-flex>
 <!-- Confirm/Deny modals -->
-        <app-dialog ref="falsealarm" max-width="500" lazy v-on:closed="addListeners()">
+        <app-dialog 
+            ref="falsealarm" 
+            max-width="500" 
+            lazy 
+            v-on:closed="addListeners()" 
+            v-on:opened="focusTextarea()">
             <template slot="modaltitle">
                 CONFIRM FALSE ALARM?
             </template>
@@ -75,6 +80,7 @@
                 <v-textarea
                     dark
                     background-color="transparent"
+                    ref="falsealarmtextarea"
                     rows="6"
                     auto-grow
                     class="textarea"
@@ -103,6 +109,7 @@ export default {
     },
     data: () => ({
         eventWatcher: null,
+        unclassifiedEvents: [],
         listeners: null,
         working: true,
         currentEventIndex: 0,
@@ -124,17 +131,23 @@ export default {
     mounted() {
         // May or may not want to fetch all events here to ensure latest data
         // for dev purposes, just assuming data and grabbing first record
-        this.currentEvent = this.$events.events[0];
+        this.unclassifiedEvents = this.$events.events.filter(evt => {
+            return !evt.classified
+        })
+        if(this.unclassifiedEvents.length > 0) {
+            this.currentEvent = this.unclassifiedEvents[0]
+        }
         // this.$events.getAllEvents()
         //     .then(resp => {
         //             this.currentEvent = resp.data[0];
         //             // this.$events.setEvents(resp.data)
-                    this.working = false;
+        //             this.working = false;
         //     })
         //     .catch(err => {
         //         this.$notifyError("ERROR FETCHING NEW EVENTS")
         //     })
-            // this.$events.setEvents(this.events.events);
+        // this.$events.setEvents(this.events.events);
+        // this.currentEvent = this.$events.events.find(evt => !evt.classified);
     },
     created() {
         this.listeners = (e) => {
@@ -147,7 +160,7 @@ export default {
             } else if (String.fromCharCode(e.keyCode) === '4') {
                 this.setClassification('coyote');
             } else if (String.fromCharCode(e.keyCode) === '5') {
-                this.setClassification('false-alarm');
+                this.openFalseAlarmModal();
             } else if (e.keyCode === 32) {
                 // space bar zoom in/out
                 this.$refs.cameraImage.zoom();
@@ -182,6 +195,7 @@ export default {
     },
     destroyed() {
         this.eventWatcher();
+        this.removeListeners();
     },
     methods: {
         addListeners() {
@@ -191,13 +205,13 @@ export default {
             window.removeEventListener("keyup", this.listeners);
         },
         goBack() {
-            this.currentEventIndex = this.crawlArray(this.$events.events, this.currentEventIndex, -1);
-            this.currentEvent = this.$events.events[this.currentEventIndex];
+            this.currentEventIndex = this.crawlArray(this.unclassifiedEvents, this.currentEventIndex, -1);
+            this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
             this.$refs.cameraImage.zoomOut();
         },
         goNext() {
-            this.currentEventIndex = this.crawlArray(this.$events.events, this.currentEventIndex, 1);
-            this.currentEvent = this.$events.events[this.currentEventIndex];
+            this.currentEventIndex = this.crawlArray(this.unclassifiedEvents, this.currentEventIndex, 1);
+            this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
             this.$refs.cameraImage.zoomOut();
         },
         crawlArray(array, index, n) {
@@ -223,7 +237,9 @@ export default {
             this.$events.updateEvent(event)
                 .then(() => {
                     this.$notifyClassification(event.classifiedAs.toUpperCase());
-                    this.goNext();
+                    setTimeout(() => {
+                        this.goNext();
+                    },1500)
                 })
                 .catch(() => {
                     this.$notifyError("Failed")
@@ -238,7 +254,7 @@ export default {
             }, 0);
         },
         selected(type) {
-            if(this.$events.events[this.currentEventIndex] && this.$events.events[this.currentEventIndex].classifiedAs === type) {
+            if(this.unclassifiedEvents[this.currentEventIndex] && this.unclassifiedEvents[this.currentEventIndex].classifiedAs === type) {
                 return `background-color: #FFF; color: black;`
             }
             return '';
@@ -247,15 +263,19 @@ export default {
             this.removeListeners();
             this.$refs.falsealarm.open();
         },
+        focusTextarea() {
+            this.$nextTick(() => {
+                this.$refs.falsealarmtextarea.focus();
+            })
+        }
     },
-    computed: {
-        getCurrentEvent() {
-            return this.events.events[this.currentEventIndex].staticImage;
-        },
-    }
 }
 </script>
 <style lang="scss" scoped>
+.video-container {
+    background-color: var(--v-secondaryDark-base);
+    font-family: 'DIN Condensed';
+}
 .v-btn {
     letter-spacing: 3.5px;
     border: 1px solid var(--v-border-base);
@@ -271,14 +291,12 @@ export default {
     &-text {
         width: 100%;
         margin: 0 auto;
-        color: #fff;
+        color: var(--v-border-base);
+        font-size: 16px;
     }
 }
 .video-feed-wrapper {
     position: relative;
-}
-.video-container {
-    background-color: var(--v-secondaryDark-base);
 }
 /* border corners */
 

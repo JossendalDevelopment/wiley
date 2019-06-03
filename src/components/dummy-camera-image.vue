@@ -5,8 +5,8 @@
     Also handling the floating zoom icon doesn't reposition itself when zoomed.
 </notes>
 <template>
-    <div style="overflow:hidden; position:relative; padding-bottom: 55.65%;">
-        <!-- <transition name="fade" mode="out-in" :duration="100"> -->
+    <div class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
+        <transition appear name="fade" mode="out-in" :duration="300">
             <v-img 
                 v-if="!zoomed" 
                 ref="dummyImage" 
@@ -18,6 +18,10 @@
                 <!-- <canvas ref="myCanvas" id="myCanvas" style="position:absolute; top:0; bottom:0; right:0; left:0;">
                     Your browser does not support the HTML5 canvas tag.
                 </canvas> -->
+
+                <div class="image-overlay-text">
+                    <span>PRESS SPACE BAR TO ZOOM</span>
+                </div>
 
                 <template v-slot:placeholder>
                     <v-layout
@@ -39,7 +43,7 @@
                 @click="zoom()">
             </v-img>
 
-        <!-- </transition> -->
+        </transition>
     </div>
 </template>
 <script>
@@ -147,6 +151,28 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.images-container {
+    overflow: hidden; 
+    position: relative; 
+    padding-bottom: 55.65%;
+    &.zoom-in-cursor {
+        cursor: url(/assets/images/zoom-in.png) 10 3, auto;
+    }
+    &.zoom-out-cursor {
+        cursor: url(/assets/images/zoom-out.png) 10 3, auto;
+    }
+}
+.image-overlay-text {
+    background-color: var(--v-buttonBlack-base);
+    border: 1px solid var(--v-border-base);
+    letter-spacing: 2px;
+    padding: 0px 10px;
+    color: #FFF;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2001;;
+}
 .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
 }

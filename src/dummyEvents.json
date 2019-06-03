@@ -1,38 +1,6 @@
 {
     "events": [
     {
-        "id": "01",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "84%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
-        },
-        "staticImage": "/assets/images/demo-images/test.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/test-zoom.jpg",
-        "boundary": {
-            "yMin": "0.19369137287139893",
-            "xMin": "0.4157434105873108",
-            "yMax": "0.33124929666519165",
-            "xMax": "0.4459244608879089",
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
         "id": "02",
         "eventId": "",
         "status": "active",
@@ -46,13 +14,14 @@
         "duration": "41",
         "camId": 100,
         "camNumber": 1,
-        "camName": "Rail-EAST",
+        "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/e1.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e1-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e1-thumb.jpg",
         "boundary": {
             "x": 480,
             "y": 280,
@@ -74,13 +43,14 @@
         "duration": "41",
         "camId": 100,
         "camNumber": 1,
-        "camName": "Rail-EAST",
+        "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/e2.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e2-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e2-thumb.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -102,13 +72,14 @@
         "duration": "41",
         "camId": 100,
         "camNumber": 1,
-        "camName": "Rail-EAST",
+        "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/e3.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e3-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e3-thumb.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -137,6 +108,7 @@
         },
         "staticImage": "/assets/images/demo-images/e4.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e4-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e4-thumb.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -165,6 +137,7 @@
         },
         "staticImage": "/assets/images/demo-images/e5.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e5-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e5-thumb.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -186,13 +159,14 @@
         "duration": "41",
         "camId": 100,
         "camNumber": 1,
-        "camName": "Rail-EAST",
+        "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/e6.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e6-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e6-thumb.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -221,6 +195,7 @@
         },
         "staticImage": "/assets/images/demo-images/e7.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e7-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e7-thumb.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -249,6 +224,7 @@
         },
         "staticImage": "/assets/images/demo-images/e8.jpg",
         "staticImageZoomed": "/assets/images/demo-images/e8-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/e8-thumb.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -270,13 +246,14 @@
         "duration": "41",
         "camId": 100,
         "camNumber": 1,
-        "camName": "Rail-EAST",
+        "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/p1.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p1-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p1-thumb.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -298,13 +275,14 @@
         "duration": "41",
         "camId": 100,
         "camNumber": 1,
-        "camName": "Rail-EAST",
+        "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/p2.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p2-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p2-thumb.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -326,13 +304,14 @@
         "duration": "41",
         "camId": 200,
         "camNumber": 2,
-        "camName": "Rail-WEST",
+        "camName": "Rail-EAST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/p3.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p3-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p3-thumb.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -361,6 +340,7 @@
         },
         "staticImage": "/assets/images/demo-images/p4.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p4-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p4-thumb.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -382,13 +362,14 @@
         "duration": "41",
         "camId": 200,
         "camNumber": 2,
-        "camName": "Rail-WEST",
+        "camName": "Rail-EAST",
         "sourceData": {
             "src": "",
             "type": ""
         },
         "staticImage": "/assets/images/demo-images/p5.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p5-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p5-thumb.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -417,6 +398,7 @@
         },
         "staticImage": "/assets/images/demo-images/p6.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p6-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p6-thumb.jpg",
         "boundary": {
             "x": 340,
             "y": 200,
@@ -445,6 +427,7 @@
         },
         "staticImage": "/assets/images/demo-images/p7.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p7-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p7-thumb.jpg",
         "boundary": {
             "x": 220,
             "y": 160,
@@ -473,6 +456,7 @@
         },
         "staticImage": "/assets/images/demo-images/p8.jpg",
         "staticImageZoomed": "/assets/images/demo-images/p8-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/p8-thumb.jpg",
         "boundary": {
             "x": 280,
             "y": 180,
@@ -494,13 +478,217 @@
         "duration": "41",
         "camId": 200,
         "camNumber": 2,
+        "camName": "Rail-EAST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/c1.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/c1-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/c1-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "19",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
+        "camName": "Rail-EAST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/c2.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/c2-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/c2-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "20",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
         "camName": "Rail-WEST",
         "sourceData": {
             "src": "",
             "type": ""
         },
-        "staticImage": "/assets/images/demo-images/p8.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p8-zoom.jpg",
+        "staticImage": "/assets/images/demo-images/c3.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/c3-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/c3-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "21",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
+        "camName": "Rail-WEST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/c4.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/c4-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/c4-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "22",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
+        "camName": "Rail-EAST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/c5.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/c5-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/c5-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "23",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
+        "camName": "Rail-EAST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/f1.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/f1-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/f1-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "24",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
+        "camName": "Rail-EAST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/f2.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/f2-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/f2-thumb.jpg",
+        "boundary": {
+            "x": 340,
+            "y": 200,
+            "width": 30,
+            "height": 75
+        }
+    },
+    {
+        "id": "25",
+        "eventId": "",
+        "status": "active",
+        "classifiedAs": "",
+        "classificationDescription": "",
+        "classified": false,
+        "detectedObject": "coyote",
+        "probability": "100%",
+        "startTime": "159",
+        "endTime": "200",
+        "duration": "41",
+        "camId": 200,
+        "camNumber": 2,
+        "camName": "Rail-WEST",
+        "sourceData": {
+            "src": "",
+            "type": ""
+        },
+        "staticImage": "/assets/images/demo-images/f3.jpg",
+        "staticImageZoomed": "/assets/images/demo-images/f3-zoom.jpg",
+        "staticImageThumb": "/assets/images/thumbs/f3-thumb.jpg",
         "boundary": {
             "x": 340,
             "y": 200,

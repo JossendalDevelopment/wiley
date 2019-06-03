@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid grid-list-lg class="history-container">
+    <v-container fluid pb-0 grid-list-lg class="history-container">
         <template v-if="working">
             <v-layout v-if="working" align-center justify-center>
                 <h3 class="white--text">LOADING...</h3>
@@ -187,8 +187,9 @@ select::-ms-expand {
 }
 // list container styles
 .list-container {
-    height:400px; 
+    height: 450px; 
     overflow: auto;
+    scrollbar-color: orange lightyellow;    
     &::-webkit-scrollbar {
         background-color: transparent;
         width: 8px;
@@ -201,6 +202,9 @@ select::-ms-expand {
             background: #888; 
         }
     }
+}
+.scroll-color-dark {
+  scrollbar-color: dark;
 }
 @media only screen and (max-width: 1100px) {
     .app-card {

@@ -163,7 +163,7 @@ export default {
 }
 video {
     outline: none !important;
-    cursor: pointer;
+    // cursor: pointer;
 }
 .video-js {
     outline: none;

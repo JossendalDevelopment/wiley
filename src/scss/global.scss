@@ -5,6 +5,17 @@
     font-style: normal;
 }
 
+html {
+    //vuetify forces overflow-y to scroll by default, creating an empty scrollbar
+    overflow-y: auto;
+}
+
+* {
+    // background: #000 !important;
+    // color: #0f0 !important;
+    // outline: solid #f00 1px !important;
+}
+
 .v-btn {
     font-family: 'DIN Condensed';
     font-size: 18px;

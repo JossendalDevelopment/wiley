@@ -106,6 +106,7 @@ export default {
 .text-input > .v-input__control > .v-input__slot {
     // override text-fields' background
     // background-color: #FFFFFF !important;
+    padding-left: 8px;
 }
 .app-form-label {
     font-family: 'DIN Condensed';
