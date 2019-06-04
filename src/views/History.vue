@@ -1,47 +1,58 @@
 <template>
-    <v-container fluid pb-0 grid-list-lg class="history-container">
+    <v-container fill-height pb-0 grid-list-lg class="history-container">
         <template v-if="working">
             <v-layout v-if="working" align-center justify-center>
                 <h3 class="white--text">LOADING...</h3>
             </v-layout>
         </template>
         <template v-else>
-            <v-layout row wrap>
-                    <!-- card row -->
-                <v-flex xs10 offset-xs1>
-                    <v-layout justify-center align-center>
-                        <v-flex class="app-card" v-for="(item, i) in eventTypes" :key="i" @click="selectEventType(item)">
-                            <v-layout column align-center>
-                                <p class="name text-xs-center">{{ item.name.toUpperCase() }}</p>
-                                <p class="percentage">{{ Math.round(percentage(item.count)) || 0 }}%</p>
-                                <p class="count">{{ item.count }}</p>
+            <v-layout column align-center>
+                <!-- card row -->
+                <v-flex style="width:90%;" mt-2 shrink>
+                    <!-- <v-layout wrap align-center justify-space-around>
+                        <v-flex xs10> -->
+                            <v-layout justify-center align-center>
+                                <v-flex xs4 class="app-card" v-for="(item, i) in eventTypes" :key="i" @click="selectEventType(item)">
+                                    <v-layout column align-center>
+                                        <p class="name text-xs-center">{{ item.name.toUpperCase() }}</p>
+                                        <p class="percentage">{{ Math.round(percentage(item.count)) || 0 }}%</p>
+                                        <p class="count">{{ item.count }}</p>
+                                    </v-layout>
+                                </v-flex>
+                            </v-layout>
+                        <!-- </v-flex>
+                    </v-layout> -->
+                </v-flex>
+                <!-- sub header bar -->
+                <v-flex style="width:90%;" shrink>
+                    <v-layout wrap mx-2 my-2 align-center :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'">
+                    <!-- <v-layout justify-space-between align-center> -->
+                        <v-flex xs5>
+                            <v-layout justify-start>
+                                <h3 class="sort-bar-text">{{ selectedEvent.name.toUpperCase() }}S THIS WEEK  ({{ eventTypes[selectedEvent.type].count }})</h3>
+                            </v-layout>
+                        </v-flex>
+                        <v-flex xs7>
+                            <v-layout justify-end>
+                                <div class="select-container" style="margin-right:10px;">
+                                    <span class="text">SHOW ONLY</span>
+                                    <select class="select" @change="filterBy($event)">
+                                        <option v-for="item in filterOptions" :key="item">{{ item }}</option>
+                                    </select>
+                                </div>
+                                <div class="select-container">
+                                    <span class="text">ARRANGE BY</span>
+                                    <select class="select" @change="sortBy($event)">
+                                        <option v-for="item in sortOptions" :key="item">{{ item }}</option>
+                                    </select>
+                                </div>
                             </v-layout>
                         </v-flex>
                     </v-layout>
                 </v-flex>
-                    <!-- sub header bar -->
-                <v-flex xs8 offset-xs2 my-4>
-                    <v-layout row wrap align-center :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'">
-                        <h3 class="sort-bar-text">{{ selectedEvent.name.toUpperCase() }}S THIS WEEK  ({{ eventTypes[selectedEvent.type].count }})</h3>
-                        <div>
-                            <div class="select-container">
-                                <span class="text">SHOW ONLY</span>
-                                <select class="select" @change="filterBy($event)">
-                                    <option v-for="item in filterOptions" :key="item">{{ item }}</option>
-                                </select>
-                            </div>
-                            <div class="select-container">
-                                <span class="text">ARRANGE BY</span>
-                                <select class="select" @change="sortBy($event)">
-                                    <option v-for="item in sortOptions" :key="item">{{ item }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </v-layout>
-                </v-flex>
-                    <!-- dynamic component -->
-                <v-flex xs8 offset-xs2 class="list-container">
-                    <component :is="getComponent" :key="selectedEvent.type" :data="eventTypes[selectedEvent.type]"/>
+                        <!-- dynamic component -->
+                <v-flex pl-0 style="width:90%; position:relative; overflow-y:auto; height:100%;">
+                    <component :is="getComponent" :key="selectedEvent.type" :data="eventTypes[selectedEvent.type]" style="position:absolute;"/>
                 </v-flex>
             </v-layout>
         </template>
@@ -118,7 +129,6 @@ export default {
     border: 1px solid var(--v-border-base);
     letter-spacing: 2px;
     padding: 15px;
-    width: 18%;
     cursor: pointer;
     margin: 0 8px;
     color: #FFF;
@@ -148,19 +158,18 @@ export default {
     color: #FFF;
     border: 1px solid var(--v-border-base);
     background-color: var(--v-buttonBlack-base);
-    padding: 8px 15px;
-    margin: 0px 15px;
+    padding: 8px 12px;
+    // margin: 0px 15px 0px;
 	position: relative;
 	display: inline-block;
     .text {
-        margin-right: 10px;
-        padding-right: 14px;
+        margin-right: 8px;
+        padding-right: 12px;
         border-right: 1px solid var(--v-border-base);
     }
     .select {
-        width: 130px;
+        width: 110px;
         color: var(--v-border-base);
-        padding: 0 4px;
     }
 }
 .select-container:after{
@@ -206,7 +215,7 @@ select::-ms-expand {
 .scroll-color-dark {
   scrollbar-color: dark;
 }
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1260px) {
     .app-card {
         .name {
             font-size: 20px;

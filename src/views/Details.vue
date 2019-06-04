@@ -88,7 +88,14 @@
                     v-model="confirmationDescription"                    
                 />
             </template>
-            <v-btn slot="detailsButton" dark style="background-color:#FFF; color:black;" :disabled="!confirmationDescription" @click="setFalseAlarmClassification('false-alarm')">Confirm</v-btn> 
+            <v-btn 
+                slot="detailsButton" 
+                dark 
+                style="background-color:#FFF; color:black;" 
+                :disabled="!confirmationDescription" 
+                @click="setFalseAlarmClassification('false-alarm')">
+                Confirm
+            </v-btn> 
         </app-dialog>
     </v-layout>
 </template>
@@ -189,7 +196,7 @@ export default {
                     this.working = false;
                 },
                 (error) => {
-                    console.log("Error in EventWatcher:", error)
+                    console.log("Error in EventWatcher:", error);
                 }
             )
     },
@@ -223,14 +230,9 @@ export default {
             this.setClassification(type);
         },
         setClassification(type) {
-            // get copy of current event - could probably just use this.currentEvent
-            // let curr = this.$events.events.find(event => {
-            //     return event.eventId === this.currentEvent.eventId
-            // });
-            // curr.classifiedAs = type;
-            // curr.confirmationDescription = this.confirmationDescription;
             this.currentEvent.classifiedAs = type;
             this.currentEvent.confirmationDescription = this.confirmationDescription;
+            this.confirmationDescription = '';
             this.updateConfirmedEvent(this.currentEvent);
         },
         updateConfirmedEvent(event) {
@@ -242,7 +244,7 @@ export default {
                     },1500)
                 })
                 .catch(() => {
-                    this.$notifyError("Failed")
+                    this.$notifyError("FAILED TO CLASSIFY EVENT")
                 })
         },
         getTotalByType(type) {

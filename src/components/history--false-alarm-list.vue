@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-container>
         <v-layout justify-center v-if="data.events.length === 0">
             <span style="color:white; font-family: DIN Condensed; font-size: 30px;">
             THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S
@@ -16,7 +16,7 @@
                 </v-card>
             </v-flex>
         </v-layout>
-    </div>
+    </v-container>
 </template>
 <script>
 import format from 'date-fns/format';

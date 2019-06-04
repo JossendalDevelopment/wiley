@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-xs pa-0>
+    <v-container grid-list-xs>
         <v-layout justify-center v-if="data.events.length === 0">
             <span style="color:white; font-family: DIN Condensed; font-size: 30px;">
             THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S
