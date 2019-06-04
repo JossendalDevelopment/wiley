@@ -6,13 +6,30 @@
             </span>
         </v-layout>
         <v-layout v-else row wrap>
-            <v-flex xs12 v-for="(evt) in data.events" :key="evt.eventId" class="app-list-item-container">
+            <v-flex xs12 v-for="(evt) in data.events" :key="evt.eventId">
                 <v-card flat class="app-list-item">
-                    <v-layout row justify-space-between pt-3 px-4>
-                        <p class="app-list-item-username">{{ $auth.user.email }}</p>
-                        <p class="app-list-item-username">{{ getDate(evt) }}</p>
+                    <v-layout align-start>
+                        <v-flex xs2 class="app-list-item-image-container">
+                            <v-img
+                                contain
+                                :aspect-ratio="1/1"
+                                class="app-list-item-image"
+                                :src="evt.staticImageThumb"
+                            ></v-img> 
+                        </v-flex>
+                        <v-flex xs10 class="app-list-item-info-container">
+                            <v-card-text>
+                                <v-layout row pl-2 justify-space-between>
+                                    <p class="app-list-item-username">{{ $auth.user.email }}</p>
+                                    <p class="app-list-item-date">{{ getDate(evt) }}</p>
+
+                                </v-layout>
+                            </v-card-text>
+                            <v-card-text class="app-list-item-content">{{ evt.confirmationDescription }}</v-card-text>
+                        </v-flex> 
+
+
                     </v-layout>
-                    <v-card-text class="app-list-item-content">{{ evt.confirmationDescription }}</v-card-text>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -36,19 +53,42 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.app-list-item-container {
+// .app-list-item {
+//     background-color: var(--v-buttonBlack-base);
+//     color: #FFF;
+//     &-username {
+//         padding-bottom: 0px;
+//     }
+//     &-content {
+//         padding-top: 0px;
+//     }
+// }
+.app-list-item {
     border: 1px solid var(--v-border-base);
     background-color: var(--v-buttonBlack-base);
-    margin-bottom: 8px;
-}
-.app-list-item {
-    background-color: var(--v-buttonBlack-base);
     color: #FFF;
+    &-image-container {
+        margin: 7px 8px 7px 7px;
+        border: 1px solid var(--v-border-base);
+    }
+    &-info-container {
+        margin: 8px 16px 8px 0px;
+        font-size: 20px;
+    }
+    &-image {
+        margin: 0 auto;
+    }
     &-username {
-        padding-bottom: 0px;
+        // color: var(--v-border-base);
+        margin-bottom: 0px;
+    }
+    &-date {
+        color: var(--v-border-base);
+        margin-bottom: 0px;
     }
     &-content {
         padding-top: 0px;
+        font-size: 16px;
     }
 }
 </style>
