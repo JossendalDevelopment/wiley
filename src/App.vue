@@ -40,14 +40,14 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat>Live Feed</v-btn>
+                <v-btn v-if="$auth.status.loggedIn" to="/overview" dark flat style="min-width:110px;">Live Feed</v-btn>
                 <v-btn v-if="$auth.status.loggedIn" to="/training" dark flat style="position:relative;">
                     Model Training
-                    <v-badge v-if="!!unclassifiedEventCount" color="red" style="position:absolute; top:3px; right:-5px;">
+                    <v-badge v-if="!!unclassifiedEventCount" :color="$vuetify.theme.accent" style="position:absolute; top:4px; right:-5px;">
                         <span slot="badge" style="margin-left:2px; margin-top:1px;">{{ unclassifiedEventCount }}</span>
                     </v-badge>
                 </v-btn>
-                <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat>History</v-btn>
+                <v-btn v-if="$auth.status.loggedIn" to="/history" dark flat style="min-width:110px;">History</v-btn>
 
                 <v-spacer></v-spacer>
 

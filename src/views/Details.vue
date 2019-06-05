@@ -18,7 +18,7 @@
             <v-layout align-center justify-center>
                 <v-flex xs2>
                     <v-layout justify-start align-center>
-                        <v-btn flat large @click="goBack()">Previous</v-btn>
+                        <v-btn class="prevBtn" flat large @click="goBack()">Previous</v-btn>
                     </v-layout>
                 </v-flex>
                 <v-flex xs8 class="video-feed-wrapper">
@@ -34,7 +34,7 @@
                 </v-flex>
                 <v-flex xs2>
                     <v-layout justify-end align-center>
-                        <v-btn flat large @click="goNext()">Next/Skip</v-btn>
+                        <v-btn class="nextBtn" flat large @click="goNext()">Next/Skip</v-btn>
                     </v-layout>
                 </v-flex>
             </v-layout>
@@ -345,5 +345,12 @@ export default {
     background-color: var(--v-secondaryDark-base);
     color: #FFF;
     padding: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .v-btn {
+        font-size: 14px;
+        max-width: 120px;
+    }
 }
 </style>

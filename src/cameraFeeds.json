@@ -15,7 +15,7 @@
         "camNumber": 2,
         "camName": "Rail-WEST",
         "sourceData": {
-            "src": "/assets/video/sample_rail_west.mp4",
+            "src": "/assets/video/sample_rail_west_sm.mp4",
             "type": "video/mp4"
         },
         "staticImage": "/assets/images/ref_railwest.jpg"
