@@ -1,8 +1,9 @@
 <notes>
-    This component handles all the heavy lifting for classifying an event. Will need abstraction  
+    This component handles all the heavy lifting for classifying an event. Will need abstraction.
+    TODO make the selected method here a global or mixin and use it for the history page percentage cards.
 </notes>
 <template>
-    <v-layout justify-center fill-height align-center v-if="unclassifiedEvents.length === 0" class="video-container test-ref">
+    <v-layout justify-center fill-height align-center v-if="!unclassifiedRemaining" class="video-container test-ref">
         <span style="color:white; font-family: DIN Condensed; font-size: 30px; letter-spacing2px;">
             THERE ARE NO UNCLASSIFIED EVENTS
         </span>
@@ -84,6 +85,9 @@
                     rows="6"
                     auto-grow
                     class="textarea"
+                    @keydown.enter.exact.prevent
+                    @keyup.enter.exact="setFalseAlarmClassification('false-alarm')"
+                    @keydown.enter.shift.exact="newline"
                     placeholder="Please leave a reason for registering this event as a false alarm"                    
                     v-model="confirmationDescription"                    
                 />
@@ -117,6 +121,7 @@ export default {
     data: () => ({
         eventWatcher: null,
         unclassifiedEvents: [],
+        unclassifiedRemaining: 0,
         listeners: null,
         working: true,
         currentEventIndex: 0,
@@ -139,10 +144,13 @@ export default {
         // May or may not want to fetch all events here to ensure latest data
         // for dev purposes, just assuming data and grabbing first record
         this.unclassifiedEvents = this.$events.events.filter(evt => {
-            return !evt.classified
-        })
+            return !evt.classified;
+        });
+
+        this.unclassifiedRemaining = this.unclassifiedEvents.length;
+
         if(this.unclassifiedEvents.length > 0) {
-            this.currentEvent = this.unclassifiedEvents[0]
+            this.currentEvent = this.unclassifiedEvents[0];
         }
         // this.$events.getAllEvents()
         //     .then(resp => {
@@ -183,13 +191,13 @@ export default {
         // watcher on all classified events. this will update all events in real time
 
         const db = firebase.firestore();
-        this.eventWatcher = db.collection("classified_events").limit(25)
+        this.eventWatcher = db.collection("classified_events").limit(30)
             .onSnapshot(
                 querySnapshot => {
                     let result = [];
                     querySnapshot.forEach((doc) => { 
                         let newDoc = doc.data();
-                        newDoc.id = doc.id;
+                        newDoc.id = doc.id; // TODO what is this here for?
                         result.push(newDoc);
                     });
                     this.$events.setEvents(result);
@@ -204,6 +212,16 @@ export default {
         this.eventWatcher();
         this.removeListeners();
     },
+    computed: {
+        unclassifiedEventsCount() {
+            return this.$events.events.reduce((prev, next) => {
+                if (!next.classified) {
+                    prev++;
+                }
+                return prev;
+            }, 0)
+        }
+    },
     methods: {
         addListeners() {
             window.addEventListener("keyup", this.listeners);
@@ -217,9 +235,12 @@ export default {
             this.$refs.cameraImage.zoomOut();
         },
         goNext() {
-            this.currentEventIndex = this.crawlArray(this.unclassifiedEvents, this.currentEventIndex, 1);
-            this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
-            this.$refs.cameraImage.zoomOut();
+            if (this.unclassifiedRemaining > 0) {
+                this.currentEventIndex = this.crawlArray(this.unclassifiedEvents, this.currentEventIndex, 1);
+                this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
+                this.$refs.cameraImage.zoomOut();
+            }
+            this.unclassifiedRemaining = this.unclassifiedEventsCount;
         },
         crawlArray(array, index, n) {
             return ((index + n) % array.length + array.length) % array.length;
@@ -233,15 +254,16 @@ export default {
             this.currentEvent.classifiedAs = type;
             this.currentEvent.confirmationDescription = this.confirmationDescription;
             this.confirmationDescription = '';
-            this.updateConfirmedEvent(this.currentEvent);
+            this.updateEvent(this.currentEvent);
         },
-        updateConfirmedEvent(event) {
+        updateEvent(event) {
             this.$events.updateEvent(event)
                 .then(() => {
                     this.$notifyClassification(event.classifiedAs.toUpperCase());
                     setTimeout(() => {
                         this.goNext();
-                    },1500)
+                        // timing the fade out transition with the classification animation
+                    },950)
                 })
                 .catch(() => {
                     this.$notifyError("FAILED TO CLASSIFY EVENT")
@@ -269,7 +291,10 @@ export default {
             this.$nextTick(() => {
                 this.$refs.falsealarmtextarea.focus();
             })
-        }
+        },
+        newline() {
+            this.confirmationDescription = `${this.confirmationDescription}\n`;
+        },
     },
 }
 </script>

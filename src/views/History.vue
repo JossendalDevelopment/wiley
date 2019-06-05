@@ -1,32 +1,31 @@
 <template>
     <v-container fill-height pb-0 grid-list-lg class="history-container">
         <template v-if="working">
-            <v-layout v-if="working" align-center justify-center>
-                <h3 class="white--text">LOADING...</h3>
-            </v-layout>
+            <app-loading-spinner />
         </template>
         <template v-else>
             <v-layout column align-center>
                 <!-- card row -->
                 <v-flex style="width:90%;" mt-2 shrink>
-                    <!-- <v-layout wrap align-center justify-space-around>
-                        <v-flex xs10> -->
-                            <v-layout justify-center align-center>
-                                <v-flex xs4 class="app-card" v-for="(item, i) in eventTypes" :key="i" @click="selectEventType(item)">
-                                    <v-layout column align-center>
-                                        <p class="name text-xs-center">{{ item.name.toUpperCase() }}</p>
-                                        <p class="percentage">{{ Math.round(percentage(item.count)) || 0 }}%</p>
-                                        <p class="count">{{ item.count }}</p>
-                                    </v-layout>
-                                </v-flex>
+                    <v-layout justify-center align-center>
+                        <v-flex 
+                            xs4 
+                            class="app-card" 
+                            :class="selectedEvent.type === item.type ? 'app-card-selected' : ''"
+                            v-for="(item, i) in eventTypes" 
+                            :key="i" 
+                            @click="selectEventType(item)">
+                            <v-layout column align-center>
+                                <p class="name text-xs-center">{{ item.name.toUpperCase() }}</p>
+                                <p class="percentage">{{ Math.round(percentage(item.count)) || 0 }}%</p>
+                                <p class="count">{{ item.count }}</p>
                             </v-layout>
-                        <!-- </v-flex>
-                    </v-layout> -->
+                        </v-flex>
+                    </v-layout>
                 </v-flex>
                 <!-- sub header bar -->
                 <v-flex style="width:90%;" shrink>
-                    <v-layout wrap mx-2 my-2 align-center :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'">
-                    <!-- <v-layout justify-space-between align-center> -->
+                    <v-layout wrap my-2 px-2 align-center :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'">
                         <v-flex xs5>
                             <v-layout justify-start>
                                 <h3 class="sort-bar-text">{{ selectedEvent.name.toUpperCase() }}S THIS WEEK  ({{ eventTypes[selectedEvent.type].count }})</h3>
@@ -50,19 +49,23 @@
                         </v-flex>
                     </v-layout>
                 </v-flex>
-                        <!-- dynamic component -->
-                <v-flex pl-0 style="width:90%; position:relative; overflow-y:auto; height:100%;">
-                    <component :is="getComponent" :key="selectedEvent.type" :data="eventTypes[selectedEvent.type]" style="position:absolute;"/>
+                <!-- dynamic component -->
+                <v-flex style="width:90%; position:relative; height:100%;" class="list-container">
+                    <component :is="getComponent" :key="selectedEvent.type" :data="eventTypes[selectedEvent.type]" style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"/>
                 </v-flex>
             </v-layout>
         </template>
     </v-container>
 </template>
 <script>
-import FalseAlarmList from '@/components/history--false-alarm-list.vue';
-import DefaultList    from '@/components/history--default-list.vue';
+import AppLoadingSpinner from '@/components/app-loading-spinner.vue';
+import FalseAlarmList    from '@/components/history--false-alarm-list.vue';
+import DefaultList       from '@/components/history--default-list.vue';
 
 export default {
+    components: {
+        'app-loading-spinner': AppLoadingSpinner
+    },
     data: () => ({
         events: [],
         working: true,
@@ -132,6 +135,9 @@ export default {
     cursor: pointer;
     margin: 0 8px;
     color: #FFF;
+    &-selected {
+        filter: invert(1);
+    }
     .name {
         font-size: 24px;
         margin-bottom: -12px;
@@ -172,7 +178,7 @@ export default {
         color: var(--v-border-base);
     }
 }
-.select-container:after{
+.select-container:after {
 	content: " ";
 	height: 0;
 	width: 0;
@@ -184,7 +190,7 @@ export default {
 	top: 42%;
 	transition: all 0.3s linear;
 }
-.select-container.open:after{
+.select-container.open:after {
 	transform: rotate(-180deg);
 	-webkit-transform: rotate(-180deg);
 	-moz-transform: rotate(-180deg);
@@ -196,9 +202,12 @@ select::-ms-expand {
 }
 // list container styles
 .list-container {
-    height: 450px; 
-    overflow: auto;
-    scrollbar-color: orange lightyellow;    
+    position: relative; 
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width:90%; 
+    height:100%;
+    scrollbar-color: var(--v-border-base) transparent;    
     &::-webkit-scrollbar {
         background-color: transparent;
         width: 8px;
@@ -208,7 +217,7 @@ select::-ms-expand {
     }
     &:hover {
         &::-webkit-scrollbar-thumb {
-            background: #888; 
+            background: var(--v-border-base); 
         }
     }
 }

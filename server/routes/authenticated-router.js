@@ -94,7 +94,8 @@ router.post('/add_new_events', (req, res) => {
                 formatResponse(res, 'success', resp);
             })
             .catch((error) => {
-                formatResponse(res, 'error', error);
+                return error
+                // formatResponse(res, 'error', error);
             })
 
     })

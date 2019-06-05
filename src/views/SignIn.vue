@@ -103,9 +103,7 @@ export default {
     height:100%;
     background-color: #FFFFFF; 
 }
-.text-input > .v-input__control > .v-input__slot {
-    // override text-fields' background
-    // background-color: #FFFFFF !important;
+input[name=password], input[name=employeeEmail] {
     padding-left: 8px;
 }
 .app-form-label {
@@ -115,7 +113,7 @@ export default {
     color: #FFF;
 }
 .red-border {
-    background-image: url("/assets/images/red_border.png");
+    background-image: url("/assets/images/red_border_small.png");
     background-repeat: no-repeat;
     background-size:100% 100%;
     z-index: 200;

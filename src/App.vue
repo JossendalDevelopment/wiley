@@ -68,9 +68,9 @@
             <notifications 
                 group="classification-notifications"
                 :max="1"
-                :speed="500"
+                :speed="300"
                 :width="250"
-                :duration="500"
+                :duration="300"
                 animation-type="velocity"
                 style="top:20%;"
                 :animation="animation"
@@ -85,7 +85,7 @@
             <notifications 
                 group="app-notifications"
                 :max="1"
-                :duration="1000"
+                :duration="2000"
                 style="bottom:5%; right:5%;"
                 position="right bottom"
                 >
@@ -123,7 +123,7 @@ export default {
                 return {
                     // Animates from 0px to "height"
                     // height: [height, 0],
-                    translateY: [0, 200],
+                    translateY: [0, 220],
 
                     // Animates from 0 to 1 opacity
                     opacity: [1, 0]

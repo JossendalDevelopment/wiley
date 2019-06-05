@@ -15,7 +15,7 @@
                     <v-card class="card-container" flat>
                         <video-live-feed :stream="stream" />
                         <v-card-title>
-                            <span class="cam-name">{{ stream.camName.toUpperCase() }}</span>
+                            <span class="cam-name">{{ stream.camName.toUpperCase().replace(/-/, ' ') }}</span>
                         </v-card-title>
                     </v-card>
                 </v-flex>

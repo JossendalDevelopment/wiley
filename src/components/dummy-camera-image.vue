@@ -6,7 +6,7 @@
 </notes>
 <template>
     <div class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
-        <transition appear name="fade" mode="out-in" :duration="300">
+        <transition appear name="fade" mode="out-in" :duration="100">
             <v-img 
                 v-if="!zoomed" 
                 ref="dummyImage" 

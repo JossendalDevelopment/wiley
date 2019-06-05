@@ -31,6 +31,7 @@ router.post('/update_event', (req, res) => {
     const event = req.body.event;
     COLLECTION_REF.doc(event.eventId).update({
         classifiedAs: event.classifiedAs,
+        confirmationDescription: event.confirmationDescription,
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
         classified: true
     })
@@ -93,7 +94,8 @@ router.post('/add_new_events', (req, res) => {
                 formatResponse(res, 'success', resp);
             })
             .catch((error) => {
-                formatResponse(res, 'error', error);
+                return error
+                // formatResponse(res, 'error', error);
             })
 
     })
@@ -102,6 +104,7 @@ router.post('/add_new_events', (req, res) => {
 router.post('/delete_events', (req, res) => {
     // helper to clear firestore as a collection cannot be deleted and each document must be deleted indiviually
     // This will batch deletions. Only used to support resetting data for demo use
+    // OTHERWISE VERY DANGEROUS!!!!!!!!!!!!!!!
     const deleteCollection = (batchSize) => {
         let query = COLLECTION_REF.limit(batchSize);
         return new Promise((resolve, reject) => {
