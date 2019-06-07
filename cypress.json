@@ -1,0 +1,8 @@
+{
+  "fileServerFolder": "./tests/e2e",
+  "integrationFolder": "./tests/e2e/cypress/integration",
+  "fixturesFolder": "./tests/e2e/cypress/fixtures",
+  "pluginsFile": "./tests/e2e/cypress/plugins",
+  "supportFile": "./tests/e2e/cypress/support",
+  "screenshotsFolder": "./tests/e2e/screenshots"
+}

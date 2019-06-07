@@ -1,16 +1,18 @@
 # wiley
 
-## Run Dockerized with nginx and node
+## Commands
+
+### Run Dockerized with nginx and node - NO live reloading so not really a devserver
 ```
 ./devserver.sh
 ```
 
-## Run in development
+### Run server and client in development
 ```
 npm run dev
 ```
 
-## Build and deploy to firebase hosting
+### Build and deploy to firebase hosting
 ```
 npm run deploy
 ```
@@ -25,7 +27,7 @@ npm run serve
 npm run build
 ```
 
-### Run Unit tests
+### Run Unit tests with vue-test-utils
 ```
 npm run test
 ```
@@ -33,4 +35,9 @@ npm run test
 ### Lints and fixes files
 ```
 npm run lint
+```
+
+### Run Cypress Integration test
+```
+npm run cypress:open
 ```
