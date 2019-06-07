@@ -25,6 +25,7 @@
                                 <v-text-field 
                                     background-color="#FFF"
                                     height="40px"
+                                    v-test-ref="'employee-email'"
                                     name="employeeEmail" 
                                     v-model="employeeEmail"
                                     placeholder="admin@email.com" 
@@ -35,6 +36,7 @@
                                     @keyup.enter="login()"
                                     background-color="#FFF"
                                     height="40px"
+                                    v-test-ref="'password'"
                                     name="password" 
                                     v-model="password"
                                     placeholder="password" 
@@ -44,12 +46,13 @@
                         </v-card-text>
                         <v-card-actions class="px-3 text-xs-center">
                             <v-layout wrap align-center justify-space-between>
-                                <v-checkbox v-model="remember" dark color="accent" >
+                                <v-checkbox v-model="remember" dark color="accent" v-test-ref="'remember-checkbox'">
                                     <template v-slot:label>
                                         <div style="color:#FFF; font-family: 'DIN Condensed; letter-spacing:2px;'"> REMEMBER ME </div>
                                     </template>
                                 </v-checkbox>
                                 <v-btn 
+                                    v-test-ref="'login-btn'"
                                     :loading="$auth.status.loggingIn" 
                                     color="accent" 
                                     @click="login()">Sign In</v-btn>

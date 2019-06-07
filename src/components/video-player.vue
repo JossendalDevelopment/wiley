@@ -54,7 +54,7 @@
 import VideoPlayerSlider from '@/components/video-player--slider.vue';
 
 import videojs from 'video.js';
-import '../../node_modules/videojs-rotatezoom/src/videojs.zoomrotate';
+// import '../../node_modules/videojs-rotatezoom/src/videojs.zoomrotate';
 
 export default {
     name: "VideoPlayer",
@@ -86,8 +86,6 @@ export default {
             this.$nextTick(() => {
                 this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
                     console.log('onPlayerReady', this);
-
-
                 })
                 this.player.on('timeupdate', () => {
                     // console.log('time update!', self.player.currentTime());
