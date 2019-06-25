@@ -23,7 +23,7 @@
           <span>CLICK IMAGE OR USE BAR TO ZOOM</span>
         </div>
         <div class="image-overlay date">
-          <span>DATE</span>
+          <span>{{ formatDate }}</span>
         </div>
 
         <template v-slot:placeholder>
@@ -44,6 +44,8 @@
   </div>
 </template>
 <script>
+import format from "date-fns/format";
+
 export default {
   props: {
     source: {
@@ -137,6 +139,9 @@ export default {
       } else {
         return this.source.staticImage;
       }
+    },
+    formatDate() {
+      return format(new Date(), "MMM DD HH:MM:SS");
     }
   },
   mounted() {

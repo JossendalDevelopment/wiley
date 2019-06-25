@@ -1,787 +1,787 @@
 {
     "events": [
-    {
-        "id": "01",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "82%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "01",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "82%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e1.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e1-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e1-thumb.jpg",
+            "boundary": {
+                "x": 480,
+                "y": 280,
+                "width": 50,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e1.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e1-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e1-thumb.jpg",
-        "boundary": {
-            "x": 480,
-            "y": 280,
-            "width": 50,
-            "height": 75
-        }
-    },
-    {
-        "id": "02",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "94%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "02",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "94%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e2.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e2-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e2-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e2.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e2-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e2-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "03",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "91%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "03",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "91%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e9.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e9-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e9-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e9.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e9-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e9-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "04",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "91%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "04",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "91%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e10.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e10-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e10-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e10.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e10-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e10-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "05",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "91%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "05",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "91%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e11.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e11-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e11-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e11.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e11-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e11-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "06",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "97%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "06",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "97%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e4.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e4-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e4-thumb.jpg",
+            "boundary": {
+                "x": 280,
+                "y": 180,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e4.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e4-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e4-thumb.jpg",
-        "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "07",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "94%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "07",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "94%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e5.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e5-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e5-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e5.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e5-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e5-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "08",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "90%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "08",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "90%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e6.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e6-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e6-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e6.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e6-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e6-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "09",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "87%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "09",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "87%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e7.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e7-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e7-thumb.jpg",
+            "boundary": {
+                "x": 280,
+                "y": 180,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e7.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e7-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e7-thumb.jpg",
-        "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "10",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "99%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "10",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "99%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/e8.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/e8-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/e8-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/e8.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/e8-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/e8-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "11",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "88%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "11",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "88%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p1.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p1-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p1-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p1.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p1-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p1-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "12",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "87%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 100,
-        "camNumber": 1,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "12",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "87%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 100,
+            "camNumber": 1,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p2.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p2-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p2-thumb.jpg",
+            "boundary": {
+                "x": 280,
+                "y": 180,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p2.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p2-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p2-thumb.jpg",
-        "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "13",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "99%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "13",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "99%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p3.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p3-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p3-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p3.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p3-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p3-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "14",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "78%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "14",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "78%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p4.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p4-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p4-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p4.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p4-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p4-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "15",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "person",
-        "probability": "83%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "15",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "person",
+            "probability": "83%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p5.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p5-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p5-thumb.jpg",
+            "boundary": {
+                "x": 280,
+                "y": 180,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p5.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p5-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p5-thumb.jpg",
-        "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "16",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "80%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "16",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "80%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p6.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p6-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p6-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p6.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p6-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p6-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "17",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "77%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "17",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "77%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p7.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p7-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p7-thumb.jpg",
+            "boundary": {
+                "x": 220,
+                "y": 160,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p7.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p7-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p7-thumb.jpg",
-        "boundary": {
-            "x": 220,
-            "y": 160,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "18",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "68%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "18",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "68%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p9.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p9-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p9-thumb.jpg",
+            "boundary": {
+                "x": 280,
+                "y": 180,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p9.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p9-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p9-thumb.jpg",
-        "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "19",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "68%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "19",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "68%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/p10.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/p10-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/p10-thumb.jpg",
+            "boundary": {
+                "x": 280,
+                "y": 180,
+                "width": 100,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/p10.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/p10-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/p10-thumb.jpg",
-        "boundary": {
-            "x": 280,
-            "y": 180,
-            "width": 100,
-            "height": 75
-        }
-    },
-    {
-        "id": "20",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "20",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/c1.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/c1-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/c1-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/c1.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/c1-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/c1-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "21",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "21",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/c2.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/c2-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/c2-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/c2.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/c2-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/c2-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "22",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "22",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/c3.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/c3-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/c3-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/c3.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/c3-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/c3-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "23",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "23",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/c4.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/c4-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/c4-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/c4.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/c4-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/c4-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "24",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "24",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/c5.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/c5-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/c5-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/c5.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/c5-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/c5-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "25",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "25",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/f1.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/f1-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/f1-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/f1.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/f1-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/f1-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    },
-    {
-        "id": "26",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-EAST",
-        "sourceData": {
-            "src": "",
-            "type": ""
+        {
+            "id": "26",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-EAST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/f2.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/f2-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/f2-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         },
-        "staticImage": "/assets/images/demo-images/f2.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/f2-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/f2-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
+        {
+            "id": "27",
+            "eventId": "",
+            "status": "active",
+            "classifiedAs": "",
+            "classificationDescription": "",
+            "classified": false,
+            "detectedObject": "animal",
+            "probability": "100%",
+            "startTime": "159",
+            "endTime": "200",
+            "duration": "41",
+            "camId": 200,
+            "camNumber": 2,
+            "camName": "Rail-WEST",
+            "sourceData": {
+                "src": "",
+                "type": ""
+            },
+            "staticImage": "/assets/images/demo-images/f3.jpg",
+            "staticImageZoomed": "/assets/images/demo-images/f3-zoom.jpg",
+            "staticImageThumb": "/assets/images/thumbs/f3-thumb.jpg",
+            "boundary": {
+                "x": 340,
+                "y": 200,
+                "width": 30,
+                "height": 75
+            }
         }
-    },
-    {
-        "id": "27",
-        "eventId": "",
-        "status": "active",
-        "classifiedAs": "",
-        "classificationDescription": "",
-        "classified": false,
-        "detectedObject": "coyote",
-        "probability": "100%",
-        "startTime": "159",
-        "endTime": "200",
-        "duration": "41",
-        "camId": 200,
-        "camNumber": 2,
-        "camName": "Rail-WEST",
-        "sourceData": {
-            "src": "",
-            "type": ""
-        },
-        "staticImage": "/assets/images/demo-images/f3.jpg",
-        "staticImageZoomed": "/assets/images/demo-images/f3-zoom.jpg",
-        "staticImageThumb": "/assets/images/thumbs/f3-thumb.jpg",
-        "boundary": {
-            "x": 340,
-            "y": 200,
-            "width": 30,
-            "height": 75
-        }
-    }
-]
+    ]
 }

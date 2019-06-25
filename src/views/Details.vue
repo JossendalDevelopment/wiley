@@ -54,7 +54,7 @@
           >SELECT OR USE YOUR KEYBOARD</p>
         </v-flex>
         <v-layout justify-space-between>
-          <v-flex xs2>
+          <v-flex mx-1>
             <v-btn
               @click="setClassification('employee')"
               flat
@@ -67,7 +67,7 @@
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('employee') }}</p>
           </v-flex>
-          <v-flex xs2>
+          <v-flex mx-1>
             <v-btn
               @click="setClassification('contractor')"
               flat
@@ -76,37 +76,37 @@
               large
             >
               contractor
-              <span class="numeral">3</span>
+              <span class="numeral">2</span>
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('contractor') }}</p>
           </v-flex>
-          <v-flex xs2>
+          <v-flex mx-1>
             <v-btn
-              @click="setClassification('non-employee')"
+              @click="setClassification('intruder')"
               flat
               class="control-btn"
-              :style="selected('non-employee')"
+              :style="selected('intruder')"
               large
             >
               intruder
-              <span class="numeral">2</span>
+              <span class="numeral">3</span>
             </v-btn>
-            <p class="control-text text-xs-center">{{ getTotalByType('non-employee') }}</p>
+            <p class="control-text text-xs-center">{{ getTotalByType('intruder') }}</p>
           </v-flex>
-          <v-flex xs2>
+          <v-flex mx-1>
             <v-btn
-              @click="setClassification('coyote')"
+              @click="setClassification('animal')"
               flat
               class="control-btn"
-              :style="selected('coyote')"
+              :style="selected('animal')"
               large
             >
               animal
               <span class="numeral">4</span>
             </v-btn>
-            <p class="control-text text-xs-center">{{ getTotalByType('coyote') }}</p>
+            <p class="control-text text-xs-center">{{ getTotalByType('animal') }}</p>
           </v-flex>
-          <v-flex xs2>
+          <v-flex mx-1>
             <v-btn
               @click="openFalseAlarmModal()"
               flat
@@ -221,11 +221,11 @@ export default {
       if (String.fromCharCode(e.keyCode) === "1") {
         this.setClassification("employee");
       } else if (String.fromCharCode(e.keyCode) === "2") {
-        this.setClassification("non-employee");
-      } else if (String.fromCharCode(e.keyCode) === "3") {
         this.setClassification("contractor");
+      } else if (String.fromCharCode(e.keyCode) === "3") {
+        this.setClassification("intruder");
       } else if (String.fromCharCode(e.keyCode) === "4") {
-        this.setClassification("coyote");
+        this.setClassification("animal");
       } else if (String.fromCharCode(e.keyCode) === "5") {
         this.openFalseAlarmModal();
       } else if (e.keyCode === 32) {
@@ -377,10 +377,11 @@ export default {
 }
 .control {
   &-btn {
-    width: 100%;
+    width: 167px;
     font-size: 20px;
     letter-spacing: 1.5px;
     position: relative;
+    margin: 0;
   }
   &-text {
     width: 100%;
@@ -392,7 +393,7 @@ export default {
 .numeral {
   position: absolute;
   top: -6px;
-  right: -26px;
+  right: 6px;
   font-size: 13px;
 }
 .video-feed-wrapper {

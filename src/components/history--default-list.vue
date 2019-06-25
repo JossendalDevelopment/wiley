@@ -136,12 +136,14 @@ export default {
   },
   methods: {
     getDateTime(evt) {
-      return format(new Date(evt.timestamp._seconds), "MMM DD HH:MM:SSs");
+      return format(new Date(evt.timestamp._seconds), "MMM DD HH:MM:SS");
     },
     setNewClass(type) {
       this.newClass = type;
     },
     openEditModal(evt) {
+      console.log("E", evt);
+      this.newClass = evt.classifiedAs;
       this.selectedForEdit = evt;
       this.$refs.editmodal.open();
     },

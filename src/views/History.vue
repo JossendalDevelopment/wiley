@@ -1,3 +1,7 @@
+<notes>
+    Sorry about the hacky css in the `.app-card` class. The font have a lot of built in padding that is unavoidable 
+    for the time being. Look in to getting a re-formatted font.
+</notes>
 <template>
   <v-container fill-height fluid pa-0 ml-0 mr-0 grid-list-lg class="history-container">
     <template v-if="working">
@@ -21,7 +25,7 @@
                     <p class="name mb-0">{{ item.name.toUpperCase() }}</p>
                     <p class="count mb-0">{{ item.count }}</p>
                   </v-flex>
-                  <v-flex pa-0 pr-1 text-xs-right>
+                  <v-flex pa-0 pr-1 text-xs-right style="margin-bottom: -10px;">
                     <p class="percentage mb-0">{{ Math.round(percentage(item.count)) || 0 }}%</p>
                   </v-flex>
                 </v-layout>
@@ -99,9 +103,9 @@ export default {
     working: true,
     eventTypes: {
       employee: { name: "Employee", type: "employee", count: 0, events: [] },
-      "non-employee": {
+      intruder: {
         name: "Intruder",
-        type: "non-employee",
+        type: "intruder",
         count: 0,
         events: []
       },
@@ -111,7 +115,7 @@ export default {
         count: 0,
         events: []
       },
-      coyote: { name: "Animal", type: "coyote", count: 0, events: [] },
+      animal: { name: "Animal", type: "animal", count: 0, events: [] },
       "false-alarm": {
         name: "False Alarm",
         type: "false-alarm",
@@ -119,7 +123,7 @@ export default {
         events: []
       }
     },
-    selectedEvent: { name: "Animal", type: "coyote", count: 0 },
+    selectedEvent: { name: "Animal", type: "animal", count: 0 },
     filterOptions: ["This Week", "Today", "Last Week", "All"],
     sortOptions: ["Recent", "User", "Camera", "All"]
   }),
@@ -190,12 +194,16 @@ export default {
   }
   .name {
     font-size: 24px;
+    margin-bottom: -5px;
   }
   .percentage {
     font-size: 50px;
+    margin-top: -10px;
+    margin-bottom: -10px;
   }
   .count {
     font-size: 20px;
+    margin-top: -10px;
     color: var(--v-border-base);
   }
 }
@@ -276,15 +284,20 @@ select::-ms-expand {
 }
 @media only screen and (max-width: 1260px) {
   .app-card {
-    .name {
-      font-size: 18px;
+    .name,
+    .count {
+      font-size: 20px;
     }
   }
 }
 @media only screen and (max-width: 920px) {
   .app-card {
-    .name {
-      font-size: 18px;
+    .name,
+    .count {
+      font-size: 16px;
+    }
+    .percentage {
+      font-size: 35px;
     }
   }
 }
