@@ -1,11 +1,8 @@
-/*   This is likely in disarray due to rapid ui iteration   */
+/*   This is completely fubar, jest continually fails on a css import which it doesn't know how to handle.
+     All this despite the transform prop set in jest.config.js   */
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import { shallowMount } from '@vue/test-utils';
-// import axios from 'axios';
-jest.mock('axios', () => ({
-    get: jest.fn(),
-}));
 
 import LiveFeedDetails from '@/views/LiveFeed--Details.vue';
 import Overview from '@/views/Overview.vue';
@@ -43,6 +40,9 @@ describe('SignIn.vue renders', () => {
                 theme: {},
                 breakpoint: {}
             },
+            $auth: {
+                status: {}
+            }
         },
     });
 
@@ -95,8 +95,13 @@ describe('History renders', () => {
 
     beforeEach(() => {
         Vue.use(Vuetify);
-    
-        wrp = shallowMount(History, { });
+    });
+    wrp = shallowMount(History, {
+        mocks: {
+            $events: {
+                getAllClassifiedEvents: () => {}
+            }
+        }
     });
     // checks History.vue is a component.
     it('Registers a component', () => {

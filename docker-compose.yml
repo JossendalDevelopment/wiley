@@ -1,27 +1,31 @@
-version: '3.7'
+version: '2.4'
 services:
-  client:
-    build: ./
-    volumes:
-      - ./:/app
-      - /node_modules
-    ports:
-      - 8080:80
-      - 5001:80
-    container_name: client
-    depends_on:
-      - api
-    links:
-      - api
-    stdin_open: true
-    tty: true
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-  api:
-    build: ./server
-    volumes:
-      - ./server:/server
-      - /server/node_modules
-    ports:
-      - 3001:3001
-    container_name: api
+    client:
+        build: ./
+        volumes:
+            - ./:/app
+            - /node_modules
+        ports:
+            - 8080:80 # default vue devserver
+            - 5001:80
+        depends_on:
+            - api
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+            - VUE_APP_API_KEY=AIzaSyC14MMLeymY_W_9a-Qoc8bYQji55tUm0Ak
+            - VUE_APP_AUTH_DOMAIN=wiley-app.firebaseapp.com
+            - VUE_APP_DATABASE_URL=https://wiley-app.firebaseio.com
+            - VUE_APP_PROJECT_ID=wiley-app
+            - VUE_APP_STORAGE_BUCKET=wiley-app.appspot.com
+            - VUE_APP_MESSAGING_SENDER_ID=918656739220
+            - VUE_APP_APP_ID=1:918656739220:web:46326f33d145a55f
+    api:
+        build: ./server
+        volumes:
+            - ./server:/server
+            # - ./server/certs/serviceAccountKey.json:/server/certs/serviceAccountKey.json
+            - /server/node_modules
+
+        ports:
+            - 3001:3001 #exposed only for testing
+        container_name: api

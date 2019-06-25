@@ -1,5 +1,5 @@
 {
-  "fileServerFolder": "./tests/e2e",
+  "fileServerFolder": "./tests/e2e/cypress",
   "integrationFolder": "./tests/e2e/cypress/integration",
   "fixturesFolder": "./tests/e2e/cypress/fixtures",
   "pluginsFile": "./tests/e2e/cypress/plugins",

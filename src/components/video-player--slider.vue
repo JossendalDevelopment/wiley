@@ -3,8 +3,8 @@
 </template>
 <script>
 import VueSlider from 'vue-slider-component'
-// this default theme has been heavily modified. Found in node_modules/vue-slider-component/theme
-import 'vue-slider-component/theme/default.css'
+// this css import breaks jest unit testing. Found in node_modules/vue-slider-component/theme
+// import 'vue-slider-component/theme/default.css'
 
 export default {
     components: {

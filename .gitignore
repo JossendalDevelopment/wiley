@@ -4,6 +4,8 @@ node_modules
 # /server/public
 
 # local env files
+*/.env
+*.env
 .env.local
 .env.*.local
 serviceAccountKey.json
@@ -21,3 +23,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# docker
+docker-compose*.yml
