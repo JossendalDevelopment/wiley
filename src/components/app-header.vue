@@ -25,7 +25,7 @@
         <router-link to="/history" class="nav-btn">Archive</router-link>
       </v-tab>
       <v-spacer></v-spacer>
-      <v-btn @click="logout()" dark flat class="logout-btn">logout</v-btn>
+      <v-btn @click="logout()" dark flat small class="logout-btn">logout</v-btn>
     </v-tabs>
   </div>
 </template>
@@ -78,7 +78,7 @@ export default {
 }
 .logout-btn {
   position: absolute;
-  top: -6px;
+  top: -2px;
   right: 12px;
   //   height: 28px;
   width: 80px;

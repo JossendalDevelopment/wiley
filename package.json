@@ -10,8 +10,7 @@
         "test": "vue-cli-service test:unit",
         "cypress:open": "cypress open",
         "dev": "concurrently \"cd server && npm run start\" \"npm run serve\" ",
-        "deploy": "npm run build && firebase deploy",
-        "docker:e2e": "./devserver.sh && cd tests/e2e && docker-compose up --exit-code-from cypress"
+        "deploy": "npm run build && firebase deploy"
     },
     "dependencies": {
         "@babel/polyfill": "^7.0.0-rc.1",

@@ -1,5 +1,6 @@
 <notes>
-    This component handles all the heavy lifting for classifying an event. Will need abstraction.
+    This component handles all the heavy lifting for classifying an event. Will need abstraction as it's
+    getting unweildy.
     TODO make the selected method here a global or mixin and use it for the history page percentage cards.
 </notes>
 <template>
