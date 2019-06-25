@@ -44,7 +44,7 @@
       ref="editmodal"
       max-width="500"
       lazy
-      v-on:closed="() => null"
+      v-on:closed="() => onClosedEditModal()"
       v-on:opened="() => null"
     >
       <template slot="modaltitle">CHANGE CLASSIFICATION</template>
@@ -142,10 +142,13 @@ export default {
       this.newClass = type;
     },
     openEditModal(evt) {
-      console.log("E", evt);
       this.newClass = evt.classifiedAs;
       this.selectedForEdit = evt;
       this.$refs.editmodal.open();
+    },
+    onClosedEditModal() {
+      this.newClass = null;
+      this.selectedForEdit = null;
     },
     openFalseAlarmModal() {
       this.newClass = "falsealarm";
