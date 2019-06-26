@@ -25,6 +25,7 @@
             slot="list-info-top-right"
             class="app-list-item-date"
           >{{ getDateTime(evt).toUpperCase() }}</span>
+          <!-- TODO username/email should come from the event, not the logged in user -->
           <span
             slot="list-info-bottom-left"
             class="app-list-item-username"
@@ -92,8 +93,8 @@
               block
               flat
               class="classification-btn"
-              @click="() => openFalseAlarmModal()"
-              :style="newClass === 'falsealarm' ? selectedClass : ''"
+              @click="() => setNewClass('false-alarm')"
+              :style="newClass === 'false-alarm' ? selectedClass : ''"
             >false alarm</v-btn>
           </v-flex>
         </v-layout>
@@ -136,7 +137,7 @@ export default {
   },
   methods: {
     getDateTime(evt) {
-      return format(new Date(evt.timestamp._seconds), "MMM DD HH:MM:SS");
+      return format(new Date(evt.timestamp.seconds), "MMM DD HH:MM:SS");
     },
     setNewClass(type) {
       this.newClass = type;
@@ -151,11 +152,25 @@ export default {
       this.selectedForEdit = null;
     },
     openFalseAlarmModal() {
-      this.newClass = "falsealarm";
+      this.newClass = "false-alarm";
       // TODO bring in false alarm modal from details.vue
     },
     saveEdits() {
-      console.log("NEW CLASSIFICATION", this.newClass);
+      this.selectedForEdit.classifiedAs = this.newClass;
+      this.updateEvent(this.selectedForEdit);
+    },
+    updateEvent(event) {
+      this.$events
+        .updateEvent(event)
+        .then(() => {
+          this.onClosedEditModal();
+          this.$notifySuccess("UPDATE SUCCESSFUL");
+        })
+        .catch(err => {
+          console.error("ERROR", err);
+          this.$notifyError("FAILED TO CLASSIFY EVENT");
+          this.$events.stopLoading();
+        });
     }
   }
 };

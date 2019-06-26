@@ -1,10 +1,11 @@
 <notes>
-    Sorry about the hacky css in the `.app-card` class. The font have a lot of built in padding that is unavoidable 
+    TODO: RENAME - This view, despite being named 'history' is now being called 'archive'
+    Sorry about the hacky css in the `.app-card` class. The font has a lot of built in padding that is unavoidable 
     for the time being. Look in to getting a re-formatted font.
 </notes>
 <template>
   <v-container fill-height fluid pa-0 ml-0 mr-0 grid-list-lg class="history-container">
-    <template v-if="working">
+    <template v-if="$events.loading">
       <app-loading-spinner/>
     </template>
     <template v-else>
@@ -90,64 +91,108 @@
   </v-container>
 </template>
 <script>
+import firebase from "firebase";
+import "firebase/firestore";
+
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import FalseAlarmList from "@/components/history--false-alarm-list.vue";
 import DefaultList from "@/components/history--default-list.vue";
+
+import EventTypes from "@/types/eventTypes";
 
 export default {
   components: {
     "app-loading-spinner": AppLoadingSpinner
   },
   data: () => ({
-    events: [],
-    working: true,
-    eventTypes: {
-      employee: { name: "Employee", type: "employee", count: 0, events: [] },
-      intruder: {
-        name: "Intruder",
-        type: "intruder",
-        count: 0,
-        events: []
-      },
-      contractor: {
-        name: "Contractor",
-        type: "contractor",
-        count: 0,
-        events: []
-      },
-      animal: { name: "Animal", type: "animal", count: 0, events: [] },
-      "false-alarm": {
-        name: "False Alarm",
-        type: "false-alarm",
-        count: 0,
-        events: []
-      }
-    },
+    totalEvents: [],
+    eventWatcher: null,
+    eventTypes: new EventTypes(),
     selectedEvent: { name: "Animal", type: "animal", count: 0 },
     filterOptions: ["This Week", "Today", "Last Week", "All"],
     sortOptions: ["Recent", "User", "Camera", "All"]
   }),
+  created() {
+    this.$events.startLoading();
+  },
+  destroyed() {
+    this.eventWatcher = null;
+  },
   mounted() {
-    // TODO cache this response
-    this.$events.getAllClassifiedEvents().then(resp => {
-      this.events = resp.data;
-      // sort out events by their classification
-      this.events.forEach(item => {
-        let cls = item.classifiedAs;
-        this.eventTypes[cls] = {
-          ...this.eventTypes[cls],
-          count: this.eventTypes[cls].count
-            ? (this.eventTypes[cls].count += 1)
-            : 1
-        };
-        this.eventTypes[cls].events.push(item);
+    const db = firebase.firestore();
+    // this watcher will query initially and then run anytime the 'classified-events' collection changes
+    this.eventWatcher = db
+      .collection("classified_events")
+      .where("classified", "==", true)
+      .limit(50)
+      .onSnapshot(querySnapshot => {
+        this.$events.startLoading();
+
+        if (querySnapshot.empty) {
+          this.$events.stopLoading();
+          return;
+        }
+
+        let results = [];
+        querySnapshot.forEach(doc => {
+          let newDoc = doc.data();
+          newDoc.id = doc.id; // docs do not come with their respective ids by default
+          results.push(newDoc);
+        });
+        this.totalEvents = results;
+        this.eventTypes = new EventTypes();
+        // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
+        // in EventTypes and splits up the query results by their type. Sample below
+        // EventTypes {
+        //     animal: {
+        //         name: String,
+        //         count: Number
+        //         type: String,
+        //         events: Array
+        //     },
+        //     contractor: (...)
+        //     employee: (...)
+        //     false-alarm: (...)
+        //     intruder: (...)
+        // }
+        results.forEach(
+          item => {
+            let cls = item.classifiedAs;
+            this.eventTypes[cls] = {
+              ...this.eventTypes[cls],
+              count: this.eventTypes[cls].count
+                ? (this.eventTypes[cls].count += 1)
+                : 1
+            };
+            this.eventTypes[cls].events.push(item);
+            this.$events.stopLoading();
+          },
+          error => {
+            console.error("Error in EventWatcher:", error);
+            this.$events.stopLoading();
+          }
+        );
       });
-      this.working = false;
-    });
+    // TODO cache this response
+    // this.$events.getAllClassifiedEvents().then(resp => {
+    //   this.events = resp.data;
+    //   // sort out events by their classification
+    //   this.events.forEach(item => {
+    //     let cls = item.classifiedAs;
+    //     console.log("CLASS", cls);
+    //     this.eventTypes[cls] = {
+    //       ...this.eventTypes[cls],
+    //       count: this.eventTypes[cls].count
+    //         ? (this.eventTypes[cls].count += 1)
+    //         : 1
+    //     };
+    //     this.eventTypes[cls].events.push(item);
+    //   });
+    // });
   },
   methods: {
     percentage(value) {
-      return (100 * value) / this.events.length;
+      return (100 * value) / this.totalEvents.length;
     },
     filterBy(e) {
       console.log(e.target.value);
@@ -180,15 +225,12 @@ export default {
   border-bottom: 1px solid var(--v-border-base);
 }
 .app-card {
-  //   border: 1px solid var(--v-border-base);
   border-radius: 12px;
   letter-spacing: 2px;
-  //   padding: 15px;
   cursor: pointer;
   margin: 0 8px;
   color: #fff;
   &-selected {
-    // filter: invert(1);
     background-color: #fff;
     color: black;
   }
@@ -223,7 +265,6 @@ export default {
   border: 1px solid var(--v-border-base);
   background-color: var(--v-buttonBlack-base);
   padding: 8px 12px;
-  // margin: 0px 15px 0px;
   position: relative;
   display: inline-block;
   .text {

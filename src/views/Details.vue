@@ -245,7 +245,7 @@ export default {
     const db = firebase.firestore();
     this.eventWatcher = db
       .collection("classified_events")
-      .limit(30)
+      .limit(50)
       .onSnapshot(
         querySnapshot => {
           let result = [];
