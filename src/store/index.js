@@ -5,23 +5,26 @@ import VuexPersistence from 'vuex-persist';
 import { cameraAlert } from './alert.module';
 import { authentication } from './auth.module';
 import { eventHistory } from './event.module';
+import { stream } from './stream.module';
 
 Vue.use(Vuex);
 
-export default(new Vuex.Store({
+export default new Vuex.Store({
     plugins: [
         new VuexPersistence({
             storage: window.localStorage,
             modules: [
                 'authentication',
                 'cameraAlert',
-                'eventHistory'
-            ]
-        }).plugin
+                'eventHistory',
+                'stream',
+            ],
+        }).plugin,
     ],
     modules: {
         authentication,
         cameraAlert,
-        eventHistory
-    }
-}));
+        eventHistory,
+        stream,
+    },
+});

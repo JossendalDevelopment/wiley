@@ -9,3 +9,6 @@ README.md
 .env.production
 
 */config/*
+
+# streaming data files
+server/public/live/streams

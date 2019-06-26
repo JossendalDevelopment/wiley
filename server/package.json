@@ -12,12 +12,14 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "config": "^3.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "firebase-admin": "^7.3.0",
     "firebase-functions": "^2.3.0",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "node-rtsp-stream": "0.0.8"
   },
   "devDependencies": {
     "nodemon": "^1.19.0"

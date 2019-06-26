@@ -158,6 +158,7 @@ export default {
         results.forEach(
           item => {
             let cls = item.classifiedAs;
+            console.log("CLS", cls);
             this.eventTypes[cls] = {
               ...this.eventTypes[cls],
               count: this.eventTypes[cls].count

@@ -6,8 +6,8 @@ import App from './App.vue';
 import { router } from './router';
 import store from './store/index';
 
-
 import AuthPlugin from '@/plugins/auth.js';
+import StreamPlugin from '@/plugins/stream.js';
 import Notifications from '@/plugins/notifications.js';
 import CameraAlertPlugin from '@/plugins/cameraAlert.js';
 import EventHistoryPlugin from '@/plugins/event.js';
@@ -25,19 +25,20 @@ firebase.initializeApp({
     projectId: process.env.VUE_APP_PROJECT_ID,
     storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
-    appId: process.env.VUE_APP_APP_ID
+    appId: process.env.VUE_APP_APP_ID,
 });
 
 Vue.config.productionTip = false;
 Vue.use(AuthPlugin);
+Vue.use(StreamPlugin);
 Vue.use(CameraAlertPlugin);
 Vue.use(EventHistoryPlugin);
 Vue.use(Notifications);
 Vue.directive('trim', trim);
-Vue.directive('test-ref', testref)
+Vue.directive('test-ref', testref);
 
 new Vue({
     router,
     store,
-    render: h => h(App)
-}).$mount('#app')
+    render: h => h(App),
+}).$mount('#app');

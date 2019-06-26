@@ -4,9 +4,8 @@
         "camNumber": 1,
         "camName": "Rail-EAST",
         "sourceData": {
-            "src": "/assets/video/sample_rail_east.mp4",
-            "src2": "https://app.coverr.co/s3/mp4/Deserted%20Island.mp4",
-            "type": "video/mp4"
+            "src": "http://localhost:3001/live/streams/480p.m3u8",
+            "type": "application/x-mpegURL"
         },
         "staticImage": "/assets/images/ref_raileast.jpg"
     },

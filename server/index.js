@@ -13,13 +13,14 @@ const admin = require('firebase-admin');
 const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://wiley-app.firebaseio.com"
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://wiley-app.firebaseio.com',
 });
 
 // routers
 const publicRouter = require('./routes/public-router');
 const authenticatedRouter = require('./routes/authenticated-router');
+const streamingRouter = require('./routes/streaming-router');
 
 var app = express();
 
@@ -27,20 +28,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
     next();
 });
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/api', publicRouter);
 app.use('/api', authenticatedRouter);
+app.use('/stream', streamingRouter);
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter);
 
 const server = app.listen(PORT, () => {
-    console.log("Server listening on port " + PORT);
+    console.log('Server listening on port ' + PORT);
 });
 
 // catch 404 and forward to error handler

@@ -7,9 +7,9 @@
   <v-container grid-list-xl fill-height px-0 class="overview-container">
     <v-layout column>
       <v-layout row wrap align-center>
-        <v-flex v-for="stream in streams" :key="stream.id" xs6>
+        <v-flex xs6>
           <v-card class="card-container" flat>
-            <video-live-feed :stream="stream"/>
+            <video-live-feed v-if="!working" :stream="stream"/>
             <v-card-title>
               <span class="cam-name">{{ stream.camName.toUpperCase().replace(/-/, ' ') }}</span>
             </v-card-title>
@@ -36,12 +36,35 @@ export default {
     "video-live-feed": VideoLiveFeed
   },
   data: () => ({
+    working: true,
     streams: CameraFeedsJson,
+    stream: {
+      id: 100,
+      camNumber: 1,
+      camName: "Rail-EAST",
+      sourceData: {
+        src: "http://localhost:3001/live/streams/480p.m3u8",
+        type: "application/x-mpegURL"
+      },
+      staticImage: "/assets/images/ref_raileast.jpg"
+    },
     dateTime: null,
     timer: null
   }),
   created() {
     this.startTime();
+  },
+  mounted() {
+    this.$stream
+      .startStream()
+      .then(resp => {
+        console.log("Start stream resp", resp);
+        // this.stream.sourceData.src = resp.data;
+        this.working = false;
+      })
+      .catch(err => {
+        console.error("ERROR", err);
+      });
   },
   destroyed() {
     clearInterval(this.timer);
