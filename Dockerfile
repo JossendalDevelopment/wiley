@@ -1,5 +1,7 @@
 # build stage
 FROM node:10.16.0 as build-stage
+# image from ffmpeg people with ffmpeg preconfigured
+# FROM jrottenberg/ffmpeg:3.4-alpine as build-stage
 LABEL MAINTAINER='Jossendal Development kevin.jossendal@revunit.com'
 # Needed to run build command
 RUN npm install -g @vue/cli
