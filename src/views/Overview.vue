@@ -7,7 +7,7 @@
   <v-container grid-list-xl fill-height px-0 class="overview-container">
     <v-layout column>
       <v-layout row wrap align-center>
-        <v-flex xs6>
+        <v-flex xs6 v-for="n of 2" :key="n + 'live-feed'">
           <v-card class="card-container" flat>
             <video-live-feed v-if="!working" :stream="stream"/>
             <v-card-title>
