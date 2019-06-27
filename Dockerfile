@@ -1,5 +1,7 @@
 # build stage
-FROM node:10.16.0 as build-stage
+# FROM node:10.16.0 as build-stage
+# custom image of node-10.16.0 with ffmpeg recompiled
+FROM jossendal/node:10.16.0-ffmpeg
 # image from ffmpeg people with ffmpeg preconfigured
 # FROM jrottenberg/ffmpeg:3.4-alpine as build-stage
 LABEL MAINTAINER='Jossendal Development kevin.jossendal@revunit.com'

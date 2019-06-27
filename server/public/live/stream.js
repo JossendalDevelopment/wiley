@@ -15,6 +15,7 @@ const startStream = function() {
     let proc = spawn('ffmpeg', [
         '-i',
         'rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0',
+        '-re',
         '-fflags',
         'nobuffer',
         '-s',
@@ -28,7 +29,7 @@ const startStream = function() {
         '-maxrate',
         '800k',
         '-preset',
-        'veryfast',
+        'ultrafast',
         '-tune',
         'zerolatency',
         '-y',

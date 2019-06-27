@@ -9,10 +9,10 @@ set -e
 renditions=(
 # resolution  bitrate  audio-rate
 #  "426x240    400k    64k"
-  "640x360    800k     96k"
-#   "842x480    1400k    128k"
-#   "1280x720   2800k    128k"
-#   "1920x1080  5000k    192k"
+#   "640x360    800k     96k"      # 360 p
+#   "842x480    1400k    128k"   # 480 p
+  "1280x720   2800k    128k"   # HD 720 p
+#   "1920x1080  5000k    192k"   # FULL HD
 )
 
 segment_target_duration=4       # try to create a new segment every X seconds
@@ -64,7 +64,9 @@ for rendition in "${renditions[@]}"; do
   bandwidth="$(echo ${bitrate} | grep -oE '[[:digit:]]+')000"
   name="${height}p"
   
-  cmd+=" ${static_params} -vf scale=w=${width}:h=${height}:force_original_aspect_ratio=decrease"
+#   this will override scale and enforce original aspect ratio
+#   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}:force_original_aspect_ratio=decrease"
+  cmd+=" ${static_params} -vf scale=w=${width}:h=${height}"
   cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k -b:a ${audiorate}"
   cmd+=" -hls_segment_filename ${target}/${name}_%03d.ts ${target}/${name}.m3u8"
   
