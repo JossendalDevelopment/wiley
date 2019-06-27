@@ -16,7 +16,7 @@ const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://wiley-app.firebaseio.com',
+    databaseURL: 'https://wiley-app-rotf.firebaseio.com',
 });
 
 // routers
@@ -52,6 +52,11 @@ const server = app.listen(PORT, () => {
 });
 
 (function init() {
+    // ***********************************************************************
+    // INITIALIZE FFMPEG READING OF RTSP STREAMS
+    // TODO: Make this it's own microprocess running in docker as a file server?
+    // ***********************************************************************
+
     // const stream = new Stream({
     //     name: 'ip-live-stream',
     //     // streamUrl: 'rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov',
@@ -93,8 +98,8 @@ const server = app.listen(PORT, () => {
         console.log('Creating Stream data in:', `${__dirname}/public/live`);
         // let command = './testing.sh rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0 streams'
         let commands = [
-            './testing.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
-            './testing.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
+            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
+            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];
         // let command = './stream.sh';
         // let command = './stream.js';
@@ -129,7 +134,9 @@ app.use(function(req, res, next) {
     next(createError(404));
 });
 
-// FOR DOCKER: place this code in your node app, ideally in index.js or ./bin/www
+// ******************************************************************
+// FOR DOCKER NODE CONFIGURATION: place in index.js or ./bin/www
+// ******************************************************************
 //
 // you need this code so node will watch for exit signals
 // node by default doesn't handle SIGINT/SIGTERM
@@ -141,7 +148,6 @@ app.use(function(req, res, next) {
 // https://github.com/RisingStack/kubernetes-graceful-shutdown-example/blob/master/src/index.js
 // if you want to use npm then start with `docker run --init` to help, but I still don't think it's
 // a graceful shutdown of node process, just a forced exit
-//
 
 // quit on ctrl-c when running docker in terminal
 process.on('SIGINT', function onSigint() {
