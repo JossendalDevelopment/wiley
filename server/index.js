@@ -12,7 +12,12 @@ const PORT = process.env.PORT || 3001;
 
 // firebase initialization
 const admin = require('firebase-admin');
-const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+let serviceAccount;
+if (process.env.NODE_ENV === 'production') {
+    serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_PROD);
+} else {
+    serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_DEV);
+}
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -100,8 +105,10 @@ const server = app.listen(PORT, () => {
         //     process.env.IP_CAM_PASSWORD
         // }@192.168.50.83/cam/realmonitor?channel=1subtype=0`;
         let commands = [
-            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
-            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
+            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
+            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
+            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
+            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];
         // let command = './stream.sh';
         // let command = './stream.js';

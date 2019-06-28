@@ -1,0 +1,4 @@
+GOOGLE_APPLICATION_CREDENTIALS_PROD=<path/to/firebase/service/account/json/file>
+GOOGLE_APPLICATION_CREDENTIALS_DEV=<path/to/firebase/service/account/dev/json/file>
+IP_CAM_RTSP_URL_ONE=<ip_camera_rtsp_url>
+IP_CAM_RTSP_URL_TWO=<ip_camera_rtsp_url>
