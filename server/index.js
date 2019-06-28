@@ -2,7 +2,6 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-// const Stream = require('node-rtsp-stream');
 const exec = require('child_process').exec;
 require('dotenv').config();
 // const ejwt = require('express-jwt');
@@ -21,7 +20,10 @@ if (process.env.NODE_ENV === 'production') {
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://wiley-app-rotf.firebaseio.com',
+    databaseURL:
+        process.env.NODE_ENV === 'production'
+            ? 'https://wiley-app-rotf.firebaseio.com'
+            : 'https://wiley-app-rotf-dev.firebaseio.com',
 });
 
 // routers
@@ -62,38 +64,6 @@ const server = app.listen(PORT, () => {
     // TODO: Make this it's own microprocess running in docker as a file server?
     // ***********************************************************************
 
-    // const stream = new Stream({
-    //     name: 'ip-live-stream',
-    //     // streamUrl: 'rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov',
-    //     // streamUrl: 'rtsp://192.168.50.83/cam/realmonitor?channel=1subtype=0',
-    //     streamUrl:
-    //         'rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0',
-    //     wssPort: 9998,
-    //     wsPort: 9999,
-    //     ffmpegOptions: {
-    //         // options ffmpeg flags
-    //         '-s': '900x640',
-    //         '-stats': '', // an option with no neccessary value uses a blank string
-    //         '-r': 30, // options with required values specify the value after the key
-    //     },
-    // });
-    // console.log('STREAM', stream.origin);
-    // console.log('Creating Stream', `${__dirname}/public/live`);
-    // // let command = './testing.sh rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0 streams'
-    // // let command = './stream.sh';
-    // let command = './stream.js';
-    // exec(
-    //     command,
-    //     { cwd: `${__dirname}/public/live` },
-    //     (error, stdout, stderr) => {
-    //         console.log(stdout);
-    //         console.log(stderr);
-    //         if (error !== null) {
-    //             console.log(`exec error: ${error}`);
-    //         }
-    //     }
-    // );
-
     let procs = [];
     if (procs.length !== 0) {
         console.log('Killing existing ffmpeg processes', procs);
@@ -101,14 +71,11 @@ const server = app.listen(PORT, () => {
         procs[1].kill();
     } else {
         console.log('Creating Stream data in:', `${__dirname}/public/live`);
-        // let command = `./testing.sh rtsp://${process.env.IP_CAM_USERNAME}:${
-        //     process.env.IP_CAM_PASSWORD
-        // }@192.168.50.83/cam/realmonitor?channel=1subtype=0`;
         let commands = [
-            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
-            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
-            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
-            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
+            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
+            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
+            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
+            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];
         // let command = './stream.sh';
         // let command = './stream.js';
