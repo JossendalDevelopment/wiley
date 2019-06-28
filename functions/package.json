@@ -13,8 +13,10 @@
         "config": "^3.1.0",
         "express": "^4.16.4",
         "express-jwt": "^5.3.1",
+        "ffmpeg-static": "^2.4.0",
         "firebase-admin": "^7.0.0",
         "firebase-functions": "^2.3.1",
+        "fluent-ffmpeg": "^2.1.2",
         "http-errors": "^1.7.2",
         "jsonwebtoken": "^8.5.1"
     },

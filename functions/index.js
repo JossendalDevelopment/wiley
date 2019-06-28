@@ -2,8 +2,11 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const exec = require('child_process').exec;
+// const exec = require('child_process').exec;
 require('dotenv').config();
+const ffmpeg_static = require('ffmpeg-static');
+const ffmpeg = require('fluent-ffmpeg');
+
 // const ejwt = require('express-jwt');
 // const config = require('config');
 
@@ -65,20 +68,31 @@ const server = app.listen(PORT, () => {
             './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
             './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];
-        commands.forEach(command => {
-            procs.push(
-                exec(
-                    command,
-                    { cwd: `${__dirname}/public/live` },
-                    (error, stdout, stderr) => {
-                        console.log(stdout);
-                        console.log(stderr);
-                        if (error !== null) {
-                            console.log(`exec error: ${error}`);
-                        }
-                    }
-                )
-            );
+        commands.forEach(() => {
+            ffmpeg(
+                'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov'
+            )
+                .setFfmpegPath(ffmpeg_static.path)
+                .addOptions([
+                    '-fflags nobuffer -s 842x480 -c:v libx264 -b:v 1400k -bufsize 768k -maxrate 800k -preset veryfast -tune zerolatency',
+                ])
+                .outputOptions([
+                    '-hls_time 5 -hls_list_size 10 -start_number 1 -hls_flags delete_segments',
+                ])
+                .saveToFile('streams/one');
+            //     procs.push(
+            //         exec(
+            //             command,
+            //             { cwd: `${__dirname}/public/live` },
+            //             (error, stdout, stderr) => {
+            //                 console.log(stdout);
+            //                 console.log(stderr);
+            //                 if (error !== null) {
+            //                     console.log(`exec error: ${error}`);
+            //                 }
+            //             }
+            //         )
+            //     );
         });
     }
     process.on('exit', function() {
