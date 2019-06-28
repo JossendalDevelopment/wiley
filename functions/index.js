@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 // const exec = require('child_process').exec;
-require('dotenv').config();
+// require('dotenv').config();
 const ffmpeg_static = require('ffmpeg-static');
 const ffmpeg = require('fluent-ffmpeg');
 
