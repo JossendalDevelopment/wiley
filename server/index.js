@@ -96,7 +96,9 @@ const server = app.listen(PORT, () => {
         procs[1].kill();
     } else {
         console.log('Creating Stream data in:', `${__dirname}/public/live`);
-        // let command = './testing.sh rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0 streams'
+        // let command = `./testing.sh rtsp://${process.env.IP_CAM_USERNAME}:${
+        //     process.env.IP_CAM_PASSWORD
+        // }@192.168.50.83/cam/realmonitor?channel=1subtype=0`;
         let commands = [
             './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
             './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',

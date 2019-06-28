@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 const spawn = require('child_process').spawn;
+require('dotenv').config();
 
 const startStream = function() {
     console.log('Starting Stream');
-    const VIDSOURCE =
-        'rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0';
+    const VIDSOURCE = `rtsp://${process.env.IP_CAM_USERNAME}:${
+        process.env.IP_CAM_PASSWORD
+    }@192.168.50.83/cam/realmonitor?channel=1subtype=0`;
     // AUDIO_OPTS="-c:a aac -b:a 160000 -ac 2"
     const VIDEO_OPTS =
         '-fflags nobuffer -s 960x540 -c:v libx264 -b:v 640000 -bufsize 768k -maxrate 800k -preset veryfast -tune zerolatency';
@@ -14,7 +16,9 @@ const startStream = function() {
 
     let proc = spawn('ffmpeg', [
         '-i',
-        'rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0',
+        `rtsp://${process.env.IP_CAM_USERNAME}:${
+            process.env.IP_CAM_PASSWORD
+        }@192.168.50.83/cam/realmonitor?channel=1subtype=0`,
         '-re',
         '-fflags',
         'nobuffer',

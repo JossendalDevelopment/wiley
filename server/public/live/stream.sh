@@ -1,5 +1,4 @@
 #!/bin/bash
-# VIDSOURCE="rtsp://admin:jossendal0579@192.168.50.83/cam/realmonitor?channel=1subtype=0"
 VIDSOURCE="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 # AUDIO_OPTS="-c:a aac -b:a 160000 -ac 2"
 VIDEO_OPTS="-fflags nobuffer -s 842x480 -c:v libx264 -b:v 1400k -bufsize 768k -maxrate 800k -preset veryfast -tune zerolatency"
