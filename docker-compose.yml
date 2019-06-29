@@ -21,13 +21,6 @@ services:
             # - VIRTUAL_HOST=client.localhost
             - CHOKIDAR_USEPOLLING=true
             - NODE_ENV=development
-            # - VUE_APP_API_KEY=AIzaSyCMy1Of6-fvG-udhO3JkjTkZvmAfGFE3pw
-            # - VUE_APP_AUTH_DOMAIN=wiley-app-rotf-dev.firebaseapp.com
-            # - VUE_APP_DATABASE_URL=https://wiley-app-rotf-dev.firebaseio.com
-            # - VUE_APP_PROJECT_ID=wiley-app-rotf-dev
-            # - VUE_APP_STORAGE_BUCKET=
-            # - VUE_APP_MESSAGING_SENDER_ID=821302933506
-            # - VUE_APP_APP_ID=1:821302933506:web:a7d645e362b3f48d
     api:
         build: ./server
         volumes:

@@ -49,7 +49,6 @@ export default {
         sourceData: {
           // These urls point to the file server, not the express api server
           src: "http://localhost:3000/live/streams/one/480p.m3u8",
-          //   src: "http://file_server.localhost:8080/live/streams/one/480.m3u8",
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
