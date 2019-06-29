@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const exec = require('child_process').exec;
+// const exec = require('child_process').exec;
 require('dotenv').config();
 // const ejwt = require('express-jwt');
 // const config = require('config');
@@ -29,7 +29,6 @@ admin.initializeApp({
 // routers
 const publicRouter = require('./routes/public-router');
 const authenticatedRouter = require('./routes/authenticated-router');
-const streamingRouter = require('./routes/streaming-router');
 
 var app = express();
 
@@ -38,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// this needs to be before use static and all routes requiring cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -51,55 +51,54 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', publicRouter);
 app.use('/api', authenticatedRouter);
-app.use('/stream', streamingRouter);
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter);
 
 const server = app.listen(PORT, () => {
-    console.log('Server listening on port ' + PORT);
+    console.log('API Server listening on port ' + PORT);
 });
 
-(function init() {
-    // ***********************************************************************
-    // INITIALIZE FFMPEG READING OF RTSP STREAMS
-    // TODO: Make this it's own microprocess running in docker as a file server?
-    // ***********************************************************************
+// (function init() {
+//     // ***********************************************************************
+//     // INITIALIZE FFMPEG READING OF RTSP STREAMS
+//     // TODO: Make this it's own microprocess running in docker as a file server?
+//     // ***********************************************************************
 
-    let procs = [];
-    if (procs.length !== 0) {
-        console.log('Killing existing ffmpeg processes', procs);
-        procs[0].kill();
-        procs[1].kill();
-    } else {
-        console.log('Creating Stream data in:', `${__dirname}/public/live`);
-        let commands = [
-            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
-            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
-            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
-            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
-        ];
-        // let command = './stream.sh';
-        // let command = './stream.js';
-        commands.forEach(command => {
-            procs.push(
-                exec(
-                    command,
-                    { cwd: `${__dirname}/public/live` },
-                    (error, stdout, stderr) => {
-                        console.log(stdout);
-                        console.log(stderr);
-                        if (error !== null) {
-                            console.log(`exec error: ${error}`);
-                        }
-                    }
-                )
-            );
-        });
-    }
-    process.on('exit', function() {
-        console.log('Terminating streaming processes on exit');
-        procs.forEach(p => p.kill());
-    });
-})();
+//     let procs = [];
+//     if (procs.length !== 0) {
+//         console.log('Killing existing ffmpeg processes', procs);
+//         procs[0].kill();
+//         procs[1].kill();
+//     } else {
+//         console.log('Creating Stream data in:', `${__dirname}/public/live`);
+//         let commands = [
+//             // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
+//             // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
+//             './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
+//             './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
+//         ];
+//         // let command = './stream.sh';
+//         // let command = './stream.js';
+//         commands.forEach(command => {
+//             procs.push(
+//                 exec(
+//                     command,
+//                     { cwd: `${__dirname}/public/live` },
+//                     (error, stdout, stderr) => {
+//                         console.log(stdout);
+//                         console.log(stderr);
+//                         if (error !== null) {
+//                             console.log(`exec error: ${error}`);
+//                         }
+//                     }
+//                 )
+//             );
+//         });
+//     }
+//     process.on('exit', function() {
+//         console.log('Terminating streaming processes on exit');
+//         procs.forEach(p => p.kill());
+//     });
+// })();
 
 /* ***********************************************************
  ERROR HANDLING

@@ -1,23 +1,21 @@
 # build stage
-# FROM node:10.16.0 as build-stage
-# custom image of node-10.16.0 with ffmpeg recompiled
-FROM jossendal/node:10.16.0-ffmpeg
-# image from ffmpeg people with ffmpeg preconfigured
-# FROM jrottenberg/ffmpeg:3.4-alpine as build-stage
-LABEL MAINTAINER='Jossendal Development kevin.jossendal@revunit.com'
+FROM node:10.16.0 as build-stage
+LABEL MAINTAINER='Jossendal Dev kevin.jossendal@revunit.com'
 # Needed to run build command
-RUN npm install -g @vue/cli
 WORKDIR /app
-# ENV PATH /app/node_modules/.bin:$PATH
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+RUN npm install -g @vue/cli
 
 COPY package*.json ./
-# RUN npm install @vue/cli-service
+
 RUN npm install --only=production && npm cache clean --force
+
 COPY . .
-# docker-build is custom script that reads from node_modules directory directly
-# RUN npm run build
-# CMD ["npm", "run", "build"]
-CMD ["./node_modules/\\@vue/cli-service/bin/vue-cli-service.js", "build"]
+# build:dev will build using firebase dev staging app
+CMD ["npm", "run", "build:dev"]
+# CMD ["./node_modules/\\@vue/cli-service/bin/vue-cli-service.js", "build"]
 
 # production stage
 FROM nginx:1.16-alpine as production-stage

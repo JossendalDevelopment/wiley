@@ -31,7 +31,6 @@
 import VideoLiveFeed from "@/components/video--live-feed.vue";
 
 import format from "date-fns/format";
-// import jsmpeg from "jsmpeg";
 
 // import CameraFeedsJson from "@/cameraFeeds.json";
 
@@ -48,7 +47,9 @@ export default {
         camNumber: 1,
         camName: "Rail-EAST",
         sourceData: {
-          src: "http://localhost:3001/live/streams/one/720p.m3u8",
+          // These urls point to the file server, not the express api server
+          src: "http://localhost:3000/live/streams/one/480p.m3u8",
+          //   src: "http://file_server.localhost:8080/live/streams/one/480.m3u8",
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -58,7 +59,7 @@ export default {
         camNumber: 2,
         camName: "Rail-WEST",
         sourceData: {
-          src: "http://localhost:3001/live/streams/two/720p.m3u8",
+          src: "http://localhost:3000/live/streams/two/480p.m3u8",
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"

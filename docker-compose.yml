@@ -1,31 +1,52 @@
 version: '2.4'
 services:
+    # nginx-proxy:
+    #     image: jwilder/nginx-proxy
+    #     ports:
+    #         - '8000:80'
+    #     volumes:
+    #         - /var/run/docker.sock:/tmp/docker.sock
     client:
         build: ./
         volumes:
-            - ./:/app
+            - ./:/app:delegated
             - /node_modules
         ports:
-            - 8080:80 # default vue devserver
-            - 5001:80
+            - 5001:5001
+            - 8000:80
         depends_on:
+            - fileserver
             - api
         environment:
+            # - VIRTUAL_HOST=client.localhost
             - CHOKIDAR_USEPOLLING=true
-            - VUE_APP_API_KEY=AIzaSyC14MMLeymY_W_9a-Qoc8bYQji55tUm0Ak
-            - VUE_APP_AUTH_DOMAIN=wiley-app.firebaseapp.com
-            - VUE_APP_DATABASE_URL=https://wiley-app.firebaseio.com
-            - VUE_APP_PROJECT_ID=wiley-app
-            - VUE_APP_STORAGE_BUCKET=wiley-app.appspot.com
-            - VUE_APP_MESSAGING_SENDER_ID=918656739220
-            - VUE_APP_APP_ID=1:918656739220:web:46326f33d145a55f
+            - NODE_ENV=development
+            # - VUE_APP_API_KEY=AIzaSyCMy1Of6-fvG-udhO3JkjTkZvmAfGFE3pw
+            # - VUE_APP_AUTH_DOMAIN=wiley-app-rotf-dev.firebaseapp.com
+            # - VUE_APP_DATABASE_URL=https://wiley-app-rotf-dev.firebaseio.com
+            # - VUE_APP_PROJECT_ID=wiley-app-rotf-dev
+            # - VUE_APP_STORAGE_BUCKET=
+            # - VUE_APP_MESSAGING_SENDER_ID=821302933506
+            # - VUE_APP_APP_ID=1:821302933506:web:a7d645e362b3f48d
     api:
         build: ./server
         volumes:
-            - ./server:/server
+            - ./server:/server:delegated
             # - ./server/certs/serviceAccountKey.json:/server/certs/serviceAccountKey.json
             - /server/node_modules
-
         ports:
             - 3001:3001 #exposed only for testing
-        container_name: api
+        # environment:
+        #     - VIRTUAL_HOST=api.localhost
+    fileserver:
+        build: ./file-server
+        # command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./index.js
+        ports:
+            - 3000:3000
+        volumes:
+            - ./file-server:/opt/node_app/app:delegated
+            - /node/app/node_modules
+        environment:
+            # - VIRTUAL_HOST=file_server.localhost
+            - IP_CAM_RTSP_URL_ONE=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0
+            - IP_CAM_RTSP_URL_TWO=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0

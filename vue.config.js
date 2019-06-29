@@ -8,9 +8,6 @@ module.exports = {
             '/api': {
                 target: 'http://localhost:3001',
             },
-            '/stream': {
-                target: 'http://localhost:3001',
-            },
         },
     },
     //   chainWebpack: config => {
