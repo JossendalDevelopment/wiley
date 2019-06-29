@@ -30,4 +30,4 @@ yarn-error.log*
 docker-compose*.yml
 
 # streaming data files
-server/public/live/streams
+streams
