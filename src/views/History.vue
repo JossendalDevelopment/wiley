@@ -6,7 +6,7 @@
 <template>
   <v-container fill-height fluid pa-0 ml-0 mr-0 grid-list-lg class="history-container">
     <template v-if="$events.loading">
-      <app-loading-spinner/>
+      <app-loading-spinner />
     </template>
     <template v-else>
       <v-layout column>
@@ -141,6 +141,7 @@ export default {
         });
         this.totalEvents = results;
         this.eventTypes = new EventTypes();
+        // TODO: make each type of event it's own Type
         // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
         // in EventTypes and splits up the query results by their type. Sample below
         // EventTypes {
@@ -157,8 +158,7 @@ export default {
         // }
         results.forEach(
           item => {
-            let cls = item.classifiedAs;
-            console.log("CLS", cls);
+            let cls = item.classification;
             this.eventTypes[cls] = {
               ...this.eventTypes[cls],
               count: this.eventTypes[cls].count

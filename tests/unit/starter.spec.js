@@ -1,10 +1,10 @@
-/*   This is completely fubar, jest continually fails on a css import which it doesn't know how to handle.
-     All this despite the transform prop set in jest.config.js   */
+/*   This is completely fubar, jest continually fails on a css import which jest apparently doesn't know how to handle natively.
+     Tried to configure transform prop set in jest.config.js   */
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import { shallowMount } from '@vue/test-utils';
 
-import LiveFeedDetails from '@/views/LiveFeed--Details.vue';
+import Details from '@/views/Details.vue';
 import Overview from '@/views/Overview.vue';
 import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
@@ -15,14 +15,14 @@ describe('Home.vue renders', () => {
 
     beforeEach(() => {
         Vue.use(Vuetify);
-    
-        wrp = shallowMount(Home, { });
+
+        wrp = shallowMount(Home, {});
     });
 
     // checks Home.vue is a component.
     it('Registers a component', () => {
-        expect(wrp.isVueInstance()).toBeTruthy()
-    })
+        expect(wrp.isVueInstance()).toBeTruthy();
+    });
 });
 
 describe('SignIn.vue renders', () => {
@@ -32,24 +32,23 @@ describe('SignIn.vue renders', () => {
         Vue.use(Vuetify);
         // axios.get.mockClear();
         // axios.get.mockReturnValue(Promise.resolve({}));
-    
     });
     wrp = shallowMount(SignIn, {
         mocks: {
             $vuetify: {
                 theme: {},
-                breakpoint: {}
+                breakpoint: {},
             },
             $auth: {
-                status: {}
-            }
+                status: {},
+            },
         },
     });
 
     // checks SignIn.vue is a component.
     it('Registers a component', () => {
-        expect(wrp.isVueInstance()).toBeTruthy()
-    })
+        expect(wrp.isVueInstance()).toBeTruthy();
+    });
 });
 
 describe('Overview.vue renders', () => {
@@ -57,37 +56,31 @@ describe('Overview.vue renders', () => {
 
     beforeEach(() => {
         Vue.use(Vuetify);
-    
-        wrp = shallowMount(Overview, { });
+
+        wrp = shallowMount(Overview, {});
     });
     // checks Home.vue is a component.
     it('Registers a component', () => {
-        expect(wrp.isVueInstance()).toBeTruthy()
-    })
+        expect(wrp.isVueInstance()).toBeTruthy();
+    });
 });
 
-describe('LiveFeed--Details renders', () => {
+describe('Details renders', () => {
     beforeEach(() => {
         Vue.use(Vuetify);
     });
     it('Registers an id from query string', () => {
-        const wrp = shallowMount(LiveFeedDetails, {
+        const wrp = shallowMount(Details, {
             mocks: {
                 // props
                 stream: {
-                    sourceData: {}
+                    sourceData: {},
                 },
-                $cameraAlert: {
-                    alertData: {}
-                },
-                $route: {
-                    params: { id: 100 }
-                }
-            }
-        })
+            },
+        });
 
-        expect(wrp.contains(".test-ref"))
-    })
+        expect(wrp.contains('.test-ref'));
+    });
 });
 
 describe('History renders', () => {
@@ -99,14 +92,14 @@ describe('History renders', () => {
     wrp = shallowMount(History, {
         mocks: {
             $events: {
-                getAllClassifiedEvents: () => {}
-            }
-        }
+                getAllClassifiedEvents: () => {},
+            },
+        },
     });
     // checks History.vue is a component.
     it('Registers a component', () => {
-        expect(wrp.isVueInstance()).toBeTruthy()
-    })
+        expect(wrp.isVueInstance()).toBeTruthy();
+    });
 });
 
 // describe('SignIn.vue', () => {

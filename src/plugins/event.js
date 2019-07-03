@@ -21,6 +21,12 @@ export default {
                             events,
                         });
                     };
+                    event.getYesterdaysEvents = () => {
+                        return store.dispatch(
+                            'eventHistory/getYesterdaysEvents',
+                            {}
+                        );
+                    };
                     event.updateEvent = event => {
                         return store.dispatch('eventHistory/updateEvent', {
                             event,

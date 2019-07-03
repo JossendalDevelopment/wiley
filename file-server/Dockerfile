@@ -1,18 +1,17 @@
 # if you're doing anything beyond your local machine, please pin this to a specific version at https://hub.docker.com/_/node/
 # FROM node:8-alpine also works here for a smaller image
-FROM node:10
+FROM node:10.16.0
 # FROM jossendal/node:10.16.0-ffmpeg
 
 RUN apt-get update && apt-get install -y software-properties-common ffmpeg
 RUN add-apt-repository ppa:jonathonf/ffmpeg-4
-# RUN apt-get install ffmpeg
 RUN apt-get install bc
 # set our node environment, either development or production
-# defaults to production, compose overrides this to development on build and run
+# defaults to production, compose can ovveride this
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
-# default to port 3000 for node, and 9229 and 9230 (tests) for debug
+# default to port 3000 for node
 # ARG PORT=9000
 # ENV PORT $PORT
 # EXPOSE $PORT 9229 9230 8080 3000
@@ -37,7 +36,7 @@ RUN npm install --no-optional && npm cache clean --force
 ENV PATH /opt/node_app/node_modules/.bin:$PATH
 
 # check every 30s to ensure this service returns HTTP 200
-# HEALTHCHECK --interval=30s CMD node healthcheck.js
+HEALTHCHECK --interval=30s CMD node healthcheck.js
 
 # copy in our source code last, as it changes the most
 WORKDIR /opt/node_app/app

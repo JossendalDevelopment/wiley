@@ -24,5 +24,31 @@
         "bbox_height": 100,
         "classification": "person",
         "modified_date": "2019-06-28T:15:00:00Z"
+    },
+    {
+        "id": 3,
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/06/28/",
+        "image_filename": "c3.jpg",
+        "image_width": 600,
+        "image_height": 600,
+        "bbox_xmin": 100,
+        "bbox_ymin": 100,
+        "bbox_width": 50,
+        "bbox_height": 100,
+        "classification": "train",
+        "modified_date": "2019-06-28T:15:00:00Z"
+    },
+    {
+        "id": 4,
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/06/28/",
+        "image_filename": "c4.jpg",
+        "image_width": 600,
+        "image_height": 600,
+        "bbox_xmin": 100,
+        "bbox_ymin": 100,
+        "bbox_width": 50,
+        "bbox_height": 100,
+        "classification": "person",
+        "modified_date": "2019-06-28T:15:00:00Z"
     }
 ]

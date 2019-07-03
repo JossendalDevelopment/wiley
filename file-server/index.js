@@ -27,6 +27,13 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/healthcheck', function(req, res) {
+    // do app logic here to determine if app is truly healthy
+    // you should return 200 if healthy, and anything else will fail
+    // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
+    res.send('I am happy and healthy\n');
+});
+
 app.use('/file', publicRouter);
 
 const server = app.listen(PORT, () => {
@@ -46,8 +53,8 @@ const server = app.listen(PORT, () => {
     } else {
         console.log('Creating Stream data in:', `${__dirname}/public/live`);
         let commands = [
-            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
-            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
+            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} /streams/one`,
+            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} /streams/two`,
             // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
             // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];

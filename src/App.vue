@@ -35,7 +35,7 @@
     </v-alert>
 
     <v-app id="inspire">
-      <app-header/>
+      <app-header />
 
       <v-content app class="app-container">
         <v-container fluid fill-height pa-0>
@@ -83,7 +83,7 @@
 </template>
 <script>
 import AppHeader from "@/components/app-header.vue";
-import EventsJson from "./dummyEvents.json";
+import MetaDataJson from "../metadata.json";
 
 // import AlertData from '@/types/cameraAlertType';
 
@@ -95,7 +95,7 @@ export default {
   data: () => ({
     alert: true,
     tab: null,
-    events: EventsJson.events,
+    events: MetaDataJson,
     animation: {
       enter() {
         /*
@@ -135,6 +135,9 @@ export default {
         return prev;
       }, 0);
     }
+  },
+  async mounted() {
+    // this.getNewEvents();
   },
   methods: {
     async getNewEvents() {

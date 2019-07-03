@@ -2,8 +2,6 @@
     This view will serve as the default screen, showing all available cameras live feeds.
     Assumption is that any live streaming data and corresponding alerts will come in through here.
     The initial configuration of each stream is set here
-    TODO: determine the location of the final file server where each stream will pull it's source file. 
-    localhost wont cut it in production
 </notes>
 <template>
   <v-container grid-list-xl fill-height px-0 class="overview-container">
@@ -11,8 +9,8 @@
       <v-layout row wrap align-center>
         <v-flex xs6 v-for="stream in streams" :key="stream.id">
           <v-card class="card-container" flat>
-            <video-live-feed :stream="stream"/>
-            <!-- <canvas id="video-canvas"></canvas> -->
+            <video-live-feed :stream="stream" />
+            <!-- <div id="playerElement" style="width:100%; height:0; padding:0 0 56.25% 0"></div> -->
             <v-card-title>
               <span class="cam-name">{{ stream.camName.toUpperCase().replace(/-/, ' ') }}</span>
             </v-card-title>
@@ -32,15 +30,12 @@ import VideoLiveFeed from "@/components/video--live-feed.vue";
 
 import format from "date-fns/format";
 
-// import CameraFeedsJson from "@/cameraFeeds.json";
-
 export default {
   components: {
     "video-live-feed": VideoLiveFeed
   },
   data: () => ({
     working: true,
-    // streams: CameraFeedsJson,
     streams: [
       {
         id: 100,
@@ -69,6 +64,24 @@ export default {
   }),
   created() {
     this.startTime();
+  },
+  mounted() {
+    // this.$nextTick(() => {
+    // });
+    // WowzaPlayer.create("playerElement", {
+    //   license: process.env.VUE_APP_WOWZA_LICENSE,
+    //   title: "",
+    //   description: "",
+    //   sourceURL:
+    //     "http%3A%2F%2F192.168.50.109%3A1935%2Flive%2FBahay.stream%2Fplaylist.m3u8",
+    //   autoPlay: true,
+    //   volume: "75",
+    //   mute: false,
+    //   loop: false,
+    //   audioOnly: false,
+    //   uiShowQuickRewind: true,
+    //   uiQuickRewindSeconds: "30"
+    // });
   },
   destroyed() {
     clearInterval(this.timer);

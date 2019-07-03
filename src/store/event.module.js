@@ -84,6 +84,12 @@ export const eventHistory = {
                 return resp;
             });
         },
+        // eslint-disable-next-line no-unused-vars
+        getYesterdaysEvents({ commit }) {
+            return api.getYesterdaysEvents().then(resp => {
+                return resp;
+            });
+        },
         startLoading({ commit }) {
             commit('startLoading');
         },

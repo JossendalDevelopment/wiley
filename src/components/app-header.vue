@@ -38,14 +38,6 @@ export default {
       this.$router.replace("/sign_in");
     }
   },
-  watch: {
-    tab: {
-      immediate: true,
-      handler(newVal) {
-        console.log("NEW TAB", newVal);
-      }
-    }
-  },
   computed: {
     unclassifiedEventCount() {
       return this.$events.events.reduce((prev, next) => {

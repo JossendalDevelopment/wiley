@@ -1,45 +1,47 @@
 version: '2.4'
 services:
-    # nginx-proxy:
-    #     image: jwilder/nginx-proxy
-    #     ports:
-    #         - '8000:80'
-    #     volumes:
-    #         - /var/run/docker.sock:/tmp/docker.sock
     client:
         build: ./
         volumes:
             - ./:/app:delegated
             - /node_modules
         ports:
-            - 5001:5001
+            - 5001:5001 # vue dev servers native port
             - 8000:80
         depends_on:
-            - fileserver
-            - api
+            # fileserver:
+            #     condition: service_healthy
+            api:
+                condition: service_healthy
         environment:
-            # - VIRTUAL_HOST=client.localhost
             - CHOKIDAR_USEPOLLING=true
             - NODE_ENV=development
     api:
-        build: ./server
+        build:
+            context: ./server
+            target: prod-stage
+        # if nodemon needs to be setup for dev
+        # command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./index.js
         volumes:
             - ./server:/server:delegated
-            # - ./server/certs/serviceAccountKey.json:/server/certs/serviceAccountKey.json
             - /server/node_modules
         ports:
-            - 3001:3001 #exposed only for testing
-        # environment:
-        #     - VIRTUAL_HOST=api.localhost
+            - 3001:3001 #exposed only for testing and required for healthcheck script
+        environment:
+            # These files need to be retrieved from firebase and placed in `server/certs`
+            - GOOGLE_APPLICATION_CREDENTIALS_DEV=./certs/wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
+            - GOOGLE_APPLICATION_CREDENTIALS_PROD=./certs/wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json
     fileserver:
         build: ./file-server
-        # command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./index.js
         ports:
             - 3000:3000
         volumes:
             - ./file-server:/opt/node_app/app:delegated
             - /node/app/node_modules
         environment:
-            # - VIRTUAL_HOST=file_server.localhost
-            - IP_CAM_RTSP_URL_ONE=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0
-            - IP_CAM_RTSP_URL_TWO=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0
+            # replace these with live rtsp urls
+            - IP_CAM_RTSP_URL_ONE=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+            - IP_CAM_RTSP_URL_TWO=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+            # these were for my local camera
+            # - IP_CAM_RTSP_URL_ONE=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0
+            # - IP_CAM_RTSP_URL_TWO=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0

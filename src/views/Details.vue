@@ -32,11 +32,7 @@
         </v-flex>
         <v-flex xs8 class="video-feed-wrapper">
           <div class="red-border">
-            <dummy-camera-image
-              ref="cameraImage"
-              :boundary="currentEvent.boundary"
-              :source="currentEvent"
-            />
+            <dummy-camera-image ref="cameraImage" :source="currentEvent" />
             <!-- <video-player :options="getVideoOptions()"/> -->
           </div>
         </v-flex>
@@ -143,14 +139,14 @@
           @keyup.enter.exact="setFalseAlarmClassification('false-alarm')"
           @keydown.enter.shift.exact="newline"
           placeholder="Please leave a reason for registering this event as a false alarm"
-          v-model="confirmationDescription"
+          v-model="classificationDescription"
         />
       </template>
       <v-btn
         slot="detailsButton"
         dark
         style="background-color:#FFF; color:black;"
-        :disabled="!confirmationDescription"
+        :disabled="!classificationDescription"
         @click="setFalseAlarmClassification('false-alarm')"
       >Confirm</v-btn>
     </app-dialog>
@@ -162,8 +158,6 @@ import "firebase/firestore";
 import DummyCameraImage from "@/components/dummy-camera-image";
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from "@/components/app-dialog.vue";
-
-// import CameraFeedsJson from '@/cameraFeeds.json';
 
 export default {
   components: {
@@ -179,7 +173,7 @@ export default {
     working: true,
     currentEventIndex: 0,
     currentEvent: {},
-    confirmationDescription: "",
+    classificationDescription: "",
     videoOptions: {
       autoplay: true,
       controls: false,
@@ -240,7 +234,7 @@ export default {
       }
     };
     this.addListeners();
-    // watcher on all classified events. this will update all events in real time
+    // watcher on all classified events in firestore. this will update all events in real time
 
     const db = firebase.firestore();
     this.eventWatcher = db
@@ -251,7 +245,7 @@ export default {
           let result = [];
           querySnapshot.forEach(doc => {
             let newDoc = doc.data();
-            newDoc.id = doc.id; // TODO what is this here for?
+            newDoc.id = doc.id;
             result.push(newDoc);
           });
           this.$events.setEvents(result);
@@ -313,16 +307,16 @@ export default {
       this.setClassification(type);
     },
     setClassification(type) {
-      this.currentEvent.classifiedAs = type;
-      this.currentEvent.confirmationDescription = this.confirmationDescription;
-      this.confirmationDescription = "";
+      this.currentEvent.classification = type;
+      this.currentEvent.classificationDescription = this.classificationDescription;
+      this.classificationDescription = "";
       this.updateEvent(this.currentEvent);
     },
     updateEvent(event) {
       this.$events
         .updateEvent(event)
         .then(() => {
-          this.$notifyClassification(event.classifiedAs.toUpperCase());
+          this.$notifyClassification(event.classification.toUpperCase());
           setTimeout(() => {
             this.goNext();
             // timing the fade out transition with the classification animation
@@ -334,7 +328,7 @@ export default {
     },
     getTotalByType(type) {
       return this.$events.events.reduce((prev, next) => {
-        if (next.classifiedAs === type) {
+        if (next.classification === type) {
           prev++;
         }
         return prev;
@@ -343,7 +337,7 @@ export default {
     selected(type) {
       if (
         this.unclassifiedEvents[this.currentEventIndex] &&
-        this.unclassifiedEvents[this.currentEventIndex].classifiedAs === type
+        this.unclassifiedEvents[this.currentEventIndex].classification === type
       ) {
         return `background-color: #FFF; color: black;`;
       }
@@ -359,7 +353,7 @@ export default {
       });
     },
     newline() {
-      this.confirmationDescription = `${this.confirmationDescription}\n`;
+      this.classificationDescription = `${this.classificationDescription}\n`;
     }
   }
 };

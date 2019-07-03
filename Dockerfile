@@ -1,7 +1,6 @@
 # build stage
 FROM node:10.16.0 as build-stage
-LABEL MAINTAINER='Jossendal Dev kevin.jossendal@revunit.com'
-# Needed to run build command
+LABEL MAINTAINER='kevin.jossendal@revunit.com'
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH

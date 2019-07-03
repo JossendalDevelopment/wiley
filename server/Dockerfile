@@ -1,5 +1,5 @@
 # prod stage
-FROM node:10.16.0-alpine as prod-stage
+FROM node:10.16.0 as prod-stage
 
 ENV NODE_ENV=production
 
@@ -12,6 +12,8 @@ COPY package*.json ./
 RUN chown -R node:node .
 
 USER node
+
+HEALTHCHECK --interval=30s CMD node healthcheck.js
 
 RUN npm install --only=production && npm cache clean --force
 
