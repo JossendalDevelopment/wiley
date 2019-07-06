@@ -16,6 +16,7 @@
             <template v-for="(item, i) in eventTypes">
               <v-flex
                 xs4
+                d-flex
                 class="app-card"
                 :class="selectedEvent.type === item.type ? 'app-card-selected' : ''"
                 :key="i + 'card'"
@@ -123,7 +124,7 @@ export default {
     // this watcher will query initially and then run anytime the 'classified-events' collection changes
     this.eventWatcher = db
       .collection("classified_events")
-      .where("classified", "==", true)
+      .where("user_classification", ">", "")
       .limit(50)
       .onSnapshot(querySnapshot => {
         this.$events.startLoading();
@@ -135,6 +136,7 @@ export default {
 
         let results = [];
         querySnapshot.forEach(doc => {
+          console.log("NEW DOC", doc);
           let newDoc = doc.data();
           newDoc.id = doc.id; // docs do not come with their respective ids by default
           results.push(newDoc);
@@ -158,7 +160,7 @@ export default {
         // }
         results.forEach(
           item => {
-            let cls = item.classification;
+            let cls = item.user_classification;
             this.eventTypes[cls] = {
               ...this.eventTypes[cls],
               count: this.eventTypes[cls].count
@@ -226,11 +228,12 @@ export default {
   border-bottom: 1px solid var(--v-border-base);
 }
 .app-card {
-  border-radius: 12px;
+  border-radius: 5px;
   letter-spacing: 2px;
   cursor: pointer;
   margin: 0 8px;
   color: #fff;
+  height: 70px;
   &-selected {
     background-color: #fff;
     color: black;
@@ -336,10 +339,10 @@ select::-ms-expand {
   .app-card {
     .name,
     .count {
-      font-size: 16px;
+      font-size: 18px;
     }
     .percentage {
-      font-size: 35px;
+      font-size: 40px;
     }
   }
 }

@@ -1,6 +1,8 @@
 <notes>
     Only handles logging in, new accounts must be created manually for now or by temporarily switching the firebase method in auth.module login action to sign up.
     Contact kevin.jossendal@revunit.com if help is needed creating a new user or password resetting
+    Fetching of the events for classification is tied to login, which may not be ideal but there is no other
+    ui to be able to fetch events currently
 </notes>
 <template>
   <v-layout align-center justify-center fill-height>
@@ -31,7 +33,7 @@
                   v-model="employeeEmail"
                   placeholder="admin@email.com"
                   type="text"
-                >
+                />
                 <label for="password" class="app-form-label">COMPANY EMAIL ADDRESS</label>
                 <input
                   @keyup.enter="login()"
@@ -40,7 +42,7 @@
                   v-model="password"
                   placeholder="password"
                   type="password"
-                >
+                />
               </v-form>
             </v-card-text>
             <v-card-actions class="px-3 text-xs-center">
@@ -72,7 +74,7 @@
 
     <v-flex xs6 class="container-image" ml-0>
       <v-layout align-center justify-center fill-height>
-        <v-img max-width="55%" :src="'/assets/images/wiley_logo_xl.png'"/>
+        <v-img max-width="55%" :src="'/assets/images/wiley_logo_xl.png'" />
       </v-layout>
     </v-flex>
   </v-layout>
@@ -84,15 +86,29 @@ export default {
     password: "",
     remember: false
   }),
+  mounted() {},
   methods: {
-    login() {
-      this.$auth.login(this.employeeEmail, this.password).then(resp => {
-        if (resp.status === 500) {
+    async login() {
+      // TODO decouple login success from setting events success or have alternate way to get events?
+      try {
+        const authResp = await this.$auth.login(
+          this.employeeEmail,
+          this.password
+        );
+        if (authResp.status === 500) {
           this.$notifyError("Invalid email and/or password");
           return;
         }
+        const eventResp = await this.$events.setYesterdaysEvents();
+        console.log("Login response", eventResp);
+      } catch (error) {
+        this.$notifyError(
+          "Error getting todays events. Please try again later"
+        );
+      } finally {
+        // if auth fails, router guards will kick you back to login screen
         this.$router.replace("/overview");
-      });
+      }
     }
   }
 };

@@ -27,7 +27,8 @@ export const eventHistory = {
             });
         },
         setEvents(state, payload) {
-            state.events = payload.events;
+            console.log('MODULE SET EVENTS', payload);
+            state.events = payload;
         },
         addEvents(state, payload) {
             state.events = [...state.events, ...payload.events];
@@ -68,14 +69,16 @@ export const eventHistory = {
             });
         },
         setEvents({ commit }, payload) {
-            commit('setEvents', payload);
+            commit('setEvents', payload.events);
         },
+        // eslint-disable-next-line no-unused-vars
         deleteEvents(context, payload) {
             context.commit('deleteEvents');
             return api.deleteEvents().then(() => {
-                return context.dispatch('addNewEvents', payload).then(resp => {
-                    return resp;
-                });
+                return;
+                // return context.dispatch('addNewEvents', payload).then(resp => {
+                //     return resp;
+                // });
             });
         },
         // eslint-disable-next-line no-unused-vars
@@ -85,8 +88,9 @@ export const eventHistory = {
             });
         },
         // eslint-disable-next-line no-unused-vars
-        getYesterdaysEvents({ commit }) {
-            return api.getYesterdaysEvents().then(resp => {
+        setYesterdaysEvents({ commit }, payload) {
+            return api.setYesterdaysEvents().then(resp => {
+                commit('setEvents', resp);
                 return resp;
             });
         },

@@ -9,7 +9,7 @@
   <div class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
     <transition appear name="fade" mode="out-in" :duration="100">
       <v-img
-        :aspect-ratio="16/9"
+        :aspect-ratio="4/3"
         ref="dummyImage"
         :key="source.id"
         :src="`http://localhost:3000${source.image_filepath}/${source.image_filename}`"
@@ -17,18 +17,46 @@
         :style="setScale"
         @click="zoom()"
       >
-        <canvas
+        <svg class="svg-responsive" viewBox="0 0 640 480" preserveAspectRatio="none">
+          <g>
+            <rect
+              :x="source.bbox_xmin"
+              :y="source.image_height - source.bbox_ymin"
+              :width="source.bbox_width"
+              :height="source.bbox_height"
+              fill="transparent"
+              stroke="red"
+              stroke-width="5"
+            />
+            <rect
+              :x="source.bbox_xmin"
+              :y="source.image_height - source.bbox_ymin"
+              width="80"
+              height="20"
+              fill="red"
+            />
+            <text
+              :x="source.bbox_xmin + 3"
+              :y="source.image_height - source.bbox_ymin + 14"
+              font-family="Verdana"
+              font-size="14"
+              fill="black"
+            >Train 99%</text>
+          </g>
+        </svg>
+        <!-- <canvas
           ref="myCanvas"
           id="myCanvas"
-          style="position:absolute; top:0; bottom:0; right:0; left:0;"
-        >Your browser does not support the HTML5 canvas tag.</canvas>
+          style="position:absolute; top:0; left:0; width:100%;"
+        >Your browser does not support the HTML5 canvas tag.</canvas>-->
 
         <div class="image-overlay zoom-text">
           <span>CLICK IMAGE OR USE BAR TO ZOOM</span>
         </div>
-        <div class="image-overlay date">
+        <!-- Inferenced images already come with timestamp? -->
+        <!-- <div class="image-overlay date">
           <span>{{ formatDate }}</span>
-        </div>
+        </div>-->
 
         <template v-slot:placeholder>
           <v-layout fill-height align-center justify-center ma-0>
@@ -36,14 +64,6 @@
           </v-layout>
         </template>
       </v-img>
-      <!-- <v-img
-        v-if="zoomed"
-        ref="dummyImage"
-        :key="source.id"
-        :src="source.staticImageZoomed"
-        style="position:absolute; width:100%;"
-        @click="zoom()"
-      ></v-img>-->
     </transition>
   </div>
 </template>
@@ -69,14 +89,21 @@ export default {
     },
     drawCanvas() {
       this.canvas = this.$refs.myCanvas;
-      var canvas = this.$refs.myCanvas;
+      //   var canvas = this.$refs.myCanvas;
       // Make it visually fill the positioned parent
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
+      //   canvas.style.width = "100%";
+      //   canvas.style.height = "100%";
       // ...then set the internal size to match
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      this.drawBoundary();
+      //   canvas.width = canvas.offsetWidth;
+      //   canvas.height = canvas.offsetHeight;
+      // 0.75 is for 4:3 ratio
+      //   const heightRatio = 0.75;
+      // for 16:9
+      //   const heightRatio = 1.778;
+
+      //   canvas.height = canvas.width * heightRatio;
+      //   console.log("CANVAS HEIGHT", canvas.height);
+      //   this.drawBoundary();
     },
     drawBoundary() {
       let ctx = this.$refs.myCanvas.getContext("2d");
@@ -85,9 +112,17 @@ export default {
       ctx.beginPath();
       ctx.lineWidth = "3";
       ctx.strokeStyle = "red";
+      console.log(
+        "DRAW BOX",
+        this.source.bbox_xmin.toFixed(0),
+        this.source.image_height - this.source.bbox_ymin.toFixed(0),
+        this.source.bbox_width.toFixed(0),
+        this.source.bbox_height.toFixed(0)
+      );
       ctx.rect(
-        this.source.bbox_xmin,
-        this.source.bbox_ymin,
+        90,
+        // this.source.bbox_xmin,
+        this.source.image_height - this.source.bbox_ymin,
         this.source.bbox_width,
         this.source.bbox_height
       );
@@ -97,10 +132,10 @@ export default {
       ctx.lineWidth = "3";
       ctx.strokeStyle = "white";
       ctx.rect(
-        this.source.bbox_xmin - 3,
-        this.source.bbox_ymin - 3,
-        this.source.bbox_width + 6,
-        this.source.bbox_height + 6
+        this.source.bbox_xmin - 2,
+        this.source.image_height - this.source.bbox_ymin - 2,
+        this.source.bbox_width + 5,
+        this.source.bbox_height + 5
       );
       ctx.stroke();
     },
@@ -124,13 +159,36 @@ export default {
     },
     setScale() {
       if (this.zoomed) {
+        // THIS HERE WORKS FOR 16:9
         let img = this.$refs.dummyImage.$el.getBoundingClientRect();
         let x =
-          img.width / 2 - (this.source.bbox_xmin + this.source.bbox_width / 2);
+          this.source.image_width / 2 -
+          (this.source.bbox_xmin + this.source.bbox_width / 2);
         let y =
-          img.height / 2 -
-          (this.source.bbox_ymin + this.source.bbox_height / 2);
-        return `transform: scale(3) translate(${x}px, ${y}px)`;
+          this.source.image_height / 2 -
+          (this.source.image_height -
+            this.source.bbox_ymin +
+            this.source.bbox_height / 2);
+        console.log("ORIGINAL X Y", x, y);
+        // prevent an image from being translated beyond its x min/max, causing blank space
+        let negX = x < 0 ? true : false;
+        let negY = y < 0 ? true : false;
+        // Hopefully this is temporary, if the x translation is more than 25% width of the image either pos or neg
+        // then we only want to translate to the edge of the image. This applies only to a transform scale of 2
+        let computedX =
+          Math.abs(x) > img.width / 4
+            ? negX
+              ? -(img.width / 4)
+              : img.width / 4
+            : x;
+        let computedY =
+          Math.abs(y) > img.height / 4
+            ? negY
+              ? -(img.height / 4)
+              : img.height / 4
+            : y;
+        console.log("ZOOM TO", computedX, computedY);
+        return `transform: scale(2) translate(${computedX}px, ${computedY}px)`;
       }
       return ``;
     },
@@ -149,7 +207,7 @@ export default {
       setTimeout(() => {
         // fade transition requires keyed elements to redraw image properly
         // so you cant redraw the canvas/bounding box until after transition completes
-        // this.drawCanvas();
+        this.drawCanvas();
       }, 400);
     }
   }
@@ -159,7 +217,8 @@ export default {
 .images-container {
   overflow: hidden;
   position: relative;
-  padding-bottom: 55.65%;
+  //   padding-bottom: 55.65%;
+  padding-bottom: 75%;
   &.zoom-in-cursor {
     cursor: url(/assets/images/zoom-in.png) 10 3, auto;
   }

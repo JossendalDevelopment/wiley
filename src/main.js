@@ -7,7 +7,6 @@ import { router } from './router';
 import store from './store/index';
 
 import AuthPlugin from '@/plugins/auth.js';
-import StreamPlugin from '@/plugins/stream.js';
 import Notifications from '@/plugins/notifications.js';
 import CameraAlertPlugin from '@/plugins/cameraAlert.js';
 import EventHistoryPlugin from '@/plugins/event.js';
@@ -30,7 +29,6 @@ firebase.initializeApp({
 
 Vue.config.productionTip = false;
 Vue.use(AuthPlugin);
-Vue.use(StreamPlugin);
 Vue.use(CameraAlertPlugin);
 Vue.use(EventHistoryPlugin);
 Vue.use(Notifications);

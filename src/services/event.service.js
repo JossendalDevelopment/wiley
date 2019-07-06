@@ -51,13 +51,10 @@ instance.getAllClassifiedEvents = async function() {
     }
 };
 
-instance.getYesterdaysEvents = async function() {
-    // remove this?
+instance.setYesterdaysEvents = async function() {
+    // take data from metadata.json file, parse it for only unclassified, and return array of events to be set in vuex store
     try {
-        const resp = await this.get(
-            'http://localhost:3000/mnt/sol2_video/inferenced/2019/06/28/c1.jpg'
-        );
-        console.log('GET_YESTERDAYS', resp);
+        const resp = await this.get('/set_yesterdays_events');
         return resp.data;
     } catch (err) {
         return err;

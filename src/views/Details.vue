@@ -32,7 +32,7 @@
         </v-flex>
         <v-flex xs8 class="video-feed-wrapper">
           <div class="red-border">
-            <dummy-camera-image ref="cameraImage" :source="currentEvent" />
+            <details--camera-image ref="cameraImage" :source="currentEvent" />
             <!-- <video-player :options="getVideoOptions()"/> -->
           </div>
         </v-flex>
@@ -59,7 +59,7 @@
               large
             >
               employee
-              <span class="numeral">1</span>
+              <span class="control-numeral">1</span>
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('employee') }}</p>
           </v-flex>
@@ -72,7 +72,7 @@
               large
             >
               contractor
-              <span class="numeral">2</span>
+              <span class="control-numeral">2</span>
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('contractor') }}</p>
           </v-flex>
@@ -85,7 +85,7 @@
               large
             >
               intruder
-              <span class="numeral">3</span>
+              <span class="control-numeral">3</span>
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('intruder') }}</p>
           </v-flex>
@@ -98,7 +98,7 @@
               large
             >
               animal
-              <span class="numeral">4</span>
+              <span class="control-numeral">4</span>
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('animal') }}</p>
           </v-flex>
@@ -111,14 +111,14 @@
               large
             >
               false alarm
-              <span class="numeral">5</span>
+              <span class="control-numeral">5</span>
             </v-btn>
             <p class="control-text text-xs-center">{{ getTotalByType('false-alarm') }}</p>
           </v-flex>
         </v-layout>
       </v-layout>
     </v-flex>
-    <!-- Confirm/Deny modals -->
+    <!-- modals -->
     <app-dialog
       ref="falsealarm"
       max-width="500"
@@ -155,13 +155,13 @@
 <script>
 import firebase from "firebase";
 import "firebase/firestore";
-import DummyCameraImage from "@/components/dummy-camera-image";
+import DetailsCameraImage from "@/components/details--camera-image";
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from "@/components/app-dialog.vue";
 
 export default {
   components: {
-    "dummy-camera-image": DummyCameraImage,
+    "details--camera-image": DetailsCameraImage,
     // 'video-player': VideoPlayer,
     "app-dialog": Dialog
   },
@@ -252,7 +252,7 @@ export default {
           this.working = false;
         },
         error => {
-          console.log("Error in EventWatcher:", error);
+          console.error("Error in EventWatcher:", error);
         }
       );
   },
@@ -381,17 +381,20 @@ export default {
     width: 100%;
     margin: 0 auto;
     color: var(--v-border-base);
-    font-size: 16px;
+    font-size: 18px;
   }
-}
-.numeral {
-  position: absolute;
-  top: -6px;
-  right: 6px;
-  font-size: 13px;
+  &-numeral {
+    position: absolute;
+    color: #fff;
+    top: -6px;
+    right: 6px;
+    font-size: 13px;
+  }
 }
 .video-feed-wrapper {
   position: relative;
+  // sets max width of image and canvas
+  //   max-width: 640px;
 }
 /* border corners */
 
@@ -416,9 +419,16 @@ export default {
 }
 
 @media only screen and (max-width: 1000px) {
-  .v-btn {
-    font-size: 14px;
-    max-width: 120px;
+  .control {
+    &-btn {
+      width: 130px;
+      font-size: 18px;
+    }
+    &-numeral {
+      top: -6px;
+      right: 6px;
+      font-size: 13px;
+    }
   }
 }
 </style>

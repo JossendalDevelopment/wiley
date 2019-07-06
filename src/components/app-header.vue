@@ -41,7 +41,7 @@ export default {
   computed: {
     unclassifiedEventCount() {
       return this.$events.events.reduce((prev, next) => {
-        if (!next.classified) {
+        if (next.user_classification === null) {
           prev++;
         }
         return prev;

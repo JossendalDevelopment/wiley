@@ -21,9 +21,9 @@ export default {
                             events,
                         });
                     };
-                    event.getYesterdaysEvents = () => {
+                    event.setYesterdaysEvents = () => {
                         return store.dispatch(
-                            'eventHistory/getYesterdaysEvents',
+                            'eventHistory/setYesterdaysEvents',
                             {}
                         );
                     };

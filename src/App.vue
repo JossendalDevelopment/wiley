@@ -83,9 +83,6 @@
 </template>
 <script>
 import AppHeader from "@/components/app-header.vue";
-import MetaDataJson from "../metadata.json";
-
-// import AlertData from '@/types/cameraAlertType';
 
 export default {
   name: "App",
@@ -95,7 +92,6 @@ export default {
   data: () => ({
     alert: true,
     tab: null,
-    events: MetaDataJson,
     animation: {
       enter() {
         /*
@@ -134,22 +130,6 @@ export default {
         }
         return prev;
       }, 0);
-    }
-  },
-  async mounted() {
-    // this.getNewEvents();
-  },
-  methods: {
-    async getNewEvents() {
-      try {
-        await this.$events.addNewEvents(this.events);
-        let resp = await this.$events.getAllEvents();
-        await this.$events.setEvents(resp.data);
-        this.$notifySuccess("New events received!");
-      } catch (error) {
-        this.$notifyError("Error getting new events!");
-        throw new Error(error);
-      }
     }
   }
 };
