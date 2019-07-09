@@ -32,7 +32,11 @@
         </v-flex>
         <v-flex xs8 class="video-feed-wrapper">
           <div class="red-border">
-            <details--camera-image ref="cameraImage" :source="currentEvent" />
+            <details--camera-image
+              ref="cameraImage"
+              :source="currentEvent"
+              v-on:datauricreated="createThumb($event)"
+            />
             <!-- <video-player :options="getVideoOptions()"/> -->
           </div>
         </v-flex>
@@ -190,7 +194,7 @@ export default {
     // May or may not want to fetch all events here to ensure latest data
     // for dev purposes, just assuming data and grabbing first record
     this.unclassifiedEvents = this.$events.events.filter(evt => {
-      return !evt.classified;
+      return !evt.user_classification;
     });
 
     this.unclassifiedRemaining = this.unclassifiedEvents.length;
@@ -271,6 +275,9 @@ export default {
     }
   },
   methods: {
+    createThumb(evt) {
+      this.currentEvent.thumb_250x250 = evt;
+    },
     addListeners() {
       window.addEventListener("keyup", this.listeners);
     },
@@ -310,7 +317,8 @@ export default {
       this.currentEvent.classification = type;
       this.currentEvent.classificationDescription = this.classificationDescription;
       this.classificationDescription = "";
-      this.updateEvent(this.currentEvent);
+      console.log("UPDATE EVENT", this.currentEvent);
+      //   this.updateEvent(this.currentEvent);
     },
     updateEvent(event) {
       this.$events
@@ -328,7 +336,7 @@ export default {
     },
     getTotalByType(type) {
       return this.$events.events.reduce((prev, next) => {
-        if (next.classification === type) {
+        if (next.user_classification === type) {
           prev++;
         }
         return prev;
@@ -393,13 +401,13 @@ export default {
 }
 .video-feed-wrapper {
   position: relative;
-  // sets max width of image and canvas
-  //   max-width: 640px;
+  // sets max width of image, only required while in 4:3 mode
+  max-width: 640px;
 }
 /* border corners */
 
 .red-border {
-  background-image: url("/assets/images/red_border.png");
+  background-image: url("/assets/images/red_border_640x480.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -407,7 +415,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 200;
-  padding: 20px 10px;
+  padding: 10px 10px;
 }
 
 /* modal */

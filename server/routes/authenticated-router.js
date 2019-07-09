@@ -1,6 +1,10 @@
 const express = require('express');
-const formatResponse = require('../helpers/format-response.js');
 const admin = require('firebase-admin');
+const formatResponse = require('../helpers/format-response.js');
+const {
+    getMetadataFile,
+    writeMetadataFile,
+} = require('../helpers/metadataFile.js');
 
 var router = express.Router();
 
@@ -8,7 +12,7 @@ const db = admin.firestore();
 const COLLECTION_REF = db.collection('classified_events');
 
 router.get('/authenticated', (req, res) => {
-    res.json({ title: 'Please visit jossendal.com today' });
+    res.json({ title: 'You have authenticated access' });
 });
 
 router.post('/create_event', (req, res) => {
@@ -27,21 +31,29 @@ router.post('/create_event', (req, res) => {
         });
 });
 
-router.post('/update_event', (req, res) => {
+router.post('/update_event', async (req, res) => {
     const event = req.body.event;
-    COLLECTION_REF.doc(event.eventId)
-        .update({
-            classification: event.classification,
-            classificationDescription: event.classificationDescription,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            classified: true,
-        })
-        .then(() => {
-            formatResponse(res, 'success', event.id);
-        })
-        .catch(error => {
-            formatResponse(res, 'error', error);
-        });
+    try {
+        // this will return a json object of all events fom metadata.json file
+        const newEvents = await writeMetadataFile(event);
+        console.log('NEW EVENTS', newEvents);
+        // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
+        COLLECTION_REF.doc(event.eventId)
+            .update({
+                user_classification: event.classification,
+                classification_description: event.classificationDescription,
+                timestamp: admin.firestore.FieldValue.serverTimestamp(),
+                // classified: true,
+            })
+            .then(() => {
+                formatResponse(res, 'success', event.id);
+            })
+            .catch(error => {
+                formatResponse(res, 'error', error);
+            });
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
 });
 
 router.get('/get_all_events', (req, res) => {
@@ -87,6 +99,7 @@ router.get('/get_all_classified_events', (req, res) => {
         });
 });
 
+// marked for deletion, duplicate of set_yesterdays_events
 router.post('/add_new_events', (req, res) => {
     const events = req.body.events;
     events.forEach(event => {
@@ -104,6 +117,31 @@ router.post('/add_new_events', (req, res) => {
                 // formatResponse(res, 'error', error);
             });
     });
+});
+
+router.get('/set_yesterdays_events', async (req, res) => {
+    try {
+        // this will return a json object of all events fom metadata.json file
+        const eventsJson = await getMetadataFile();
+        // load all events into the database
+        eventsJson.forEach(event => {
+            let batch = db.batch();
+            let newEventRef = COLLECTION_REF.doc();
+            batch.set(newEventRef, event);
+            batch.update(newEventRef, { eventId: newEventRef.id });
+            batch
+                .commit()
+                .then(() => {
+                    // the response object of a batch is batch data. Maybe validate batches or something?
+                })
+                .catch(error => {
+                    throw new Error(error);
+                });
+        });
+        res.json(eventsJson);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
 });
 
 router.post('/delete_events', (req, res) => {

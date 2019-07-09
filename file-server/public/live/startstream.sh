@@ -27,6 +27,7 @@ if [[ ! "${target}" ]]; then
   target="${source##*/}" # leave only last component of path
   target="${target%.*}"  # strip extension
 fi
+ls -l
 mkdir -p ${target}
 
 

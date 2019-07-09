@@ -6,9 +6,9 @@
     TODO: fileservers path is being harcoded because `process` is not available when img src is loaded. Maybe load from config file
 </notes>
 <template>
-  <div class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
+  <div id="remove" class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
     <transition appear name="fade" mode="out-in" :duration="100">
-      <v-img
+      <!-- <v-img
         :aspect-ratio="4/3"
         ref="dummyImage"
         :key="source.id"
@@ -16,60 +16,93 @@
         style="position:absolute; width:100%;"
         :style="setScale"
         @click="zoom()"
+      >-->
+      <!-- <canvas id="canvas" ref="canvas" width="640"> -->
+      <svg
+        class="svg-responsive"
+        viewBox="0 0 640 480"
+        preserveAspectRatio="none"
+        ref="dummyImage"
+        @click="zoom()"
+        :style="setScale"
+        id="svgimage"
+        v-show="pngDataUrl"
       >
-        <svg class="svg-responsive" viewBox="0 0 640 480" preserveAspectRatio="none">
-          <g>
-            <rect
-              :x="source.bbox_xmin"
-              :y="source.image_height - source.bbox_ymin"
-              :width="source.bbox_width"
-              :height="source.bbox_height"
-              fill="transparent"
-              stroke="red"
-              stroke-width="5"
-            />
-            <rect
-              :x="source.bbox_xmin"
-              :y="source.image_height - source.bbox_ymin"
-              width="80"
-              height="20"
-              fill="red"
-            />
-            <text
-              :x="source.bbox_xmin + 3"
-              :y="source.image_height - source.bbox_ymin + 14"
-              font-family="Verdana"
-              font-size="14"
-              fill="black"
-            >Train 99%</text>
-          </g>
-        </svg>
-        <!-- <canvas
+        <g>
+          <!-- :xlink:href="`http://localhost:3000${source.image_filepath}/${source.image_filename}`" -->
+          <image :xlink:href="pngDataUrl" :height="source.image_height" :width="source.image_width" />
+          <!-- Bounding box -->
+          <rect
+            :x="source.bbox_xmin"
+            :y="source.image_height - source.bbox_ymin"
+            :width="source.bbox_width"
+            :height="source.bbox_height"
+            fill="transparent"
+            stroke="red"
+            stroke-width="5"
+          />
+          <rect
+            :x="source.bbox_xmin"
+            :y="source.image_height - source.bbox_ymin"
+            width="80"
+            height="20"
+            fill="red"
+          />
+          <text
+            :x="source.bbox_xmin + 3"
+            :y="source.image_height - source.bbox_ymin + 14"
+            font-family="DIN Condensed"
+            font-size="14"
+            fill="black"
+          >{{ source.inferenced_classification }}</text>
+          <!-- black info box -->
+          <rect
+            :x="source.image_width - 175"
+            :y="5"
+            :width="170"
+            :height="20"
+            fill="black"
+            :stroke="$vuetify.theme.border"
+            stroke-width="1"
+          />
+          <text
+            :x="source.image_width - 165"
+            :y="20"
+            font-family="DIN Condensed"
+            font-size="14"
+            fill="white"
+          >CLICK IMAGE OR USE BAR TO ZOOM</text>
+        </g>
+      </svg>
+      <!-- </canvas> -->
+      <!-- <canvas
           ref="myCanvas"
           id="myCanvas"
           style="position:absolute; top:0; left:0; width:100%;"
-        >Your browser does not support the HTML5 canvas tag.</canvas>-->
+      >Your browser does not support the HTML5 canvas tag.</canvas>-->
 
-        <div class="image-overlay zoom-text">
-          <span>CLICK IMAGE OR USE BAR TO ZOOM</span>
-        </div>
-        <!-- Inferenced images already come with timestamp? -->
-        <!-- <div class="image-overlay date">
+      <!-- <div class="image-overlay zoom-text">
+        <span>CLICK IMAGE OR USE BAR TO ZOOM</span>
+      </div>-->
+
+      <!-- Inferenced images already come with timestamp? -->
+      <!-- <div class="image-overlay date">
           <span>{{ formatDate }}</span>
-        </div>-->
+      </div>-->
 
-        <template v-slot:placeholder>
-          <v-layout fill-height align-center justify-center ma-0>
-            <v-progress-circular indeterminate color="#FFFFFF55"></v-progress-circular>
-          </v-layout>
-        </template>
-      </v-img>
+      <!-- <template v-slot:placeholder>
+        <v-layout fill-height align-center justify-center ma-0>
+          <v-progress-circular indeterminate color="#FFFFFF55"></v-progress-circular>
+        </v-layout>
+      </template>-->
+      <!-- </v-img> -->
     </transition>
+    <div id="target"></div>
   </div>
 </template>
 <script>
 import format from "date-fns/format";
-import config from "../../config/env/production";
+// import config from "../../config/env/production";
 
 export default {
   props: {
@@ -81,14 +114,93 @@ export default {
   },
   data: () => ({
     canvas: null,
-    zoomed: false
+    zoomed: false,
+    pngDataUrl: null
   }),
   methods: {
     getPathZoomed() {
       return this.source.staticImageZoomed;
     },
+    toDataURL(url) {
+      console.log("calling toDataURL", url);
+      return fetch(url)
+        .then(response => response.blob())
+        .then(
+          blob =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                resolve(reader.result);
+              };
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            })
+        );
+    },
+    getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      var dataURL = canvas.toDataURL("image/png");
+      return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    },
+    convertSvgToCanvas() {
+      let svg = document.querySelector("#svgimage");
+      let svgString = new XMLSerializer().serializeToString(svg);
+      //   console.log("XML", svgString);
+
+      let canvas = document.createElement("canvas");
+      canvas.width = 250;
+      canvas.height = 250;
+      let ctx = canvas.getContext("2d");
+
+      let img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0);
+        // var png = canvas.toDataURL("image/png");
+        console.log("PNG", img);
+        let t = document.querySelector("#target");
+        t.appendChild(img);
+      };
+      let url = `data:image/svg+xml;base64,${btoa(svgString)}`;
+      this.$emit("datauricreated", url);
+      img.setAttribute("src", url);
+      //   img.src = "data:image/svg+xml; charset=utf8, " + encodeURIComponent(svgString);
+    },
     drawCanvas() {
-      this.canvas = this.$refs.myCanvas;
+      let svg = document.querySelector("#imagesvg");
+      // We can just create a canvas element inline so you don't even need one on the DOM. Cool!
+      var xml = new XMLSerializer().serializeToString(svg);
+      //   var svg64 = btoa(xml);
+      //   for utf8:
+      var svg64 = btoa(unescape(encodeURIComponent(xml)));
+      var b64start = "data:image/svg+xml;base64,";
+      var image64 = b64start + svg64;
+      this.image = image64;
+      console.log("NEW IMAGE", this.image);
+      //   var data = new XMLSerializer().serializeToString(svg);
+      //   var canvas = document.createElement("canvas");
+      //   canvg(canvas, data, {
+      //     renderCallback: function() {
+      //       canvas.toBlob(function(blob) {
+      //         // download('MyImageName.png', blob);
+      //         console.log("MyImageName.png", blob);
+      //       });
+      //     }
+      //   });
+
+      //   let canvas = this.$refs.canvas;
+      //   let ctx = canvas.getContext("2d");
+      //   var image = new Image();
+      //   image.src = `${this.source.image_filepath}/${this.source.image_filename}`;
+      //   image.onload = function() {
+      //     ctx.drawImage(image, 0, 0);
+      //   };
+      //   const pngDataURL = canvas.toDataURL("image/png");
+      //   const jpegDataURL = canvas.toDataURL("image/jpeg");
+      //   console.log("CTX", pngDataURL, jpegDataURL);
       //   var canvas = this.$refs.myCanvas;
       // Make it visually fill the positioned parent
       //   canvas.style.width = "100%";
@@ -100,7 +212,6 @@ export default {
       //   const heightRatio = 0.75;
       // for 16:9
       //   const heightRatio = 1.778;
-
       //   canvas.height = canvas.width * heightRatio;
       //   console.log("CANVAS HEIGHT", canvas.height);
       //   this.drawBoundary();
@@ -141,7 +252,7 @@ export default {
     },
     zoom() {
       this.zoomed = !this.zoomed;
-      //   this.getPath;
+      this.convertSvgToCanvas();
     },
     zoomOut() {
       if (this.zoomed) {
@@ -150,17 +261,11 @@ export default {
     }
   },
   computed: {
-    getPath() {
-      if (this.zoomed) {
-        return this.source.staticImageZoomed;
-      } else {
-        return this.source.staticImage;
-      }
-    },
     setScale() {
       if (this.zoomed) {
         // THIS HERE WORKS FOR 16:9
-        let img = this.$refs.dummyImage.$el.getBoundingClientRect();
+        // let img = this.$refs.dummyImage.$el.getBoundingClientRect();
+        let img = document.querySelector("#svgimage").getBoundingClientRect();
         let x =
           this.source.image_width / 2 -
           (this.source.bbox_xmin + this.source.bbox_width / 2);
@@ -169,7 +274,6 @@ export default {
           (this.source.image_height -
             this.source.bbox_ymin +
             this.source.bbox_height / 2);
-        console.log("ORIGINAL X Y", x, y);
         // prevent an image from being translated beyond its x min/max, causing blank space
         let negX = x < 0 ? true : false;
         let negY = y < 0 ? true : false;
@@ -198,17 +302,23 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      console.log("CONFIG", config);
-      this.drawCanvas();
+      //   console.log("CONFIG", config);
+      //   this.drawCanvas();
+      // this.convertSvgToCanvas();
     }, 400);
+    this.toDataURL(
+      `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
+    ).then(dataUrl => {
+      this.pngDataUrl = dataUrl;
+    });
   },
   watch: {
     source() {
-      setTimeout(() => {
-        // fade transition requires keyed elements to redraw image properly
-        // so you cant redraw the canvas/bounding box until after transition completes
-        this.drawCanvas();
-      }, 400);
+      this.toDataURL(
+        `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
+      ).then(dataUrl => {
+        this.pngDataUrl = dataUrl;
+      });
     }
   }
 };
@@ -218,7 +328,8 @@ export default {
   overflow: hidden;
   position: relative;
   //   padding-bottom: 55.65%;
-  padding-bottom: 75%;
+  //   padding-bottom: 75%;
+  margin-bottom: -7px;
   &.zoom-in-cursor {
     cursor: url(/assets/images/zoom-in.png) 10 3, auto;
   }

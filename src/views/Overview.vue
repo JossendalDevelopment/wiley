@@ -66,8 +66,6 @@ export default {
     this.startTime();
   },
   mounted() {
-    // this.$nextTick(() => {
-    // });
     // WowzaPlayer.create("playerElement", {
     //   license: process.env.VUE_APP_WOWZA_LICENSE,
     //   title: "",

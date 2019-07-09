@@ -136,7 +136,6 @@ export default {
 
         let results = [];
         querySnapshot.forEach(doc => {
-          console.log("NEW DOC", doc);
           let newDoc = doc.data();
           newDoc.id = doc.id; // docs do not come with their respective ids by default
           results.push(newDoc);
