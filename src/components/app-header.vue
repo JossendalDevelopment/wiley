@@ -67,7 +67,7 @@ export default {
 }
 .nav-btn {
   font-family: "DIN Condensed";
-  font-size: 22px;
+  font-size: 25px;
   letter-spacing: 2px;
   background-color: transparent;
   color: var(--v-secondaryDark-base);

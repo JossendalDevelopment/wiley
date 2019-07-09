@@ -1,4 +1,3 @@
-import 'firebase/firestore';
 import api from '../services/event.service';
 
 api.new('/api');
@@ -22,12 +21,13 @@ export const eventHistory = {
         updateEvent(state, payload) {
             state.events = state.events.map(event => {
                 if (event.id === payload.event.id) {
-                    console.log('NEW EVENT UPDATED', event, payload.event);
+                    return payload.event;
+                } else {
+                    return event;
                 }
             });
         },
         setEvents(state, payload) {
-            console.log('MODULE SET EVENTS', payload);
             state.events = payload;
         },
         addEvents(state, payload) {
@@ -76,17 +76,15 @@ export const eventHistory = {
             context.commit('deleteEvents');
             return api.deleteEvents().then(() => {
                 return;
-                // return context.dispatch('addNewEvents', payload).then(resp => {
-                //     return resp;
-                // });
             });
         },
-        // eslint-disable-next-line no-unused-vars
-        addNewEvents({ commit }, payload) {
-            return api.addNewEvents(payload.events).then(resp => {
-                return resp;
-            });
-        },
+        // delete this next time you see it please
+        // // eslint-disable-next-line no-unused-vars
+        // addNewEvents({ commit }, payload) {
+        //     return api.addNewEvents(payload.events).then(resp => {
+        //         return resp;
+        //     });
+        // },
         // eslint-disable-next-line no-unused-vars
         setYesterdaysEvents({ commit }, payload) {
             return api.setYesterdaysEvents().then(resp => {

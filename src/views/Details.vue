@@ -1,7 +1,8 @@
 <notes>
     This component handles all the heavy lifting for classifying an event. Will need abstraction as it's
     getting unweildy.
-    TODO make the selected method here a global or mixin and use it for the history page percentage cards.
+    TODO make the `selected` method here a global or mixin and use it for the history page percentage cards.
+    TODO loading component while fetching images
 </notes>
 <template>
   <v-layout
@@ -23,7 +24,7 @@
           style="color:white; font-family: 'DIN Condensed'; font-size: 28px;"
         >{{`${currentEventIndex + 1}/${ $events.events && unclassifiedEvents.length}`}}</span>
       </v-layout>
-      <!-- video -->
+      <!-- video/image -->
       <v-layout align-center justify-center>
         <v-flex xs2>
           <v-layout justify-start align-center>
@@ -35,7 +36,7 @@
             <details--camera-image
               ref="cameraImage"
               :source="currentEvent"
-              v-on:datauricreated="createThumb($event)"
+              v-on:datauricreated="setThumb($event)"
             />
             <!-- <video-player :options="getVideoOptions()"/> -->
           </div>
@@ -58,7 +59,7 @@
             <v-btn
               @click="setClassification('employee')"
               flat
-              class="control-btn"
+              :class="disabled ? 'control-btn disabled' : 'control-btn'"
               :style="selected('employee')"
               large
             >
@@ -71,7 +72,7 @@
             <v-btn
               @click="setClassification('contractor')"
               flat
-              class="control-btn"
+              :class="disabled ? 'control-btn disabled' : 'control-btn'"
               :style="selected('contractor')"
               large
             >
@@ -84,7 +85,7 @@
             <v-btn
               @click="setClassification('intruder')"
               flat
-              class="control-btn"
+              :class="disabled ? 'control-btn disabled' : 'control-btn'"
               :style="selected('intruder')"
               large
             >
@@ -97,7 +98,7 @@
             <v-btn
               @click="setClassification('animal')"
               flat
-              class="control-btn"
+              :class="disabled ? 'control-btn disabled' : 'control-btn'"
               :style="selected('animal')"
               large
             >
@@ -110,7 +111,7 @@
             <v-btn
               @click="openFalseAlarmModal()"
               flat
-              class="control-btn"
+              :class="disabled ? 'control-btn disabled' : 'control-btn'"
               :style="selected('false-alarm')"
               large
             >
@@ -170,50 +171,17 @@ export default {
     "app-dialog": Dialog
   },
   data: () => ({
-    eventWatcher: null,
+    eventFirestoreWatcher: null,
     unclassifiedEvents: [],
     unclassifiedRemaining: 0,
     listeners: null,
     working: true,
+    disabled: false,
+    loaded: false,
     currentEventIndex: 0,
     currentEvent: {},
-    classificationDescription: "",
-    videoOptions: {
-      autoplay: true,
-      controls: false,
-      responsive: true,
-      aspectRatio: "16:9",
-      fill: true,
-      muted: true,
-      language: "en",
-      playbackRates: [0.5, 1.0, 1.5, 2.0],
-      sources: [] // being set from setVideoOptions
-    }
+    classificationDescription: ""
   }),
-  mounted() {
-    // May or may not want to fetch all events here to ensure latest data
-    // for dev purposes, just assuming data and grabbing first record
-    this.unclassifiedEvents = this.$events.events.filter(evt => {
-      return !evt.user_classification;
-    });
-
-    this.unclassifiedRemaining = this.unclassifiedEvents.length;
-
-    if (this.unclassifiedEvents.length > 0) {
-      this.currentEvent = this.unclassifiedEvents[0];
-    }
-    // this.$events.getAllEvents()
-    //     .then(resp => {
-    //             this.currentEvent = resp.data[0];
-    //             // this.$events.setEvents(resp.data)
-    //             this.working = false;
-    //     })
-    //     .catch(err => {
-    //         this.$notifyError("ERROR FETCHING NEW EVENTS")
-    //     })
-    // this.$events.setEvents(this.events.events);
-    // this.currentEvent = this.$events.events.find(evt => !evt.classified);
-  },
   created() {
     this.listeners = e => {
       if (String.fromCharCode(e.keyCode) === "1") {
@@ -238,47 +206,68 @@ export default {
       }
     };
     this.addListeners();
-    // watcher on all classified events in firestore. this will update all events in real time
 
+    // watcher on classified_events collection in firestore. this will update all events in real time if one is changed
     const db = firebase.firestore();
-    this.eventWatcher = db
+    this.eventFirestoreWatcher = db
       .collection("classified_events")
+      .where("user_classification", "==", null)
       .limit(50)
       .onSnapshot(
         querySnapshot => {
           let result = [];
           querySnapshot.forEach(doc => {
             let newDoc = doc.data();
-            newDoc.id = doc.id;
             result.push(newDoc);
           });
+          // pushes all events to vuex store
           this.$events.setEvents(result);
+
+          if (!this.loaded) {
+            // I only want this to run after first query but not on subsequent queries
+            this.setInitialEvent(result);
+          }
+
           this.working = false;
         },
         error => {
-          console.error("Error in EventWatcher:", error);
+          console.error("Error in EventFirestoreWatcher:", error);
+          this.$notifyError("ERROR RETRIEVING EVENTS");
         }
       );
   },
   destroyed() {
-    this.eventWatcher();
+    this.eventFirestoreWatcher();
     this.removeListeners();
   },
   computed: {
     unclassifiedEventsCount() {
-      return this.$events.events.reduce((prev, next) => {
-        if (!next.classified) {
-          prev++;
+      return this.$events.events.reduce((total, next) => {
+        if (!next.user_classified) {
+          total++;
         }
-        return prev;
+        return total;
       }, 0);
     }
   },
   methods: {
-    createThumb(evt) {
+    setThumb(evt) {
       this.currentEvent.thumb_250x250 = evt;
     },
+    setInitialEvent(events) {
+      this.unclassifiedEvents = events.filter(evt => {
+        return !evt.user_classification;
+      });
+
+      this.unclassifiedRemaining = this.unclassifiedEvents.length;
+
+      if (this.unclassifiedEvents.length > 0) {
+        this.currentEvent = this.unclassifiedEvents[0];
+      }
+      this.loaded = true;
+    },
     addListeners() {
+      // listeners on keystrokes need to be added and removed when the modals are open
       window.addEventListener("keyup", this.listeners);
     },
     removeListeners() {
@@ -314,23 +303,27 @@ export default {
       this.setClassification(type);
     },
     setClassification(type) {
-      this.currentEvent.classification = type;
-      this.currentEvent.classificationDescription = this.classificationDescription;
+      this.disabled = true;
+      this.currentEvent.user_classification = type;
+      this.currentEvent.classification_description = this.classificationDescription;
+      this.currentEvent.classified_by = this.$auth.user.email;
       this.classificationDescription = "";
-      console.log("UPDATE EVENT", this.currentEvent);
-      //   this.updateEvent(this.currentEvent);
+      this.updateEvent(this.currentEvent);
     },
     updateEvent(event) {
       this.$events
         .updateEvent(event)
         .then(() => {
-          this.$notifyClassification(event.classification.toUpperCase());
+          this.$notifyClassification(event.user_classification.toUpperCase());
           setTimeout(() => {
+            this.disabled = false;
             this.goNext();
             // timing the fade out transition with the classification animation
           }, 950);
         })
-        .catch(() => {
+        .catch(error => {
+          this.disabled = false;
+          console.error(error);
           this.$notifyError("FAILED TO CLASSIFY EVENT");
         });
     },
@@ -345,9 +338,12 @@ export default {
     selected(type) {
       if (
         this.unclassifiedEvents[this.currentEventIndex] &&
-        this.unclassifiedEvents[this.currentEventIndex].classification === type
+        this.unclassifiedEvents[this.currentEventIndex].user_classification ===
+          type
       ) {
-        return `background-color: #FFF; color: black;`;
+        // TODO check browser support for invert()
+        // return `background-color: #FFF; color: black;`;
+        return `filter: invert(1);`;
       }
       return "";
     },
@@ -399,13 +395,15 @@ export default {
     font-size: 13px;
   }
 }
+.disabled {
+  pointer-events: none;
+}
 .video-feed-wrapper {
   position: relative;
   // sets max width of image, only required while in 4:3 mode
   max-width: 640px;
 }
 /* border corners */
-
 .red-border {
   background-image: url("/assets/images/red_border_640x480.png");
   background-position: center;

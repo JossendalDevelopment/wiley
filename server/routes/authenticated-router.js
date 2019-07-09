@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const formatResponse = require('../helpers/format-response.js');
 const {
     getMetadataFile,
-    writeMetadataFile,
+    // writeMetadataFile,
 } = require('../helpers/metadataFile.js');
 
 var router = express.Router();
@@ -15,6 +15,7 @@ router.get('/authenticated', (req, res) => {
     res.json({ title: 'You have authenticated access' });
 });
 
+// unused. revisit on sprint 2 when events are received via live events
 router.post('/create_event', (req, res) => {
     // TODO run this as a batch command
     const event = req.body.event;
@@ -31,31 +32,38 @@ router.post('/create_event', (req, res) => {
         });
 });
 
+// @METHOD: POST
+// @PARAMS: new event object
+// @RETURNS: id string
 router.post('/update_event', async (req, res) => {
     const event = req.body.event;
     try {
         // this will return a json object of all events fom metadata.json file
-        const newEvents = await writeMetadataFile(event);
-        console.log('NEW EVENTS', newEvents);
+        // const newEvents = await writeMetadataFile(event);
+        // console.log('NEW EVENTS', newEvents);
         // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
         COLLECTION_REF.doc(event.eventId)
             .update({
-                user_classification: event.classification,
-                classification_description: event.classificationDescription,
+                user_classification: event.user_classification,
+                classification_description: event.classification_description,
                 timestamp: admin.firestore.FieldValue.serverTimestamp(),
-                // classified: true,
+                thumb_250x250: event.thumb_250x250,
+                classified_by: event.classified_by,
             })
             .then(() => {
-                formatResponse(res, 'success', event.id);
+                return formatResponse(res, 'success', event.id);
             })
             .catch(error => {
-                formatResponse(res, 'error', error);
+                return formatResponse(res, 'error', error);
             });
     } catch (error) {
+        console.log('ERROR', error);
         formatResponse(res, 'error', error);
     }
 });
 
+// @METHOD: GET
+// @RETURNS: array of all events
 router.get('/get_all_events', (req, res) => {
     let result = [];
     COLLECTION_REF.get()
@@ -77,9 +85,11 @@ router.get('/get_all_events', (req, res) => {
         });
 });
 
+// @METHOD: GET
+// @RETURNS: array of all events events with non null user_classificaiton field
 router.get('/get_all_classified_events', (req, res) => {
     let result = [];
-    COLLECTION_REF.where('classified', '==', true)
+    COLLECTION_REF.where('user_classification', '>', '')
         .get()
         .then(
             querySnapshot => {
@@ -99,26 +109,9 @@ router.get('/get_all_classified_events', (req, res) => {
         });
 });
 
-// marked for deletion, duplicate of set_yesterdays_events
-router.post('/add_new_events', (req, res) => {
-    const events = req.body.events;
-    events.forEach(event => {
-        let batch = db.batch();
-        let newEventRef = COLLECTION_REF.doc();
-        batch.set(newEventRef, event);
-        batch.update(newEventRef, { eventId: newEventRef.id });
-        batch
-            .commit()
-            .then(resp => {
-                formatResponse(res, 'success', resp);
-            })
-            .catch(error => {
-                return error;
-                // formatResponse(res, 'error', error);
-            });
-    });
-});
-
+// @METHOD: GET
+// @RETURNS: json array object
+// pulls metadata.json file for given day, loads it into firestore, and returns that json to client
 router.get('/set_yesterdays_events', async (req, res) => {
     try {
         // this will return a json object of all events fom metadata.json file
@@ -144,6 +137,8 @@ router.get('/set_yesterdays_events', async (req, res) => {
     }
 });
 
+// @METHOD: DELETE
+// @RETURNS: object of batch deletion data
 router.post('/delete_events', (req, res) => {
     // helper to clear firestore as a collection cannot be deleted wholesale. each document must be deleted indiviually
     // This will batch deletions. Only used to support resetting data for demo use

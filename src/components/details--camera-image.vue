@@ -1,23 +1,24 @@
 <notes>
-    Consists of an image with a canvas drawn over it that can handle drawing bounding boxes from source props data.
-    However images will come from inference engine with boxes pre-drawn.
-    The use of the canvas is poorly implemented. The idea is that this component will will have its ``zoom()`` method triggered
-    from `Details.vue` via ref. That adds a transform scale style to the image centered on the center of the bounding box data.
-    TODO: fileservers path is being harcoded because `process` is not available when img src is loaded. Maybe load from config file
+    Component workflow explanation:
+    1. We take the inferenced image from wherever fileserver and convert that to a png data uri.
+        This step is required because when serializing the svg later, having an http url as the <image>
+        source will result in a blank. Dataurls however, serialize correctly.
+    2. Draw to the svg <image> tag with the dataurl
+    3. Draw bounding box and any other overlaying rects. This all happens on mount(), and is retriggerd
+        any time the `source` prop changes
+    4. We then take the entire <svg> element, serialize it, create and add it to a canvas at 250px square.
+    5. From canvas, we call toDataURL to create a png data url of the image and all it's drawn overlays.
+    6. We emit this.png url up to the Details.vue to be added to the event when it is classified.
+
+    TODO theres a race condition in convertSvgToCanvas where it will try to draw the canvas image before 
+        the svg image is loaded, resulting in blank background or background from previous draw. using a 
+        settimeout for lazy workaround both in mounted() and watcher() but find better way.
+    TODO possibly reimplement the loading spinner, svgs load so fast it may not be needed
+    TODO will images come with timestamp or will it need to be created and drawn
 </notes>
 <template>
   <div id="remove" class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
     <transition appear name="fade" mode="out-in" :duration="100">
-      <!-- <v-img
-        :aspect-ratio="4/3"
-        ref="dummyImage"
-        :key="source.id"
-        :src="`http://localhost:3000${source.image_filepath}/${source.image_filename}`"
-        style="position:absolute; width:100%;"
-        :style="setScale"
-        @click="zoom()"
-      >-->
-      <!-- <canvas id="canvas" ref="canvas" width="640"> -->
       <svg
         class="svg-responsive"
         viewBox="0 0 640 480"
@@ -29,7 +30,6 @@
         v-show="pngDataUrl"
       >
         <g>
-          <!-- :xlink:href="`http://localhost:3000${source.image_filepath}/${source.image_filename}`" -->
           <image :xlink:href="pngDataUrl" :height="source.image_height" :width="source.image_width" />
           <!-- Bounding box -->
           <rect
@@ -41,6 +41,7 @@
             stroke="red"
             stroke-width="5"
           />
+          <!-- name/percentage box -->
           <rect
             :x="source.bbox_xmin"
             :y="source.image_height - source.bbox_ymin"
@@ -54,7 +55,7 @@
             font-family="DIN Condensed"
             font-size="14"
             fill="black"
-          >{{ source.inferenced_classification }}</text>
+          >{{ source.inferenced_classification }} {{ source.inferenced_percentage}}%</text>
           <!-- black info box -->
           <rect
             :x="source.image_width - 175"
@@ -74,36 +75,16 @@
           >CLICK IMAGE OR USE BAR TO ZOOM</text>
         </g>
       </svg>
-      <!-- </canvas> -->
-      <!-- <canvas
-          ref="myCanvas"
-          id="myCanvas"
-          style="position:absolute; top:0; left:0; width:100%;"
-      >Your browser does not support the HTML5 canvas tag.</canvas>-->
-
-      <!-- <div class="image-overlay zoom-text">
-        <span>CLICK IMAGE OR USE BAR TO ZOOM</span>
-      </div>-->
-
-      <!-- Inferenced images already come with timestamp? -->
-      <!-- <div class="image-overlay date">
-          <span>{{ formatDate }}</span>
-      </div>-->
 
       <!-- <template v-slot:placeholder>
         <v-layout fill-height align-center justify-center ma-0>
           <v-progress-circular indeterminate color="#FFFFFF55"></v-progress-circular>
         </v-layout>
       </template>-->
-      <!-- </v-img> -->
     </transition>
-    <div id="target"></div>
   </div>
 </template>
 <script>
-import format from "date-fns/format";
-// import config from "../../config/env/production";
-
 export default {
   props: {
     source: {
@@ -117,12 +98,21 @@ export default {
     zoomed: false,
     pngDataUrl: null
   }),
+  mounted() {
+    this.toDataURL(
+      `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
+    ).then(dataUrl => {
+      this.pngDataUrl = dataUrl;
+      setTimeout(() => {
+        this.convertSvgToPng();
+      }, 1000);
+    });
+  },
   methods: {
     getPathZoomed() {
       return this.source.staticImageZoomed;
     },
     toDataURL(url) {
-      console.log("calling toDataURL", url);
       return fetch(url)
         .then(response => response.blob())
         .then(
@@ -137,122 +127,26 @@ export default {
             })
         );
     },
-    getBase64Image(img) {
-      var canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      var dataURL = canvas.toDataURL("image/png");
-      return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    },
-    convertSvgToCanvas() {
-      let svg = document.querySelector("#svgimage");
-      let svgString = new XMLSerializer().serializeToString(svg);
-      //   console.log("XML", svgString);
-
-      let canvas = document.createElement("canvas");
+    convertSvgToPng() {
+      const svg = document.querySelector("#svgimage");
+      const svgString = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement("canvas");
       canvas.width = 250;
       canvas.height = 250;
-      let ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d");
 
       let img = new Image();
       img.onload = () => {
+        // when img.src is set, onload is called and url is emitted
         ctx.drawImage(img, 0, 0);
-        // var png = canvas.toDataURL("image/png");
-        console.log("PNG", img);
-        let t = document.querySelector("#target");
-        t.appendChild(img);
+        var png = canvas.toDataURL("image/png");
+        this.$emit("datauricreated", png);
       };
-      let url = `data:image/svg+xml;base64,${btoa(svgString)}`;
-      this.$emit("datauricreated", url);
+      const url = `data:image/svg+xml;base64,${btoa(svgString)}`;
       img.setAttribute("src", url);
-      //   img.src = "data:image/svg+xml; charset=utf8, " + encodeURIComponent(svgString);
-    },
-    drawCanvas() {
-      let svg = document.querySelector("#imagesvg");
-      // We can just create a canvas element inline so you don't even need one on the DOM. Cool!
-      var xml = new XMLSerializer().serializeToString(svg);
-      //   var svg64 = btoa(xml);
-      //   for utf8:
-      var svg64 = btoa(unescape(encodeURIComponent(xml)));
-      var b64start = "data:image/svg+xml;base64,";
-      var image64 = b64start + svg64;
-      this.image = image64;
-      console.log("NEW IMAGE", this.image);
-      //   var data = new XMLSerializer().serializeToString(svg);
-      //   var canvas = document.createElement("canvas");
-      //   canvg(canvas, data, {
-      //     renderCallback: function() {
-      //       canvas.toBlob(function(blob) {
-      //         // download('MyImageName.png', blob);
-      //         console.log("MyImageName.png", blob);
-      //       });
-      //     }
-      //   });
-
-      //   let canvas = this.$refs.canvas;
-      //   let ctx = canvas.getContext("2d");
-      //   var image = new Image();
-      //   image.src = `${this.source.image_filepath}/${this.source.image_filename}`;
-      //   image.onload = function() {
-      //     ctx.drawImage(image, 0, 0);
-      //   };
-      //   const pngDataURL = canvas.toDataURL("image/png");
-      //   const jpegDataURL = canvas.toDataURL("image/jpeg");
-      //   console.log("CTX", pngDataURL, jpegDataURL);
-      //   var canvas = this.$refs.myCanvas;
-      // Make it visually fill the positioned parent
-      //   canvas.style.width = "100%";
-      //   canvas.style.height = "100%";
-      // ...then set the internal size to match
-      //   canvas.width = canvas.offsetWidth;
-      //   canvas.height = canvas.offsetHeight;
-      // 0.75 is for 4:3 ratio
-      //   const heightRatio = 0.75;
-      // for 16:9
-      //   const heightRatio = 1.778;
-      //   canvas.height = canvas.width * heightRatio;
-      //   console.log("CANVAS HEIGHT", canvas.height);
-      //   this.drawBoundary();
-    },
-    drawBoundary() {
-      let ctx = this.$refs.myCanvas.getContext("2d");
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // draw inner red box
-      ctx.beginPath();
-      ctx.lineWidth = "3";
-      ctx.strokeStyle = "red";
-      console.log(
-        "DRAW BOX",
-        this.source.bbox_xmin.toFixed(0),
-        this.source.image_height - this.source.bbox_ymin.toFixed(0),
-        this.source.bbox_width.toFixed(0),
-        this.source.bbox_height.toFixed(0)
-      );
-      ctx.rect(
-        90,
-        // this.source.bbox_xmin,
-        this.source.image_height - this.source.bbox_ymin,
-        this.source.bbox_width,
-        this.source.bbox_height
-      );
-      ctx.stroke();
-      // draw outer white box
-      ctx.beginPath();
-      ctx.lineWidth = "3";
-      ctx.strokeStyle = "white";
-      ctx.rect(
-        this.source.bbox_xmin - 2,
-        this.source.image_height - this.source.bbox_ymin - 2,
-        this.source.bbox_width + 5,
-        this.source.bbox_height + 5
-      );
-      ctx.stroke();
     },
     zoom() {
       this.zoomed = !this.zoomed;
-      this.convertSvgToCanvas();
     },
     zoomOut() {
       if (this.zoomed) {
@@ -263,8 +157,6 @@ export default {
   computed: {
     setScale() {
       if (this.zoomed) {
-        // THIS HERE WORKS FOR 16:9
-        // let img = this.$refs.dummyImage.$el.getBoundingClientRect();
         let img = document.querySelector("#svgimage").getBoundingClientRect();
         let x =
           this.source.image_width / 2 -
@@ -291,33 +183,21 @@ export default {
               ? -(img.height / 4)
               : img.height / 4
             : y;
-        console.log("ZOOM TO", computedX, computedY);
         return `transform: scale(2) translate(${computedX}px, ${computedY}px)`;
       }
       return ``;
-    },
-    formatDate() {
-      return format(new Date(), "MMM DD HH:MM:SS");
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      //   console.log("CONFIG", config);
-      //   this.drawCanvas();
-      // this.convertSvgToCanvas();
-    }, 400);
-    this.toDataURL(
-      `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
-    ).then(dataUrl => {
-      this.pngDataUrl = dataUrl;
-    });
   },
   watch: {
     source() {
+      // recreate thumbnail every time source prop changes
       this.toDataURL(
         `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
       ).then(dataUrl => {
         this.pngDataUrl = dataUrl;
+        setTimeout(() => {
+          this.convertSvgToPng();
+        }, 1000);
       });
     }
   }

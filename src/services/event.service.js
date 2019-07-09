@@ -61,14 +61,15 @@ instance.setYesterdaysEvents = async function() {
     }
 };
 
-instance.addNewEvents = async function(events) {
-    try {
-        const resp = await this.post('/add_new_events', { events });
-        return resp.data;
-    } catch (err) {
-        return err;
-    }
-};
+// delete this
+// instance.addNewEvents = async function(events) {
+//     try {
+//         const resp = await this.post('/add_new_events', { events });
+//         return resp.data;
+//     } catch (err) {
+//         return err;
+//     }
+// };
 
 instance.deleteEvents = async function(events) {
     try {

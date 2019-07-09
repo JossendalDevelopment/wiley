@@ -18,15 +18,15 @@
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
-            :src="evt.staticImageThumb"
+            :src="evt.thumb_250x250"
           ></v-img>
-          <span slot="list-info-top-left" class="app-list-item-username">{{ $auth.user.email }}</span>
+          <span slot="list-info-top-left" class="app-list-item-username">{{ evt.classified_by }}</span>
           <span slot="list-info-top-right" class="app-list-item-date">{{ getDate(evt) }}</span>
           <span
             slot="list-info-bottom-left"
             class="app-list-item-content"
             v-trim="90"
-          >{{ evt.classificationDescription }}</span>
+          >{{ evt.classification_description }}</span>
           <v-btn
             flat
             small
@@ -51,7 +51,7 @@
               contain
               :aspect-ratio="1/1"
               class="edit-modal-image"
-              :src="selectedForEdit && selectedForEdit.staticImageThumb"
+              :src="selectedForEdit && selectedForEdit.thumb_250x250"
             ></v-img>
           </v-flex>
           <v-flex xs8 pa-3>
@@ -116,14 +116,14 @@
           @keyup.enter.exact="saveDescription()"
           @keydown.enter.shift.exact="newline"
           placeholder="Please leave a reason for registering this event as a false alarm"
-          v-model="classificationDescription"
+          v-model="classification_description"
         />
       </template>
       <v-btn
         slot="detailsButton"
         dark
         style="background-color:#FFF; color:black;"
-        :disabled="classificationDescription.trim() === ''"
+        :disabled="classification_description.trim() === ''"
         @click="saveDescription()"
       >Confirm</v-btn>
     </app-dialog>
@@ -149,7 +149,7 @@ export default {
   data: () => ({
     selectedForEdit: null,
     newClass: null,
-    classificationDescription: ""
+    classification_description: ""
   }),
   computed: {
     selectedClass() {
@@ -169,14 +169,14 @@ export default {
       this.newClass = type;
     },
     openEditModal(evt) {
-      this.newClass = evt.classifiedAs;
+      this.newClass = evt.user_classification;
       this.selectedForEdit = evt;
       this.$refs.editmodal.open();
     },
     onClosedEditModal() {
       this.newClass = null;
       this.selectedForEdit = null;
-      this.classificationDescription = "";
+      this.classification_description = "";
     },
     openFalseAlarmModal() {
       this.newClass = "false-alarm";
@@ -184,12 +184,12 @@ export default {
       this.$refs.falsealarm.open();
     },
     saveDescription() {
-      this.selectedForEdit.classificationDescription = this.classificationDescription.trim();
+      this.selectedForEdit.classification_description = this.classification_description.trim();
       this.$refs.falsealarm.close();
       this.saveEdits();
     },
     saveEdits() {
-      this.selectedForEdit.classifiedAs = this.newClass;
+      this.selectedForEdit.user_classification = this.newClass;
       this.updateEvent(this.selectedForEdit);
     },
     updateEvent(event) {

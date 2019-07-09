@@ -99,8 +99,7 @@ export default {
           this.$notifyError("Invalid email and/or password");
           return;
         }
-        const eventResp = await this.$events.setYesterdaysEvents();
-        console.log("Login response", eventResp);
+        await this.$events.setYesterdaysEvents();
       } catch (error) {
         this.$notifyError(
           "Error getting todays events. Please try again later"

@@ -54,10 +54,10 @@ let procs = [];
     } else {
         console.log('Creating Stream data in:', `${__dirname}/public/live`);
         let commands = [
-            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
-            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
-            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
-            './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
+            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
+            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
+            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
+            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];
         commands.forEach(command => {
             procs.push(

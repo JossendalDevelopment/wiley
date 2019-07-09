@@ -18,18 +18,17 @@
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
-            :src="`http://localhost:3000${evt.image_filepath}/${evt.image_filename}`"
+            :src="evt.thumb_250x250"
           ></v-img>
           <!-- <span slot="list-info-top-left">{{ evt.cam_name.toUpperCase() }}</span> -->
           <span
             slot="list-info-top-right"
             class="app-list-item-date"
           >{{ getDateTime(evt).toUpperCase() }}</span>
-          <!-- TODO username/email should come from the event, not the logged in user -->
           <span
             slot="list-info-bottom-left"
             class="app-list-item-username"
-          >{{ $auth.user.email.toUpperCase() }}</span>
+          >{{ evt.classified_by.toUpperCase() }}</span>
           <v-btn
             flat
             small
@@ -51,8 +50,9 @@
               contain
               :aspect-ratio="1/1"
               class="edit-modal-image"
-              :src="`http://localhost:3000${selectedForEdit.image_filepath}/${selectedForEdit.image_filename}`"
+              :src="selectedForEdit.thumb_250x250"
             ></v-img>
+            <!-- :src="`http://localhost:3000${selectedForEdit.image_filepath}/${selectedForEdit.image_filename}`" -->
           </v-flex>
           <v-flex xs8 pa-3>
             <v-btn
@@ -169,7 +169,7 @@ export default {
       this.newClass = type;
     },
     openEditModal(evt) {
-      this.newClass = evt.classification;
+      this.newClass = evt.user_classification;
       this.selectedForEdit = evt;
       this.$refs.editmodal.open();
     },
@@ -184,12 +184,12 @@ export default {
       this.$refs.falsealarm.open();
     },
     saveDescription() {
-      this.selectedForEdit.classificationDescription = this.classificationDescription.trim();
+      this.selectedForEdit.classification_description = this.classificationDescription.trim();
       this.$refs.falsealarm.close();
       this.saveEdits();
     },
     saveEdits() {
-      this.selectedForEdit.classification = this.newClass;
+      this.selectedForEdit.user_classification = this.newClass;
       this.updateEvent(this.selectedForEdit);
     },
     updateEvent(event) {

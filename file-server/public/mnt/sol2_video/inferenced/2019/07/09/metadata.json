@@ -1,7 +1,8 @@
 [
     {
         "id": 1,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/08/",
+        "eventId": null,
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
         "image_filename": "inf_frame0.png",
         "image_width": 640,
         "image_height": 480,
@@ -11,14 +12,17 @@
         "bbox_height": 438.259835,
         "camera": "Rail-EAST",
         "inferenced_classification": "train",
+        "inferenced_percentage": 90,
         "user_classification": null,
         "classification_description": null,
         "classified_by": null,
-        "modified_date": "2019-06-28T:15:00:00Z"
+        "modified_date": "2019-06-28T:15:00:00Z",
+        "thumb_250x250": null
     },
     {
         "id": 2,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/08/",
+        "eventId": null,
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
         "image_filename": "inf_frame1.png",
         "image_width": 640,
         "image_height": 480,
@@ -28,14 +32,17 @@
         "bbox_height": 316.108469,
         "camera": "Rail-EAST",
         "inferenced_classification": "train",
+        "inferenced_percentage": 95,
         "user_classification": null,
         "classification_description": null,
         "classified_by": null,
-        "modified_date": "2019-06-28T:15:00:00Z"
+        "modified_date": "2019-06-28T:15:00:00Z",
+        "thumb_250x250": null
     },
     {
         "id": 3,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/08/",
+        "eventId": null,
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
         "image_filename": "inf_frame2.png",
         "image_width": 640,
         "image_height": 480,
@@ -45,14 +52,17 @@
         "bbox_height": 202.504907,
         "camera": "Rail-WEST",
         "inferenced_classification": "train",
+        "inferenced_percentage": 99,
         "user_classification": null,
         "classification_description": null,
         "classified_by": null,
-        "modified_date": "2019-06-28T:15:00:00Z"
+        "modified_date": "2019-06-28T:15:00:00Z",
+        "thumb_250x250": null
     },
     {
         "id": 4,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/08/",
+        "eventId": null,
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
         "image_filename": "inf_frame3.png",
         "image_width": 640,
         "image_height": 480,
@@ -62,9 +72,11 @@
         "bbox_height": 76.9565696,
         "camera": "Rail-WEST",
         "inferenced_classification": "person",
+        "inferenced_percentage": 85,
         "user_classification": null,
         "classification_description": null,
         "classified_by": null,
-        "modified_date": "2019-06-28T:15:00:00Z"
+        "modified_date": "2019-06-28T:15:00:00Z",
+        "thumb_250x250": null
     }
 ]

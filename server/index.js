@@ -31,8 +31,10 @@ const authenticatedRouter = require('./routes/authenticated-router');
 
 var app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// request limits here extended to allow for passing base64 data uri when creating thumbnail
+// in routes/authenticated-router /update_event route
+app.use(express.json({ limit: '30mb' }));
+app.use(express.urlencoded({ extended: true, limit: '30mb' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -49,7 +51,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/healthcheck', function(req, res) {
-    // do app logic here to determine if app is truly healthy
+    // docker healthcheck - do app logic here to determine if app is truly healthy
     // you should return 200 if healthy, and anything else will fail
     // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
     res.send('I am happy and healthy\n');

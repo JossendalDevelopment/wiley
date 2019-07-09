@@ -51,7 +51,7 @@ const getMetadataFile = () =>
                 try {
                     // then create nice looking json from body
                     body = JSON.parse(Buffer.concat(body).toString());
-                    // load all events into the database
+                    // resolve load all events into the database
                     resolve(body);
                 } catch (e) {
                     reject(e);
@@ -65,6 +65,7 @@ const getMetadataFile = () =>
         });
     });
 
+// Writing to this file is probably not needed anymore
 const writeMetadataFile = newEvent =>
     new Promise((resolve, reject) => {
         getMetadataFile()
