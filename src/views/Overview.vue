@@ -4,7 +4,7 @@
     The initial configuration of each stream is set here
 </notes>
 <template>
-  <v-container grid-list-xl fill-height px-0 class="overview-container">
+  <v-container grid-list-xl fill-height px-0 class="overview-container" v-test-ref="'container'">
     <v-layout column>
       <v-layout row wrap align-center>
         <v-flex xs6 v-for="stream in streams" :key="stream.id">
@@ -12,12 +12,15 @@
             <video-live-feed :stream="stream" />
             <!-- <div id="playerElement" style="width:100%; height:0; padding:0 0 56.25% 0"></div> -->
             <v-card-title>
-              <span class="cam-name">{{ stream.camName.toUpperCase().replace(/-/, ' ') }}</span>
+              <span
+                class="cam-name"
+                v-test-ref="'vid-title'"
+              >{{ stream.camName.toUpperCase().replace(/-/, ' ') }}</span>
             </v-card-title>
           </v-card>
         </v-flex>
       </v-layout>
-      <v-layout column align-end justify-end>
+      <v-layout column align-end justify-end v-test-ref="'clock-container'">
         <p class="clock label">TIME</p>
         <p class="clock timer">{{ dateTime }}</p>
       </v-layout>

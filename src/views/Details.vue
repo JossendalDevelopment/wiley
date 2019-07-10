@@ -10,13 +10,15 @@
     fill-height
     align-center
     v-if="!unclassifiedRemaining"
-    class="video-container test-ref"
+    class="video-container"
+    v-test-ref="'container'"
   >
     <span
+      v-test-ref="'empty-content'"
       style="color:white; font-family: DIN Condensed; font-size: 30px; letter-spacing2px;"
     >THERE ARE NO UNCLASSIFIED EVENTS</span>
   </v-layout>
-  <v-layout v-else-if="!working" class="video-container test-ref" justify-center>
+  <v-layout v-else-if="!working" class="video-container" justify-center>
     <v-flex xs12>
       <!-- Above video -->
       <v-layout align-center justify-center>
@@ -54,7 +56,7 @@
             style="font-family: Montserrat; font-size:14px; font-weight:700;"
           >SELECT OR USE YOUR KEYBOARD</p>
         </v-flex>
-        <v-layout justify-space-between>
+        <v-layout justify-space-between v-test-ref="'bottom-buttons-container'">
           <v-flex mx-1>
             <v-btn
               @click="setClassification('employee')"

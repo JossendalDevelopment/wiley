@@ -1,15 +1,15 @@
 version: '3.2'
 services:
-  wiley:
-    build: ../../
-    environment:
-      - PORT=8123
-  cypress:
-    image: "cypress/included:3.2.0"
-    depends_on:
-      - wiley
-    environment:
-      - CYPRESS_baseUrl=http://localhost:8080
-    working_dir: /tests/e2e
-    volumes:
-      - ./:/tests/e2e
+    wiley:
+        build: .
+        environment:
+            - PORT=8123
+    cypress:
+        image: 'cypress/included:3.2.0'
+        depends_on:
+            - wiley
+        environment:
+            - CYPRESS_baseUrl=http://localhost:5001
+        working_dir: /tests/e2e
+        volumes:
+            - ./:/tests/e2e
