@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import firebase from 'firebase';
 
 import CameraDetailsPage from '@/views/Details.vue';
+import NotFound from '@/views/NotFound.vue';
 import Overview from '@/views/Overview.vue';
 import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
@@ -40,7 +41,8 @@ export const router = new Router({
                 requiresAuth: true,
             },
         },
-        { path: '*', redirect: '/overview' }, // this should ideally redirect to / or a 404 page
+        { path: '/not_found', name: 'not-found', component: NotFound },
+        { path: '*', redirect: '/not_found' },
     ],
 });
 
@@ -57,7 +59,7 @@ router.beforeEach(async (to, from, next) => {
     }
     // router guard requiring a user be authenticated via firebase
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().onAuthStateChanged(function (user) {
             if (!user) {
                 next('/sign_in');
             } else {
