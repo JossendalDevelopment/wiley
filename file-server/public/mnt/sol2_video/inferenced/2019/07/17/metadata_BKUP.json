@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/06/04/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "c1.jpg",
         "image_width": 480,
         "image_height": 640,
@@ -18,7 +18,7 @@
     },
     {
         "id": 2,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/06/04/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "e1.jpg",
         "image_width": 480,
         "image_height": 640,
@@ -35,7 +35,7 @@
     },
     {
         "id": 3,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/06/04/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "f1.jpg",
         "image_width": 480,
         "image_height": 640,
@@ -52,7 +52,7 @@
     },
     {
         "id": 4,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/06/04/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "p1.jpg",
         "image_width": 480,
         "image_height": 640,

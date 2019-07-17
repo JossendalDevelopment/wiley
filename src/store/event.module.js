@@ -5,7 +5,7 @@ api.new('/api');
 export const eventHistory = {
     namespaced: true,
     state: {
-        history: [],
+        sessionEvents: [],
         events: [],
         loading: true,
     },
@@ -29,6 +29,9 @@ export const eventHistory = {
         },
         setEvents(state, payload) {
             state.events = payload;
+        },
+        setSessionEvents(state, payload) {
+            state.sessionEvents = payload;
         },
         addEvents(state, payload) {
             state.events = [...state.events, ...payload.events];
@@ -89,6 +92,7 @@ export const eventHistory = {
         setYesterdaysEvents({ commit }, payload) {
             return api.setYesterdaysEvents().then(resp => {
                 commit('setEvents', resp);
+                commit('setSessionEvents', resp);
                 return resp;
             });
         },

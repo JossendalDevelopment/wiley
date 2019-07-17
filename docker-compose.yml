@@ -6,8 +6,7 @@ services:
             - ./:/app:delegated
             - /node_modules
         ports:
-            - 5001:5001 # vue dev servers native port
-            - 8000:80
+            - 5001:80
         depends_on:
             # fileserver:
             #     condition: service_healthy

@@ -2,7 +2,7 @@
     {
         "id": 1,
         "eventId": null,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "inf_frame0.png",
         "image_width": 640,
         "image_height": 480,
@@ -22,7 +22,7 @@
     {
         "id": 2,
         "eventId": null,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "inf_frame1.png",
         "image_width": 640,
         "image_height": 480,
@@ -42,7 +42,7 @@
     {
         "id": 3,
         "eventId": null,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "inf_frame2.png",
         "image_width": 640,
         "image_height": 480,
@@ -62,7 +62,7 @@
     {
         "id": 4,
         "eventId": null,
-        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/09/",
+        "image_filepath": "/mnt/sol2_video/inferenced/2019/07/17/",
         "image_filename": "inf_frame3.png",
         "image_width": 640,
         "image_height": 480,

@@ -11,18 +11,20 @@ const PORT = process.env.PORT || 3001;
 // firebase initialization
 const admin = require('firebase-admin');
 let serviceAccount;
+let db_url;
+console.log("PORT:", PORT)
+console.log("ENV:", process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
     serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_PROD);
+    db_url = 'https://wiley-app-rotf.firebaseio.com';
 } else {
     serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_DEV);
+    db_url = 'https://wiley-app-rotf-dev.firebaseio.com'
 }
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL:
-        process.env.NODE_ENV === 'production'
-            ? 'https://wiley-app-rotf.firebaseio.com'
-            : 'https://wiley-app-rotf-dev.firebaseio.com',
+    databaseURL: db_url,
 });
 
 // routers
@@ -50,7 +52,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/healthcheck', function(req, res) {
+app.get('/healthcheck', function (req, res) {
     // docker healthcheck - do app logic here to determine if app is truly healthy
     // you should return 200 if healthy, and anything else will fail
     // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
@@ -70,7 +72,7 @@ const server = app.listen(PORT, () => {
 ************************************************************* */
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 

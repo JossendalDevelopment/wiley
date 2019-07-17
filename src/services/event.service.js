@@ -4,7 +4,7 @@ import axios from 'axios';
 const instance = axios.create();
 instance.token = window.localStorage.getItem('token') || null;
 
-instance.new = function(url = '/') {
+instance.new = function (url = `/`) {
     this.defaults.baseURL = url;
 
     if (this.token) {
@@ -15,7 +15,7 @@ instance.new = function(url = '/') {
     }
 };
 
-instance.createEvent = async function(event) {
+instance.createEvent = async function (event) {
     try {
         const resp = await this.post('/create_event', { event });
         return resp.data;
@@ -24,7 +24,7 @@ instance.createEvent = async function(event) {
     }
 };
 
-instance.updateEvent = async function(event) {
+instance.updateEvent = async function (event) {
     try {
         const resp = await this.post('/update_event', { event });
         return resp.data;
@@ -33,7 +33,7 @@ instance.updateEvent = async function(event) {
     }
 };
 
-instance.getAllEvents = async function() {
+instance.getAllEvents = async function () {
     try {
         const resp = await this.get('/get_all_events');
         return resp.data;
@@ -42,7 +42,7 @@ instance.getAllEvents = async function() {
     }
 };
 
-instance.getAllClassifiedEvents = async function() {
+instance.getAllClassifiedEvents = async function () {
     try {
         const resp = await this.get('/get_all_classified_events');
         return resp.data;
@@ -51,7 +51,7 @@ instance.getAllClassifiedEvents = async function() {
     }
 };
 
-instance.setYesterdaysEvents = async function() {
+instance.setYesterdaysEvents = async function () {
     // take data from metadata.json file, parse it for only unclassified, and return array of events to be set in vuex store
     try {
         const resp = await this.get('/set_yesterdays_events');
@@ -71,7 +71,7 @@ instance.setYesterdaysEvents = async function() {
 //     }
 // };
 
-instance.deleteEvents = async function(events) {
+instance.deleteEvents = async function (events) {
     try {
         const resp = await this.post('/delete_events', { events });
         return resp.data;

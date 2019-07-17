@@ -222,9 +222,9 @@ export default {
             let newDoc = doc.data();
             result.push(newDoc);
           });
+
           // pushes all events to vuex store
           this.$events.setEvents(result);
-
           if (!this.loaded) {
             // I only want this to run after first query but not on subsequent queries
             this.setInitialEvent(result);
@@ -330,10 +330,11 @@ export default {
         });
     },
     getTotalByType(type) {
-      return this.$events.events.reduce((prev, next) => {
+      return this.$events.sessionEvents.reduce((prev, next) => {
         if (next.user_classification === type) {
           prev++;
         }
+        console.log("COUNT", prev)
         return prev;
       }, 0);
     },
