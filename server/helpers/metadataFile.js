@@ -1,4 +1,5 @@
 const http = require('http');
+const config = require('../config/production.js')
 // const fs = require('fs');
 
 // TODO potential issue of someone trying to write to the json file from the wrong day
@@ -10,19 +11,20 @@ const createFilePath = () => {
     let month = date.getMonth() + 1; // months are zero indexed
     month = month.toString().padStart(2, '0');
     const day = date
-        .getUTCDate() // -1 because we want yesterdays images, foregoing this for ease of testing for now
+        .getUTCDate() // TODO -1 because we want yesterdays images, foregoing this for ease of testing for now
         .toString()
         .padStart(2, '0');
-    return `/mnt/sol2_video/inferenced/${year}/${month}/${day}/metadata.json`;
+    return `${config.image_filepath}${year}/${month}/${day}/metadata.json`;
 };
 
 const getMetadataFile = () =>
     new Promise((resolve, reject) => {
         const metaFilePath = createFilePath();
+        console.log("FILE PATH:", metaFilePath)
         console.log('Is your day correct?', metaFilePath);
 
         const get_options = {
-            host: 'localhost',
+            host: process.env.FILESERVER_BASE_URL || 'localhost', // change this from localhost on dev to fileserver(container name) in prod
             port: '3000',
             path: metaFilePath,
             method: 'GET',
@@ -47,7 +49,7 @@ const getMetadataFile = () =>
                 body.push(chunk);
             });
 
-            res.on('end', function() {
+            res.on('end', function () {
                 try {
                     // then create nice looking json from body
                     body = JSON.parse(Buffer.concat(body).toString());

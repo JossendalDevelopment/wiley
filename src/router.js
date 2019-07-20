@@ -16,6 +16,14 @@ export const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
+        {
+            path: '/',
+            name: 'overview',
+            component: Overview,
+            meta: {
+                requiresAuth: true,
+            },
+        },
         { path: '/sign_in', name: 'signIn', component: SignIn },
         {
             path: '/overview',

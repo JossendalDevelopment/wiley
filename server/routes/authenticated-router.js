@@ -88,6 +88,7 @@ router.get('/get_all_events', (req, res) => {
 // @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.get('/get_all_classified_events', (req, res) => {
+    console.log("USING PORT", process.env.PORT)
     let result = [];
     COLLECTION_REF.where('user_classification', '>', '')
         .get()

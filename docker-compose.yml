@@ -18,7 +18,7 @@ services:
     api:
         build:
             context: ./server
-            target: prod-stage
+            target: 'prod-stage'
         # if nodemon needs to be setup for dev
         # command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./index.js
         volumes:
@@ -27,6 +27,9 @@ services:
         ports:
             - 3001:3001 #exposed only for testing and required for healthcheck script
         environment:
+            # this is used in metadataFile.js, should default to localhost in dev and fileserver container name in prod
+            - FILESERVER_BASE_URL=fileserver
+            - NODE_ENV=production
             # These files need to be retrieved from firebase and placed in `server/certs`
             - GOOGLE_APPLICATION_CREDENTIALS_DEV=./certs/wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
             - GOOGLE_APPLICATION_CREDENTIALS_PROD=./certs/wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json

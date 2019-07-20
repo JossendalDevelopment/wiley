@@ -13,7 +13,7 @@ RUN npm install --only=production && npm cache clean --force
 
 COPY . .
 # build:dev will build using firebase dev staging app
-CMD ["npm", "run", "build:dev"]
+CMD ["npm", "run", "build:prod"]
 # CMD ["./node_modules/\\@vue/cli-service/bin/vue-cli-service.js", "build"]
 
 # production stage

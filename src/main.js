@@ -18,6 +18,7 @@ import 'video.js/dist/video-js.css';
 import './scss/global.scss';
 
 console.log("USING DB:", process.env.VUE_APP_DATABASE_URL)
+
 firebase.initializeApp({
     apiKey: process.env.VUE_APP_API_KEY,
     authDomain: process.env.VUE_APP_AUTH_DOMAIN,

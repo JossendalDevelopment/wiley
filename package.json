@@ -4,16 +4,17 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
+        "serve:prod": "vue-cli-service serve --mode production",
         "build": "vue-cli-service build",
         "build:dev": "vue-cli-service build --mode development",
-        "build:prod": "vue-cli-service build --mode production",
+        "build:prod": "firebase use prod && vue-cli-service build --mode production",
         "docker-build": "./node_modules/\\@vue/cli-service/bin/vue-cli-service.js build",
         "lint": "vue-cli-service lint",
         "test": "vue-cli-service test:unit",
         "cypress:open": "cypress open",
         "dev": "concurrently \"cd server && npm run start\" \"npm run serve\" ",
-        "deploy:dev": "firebase use dev && npm run build:dev && firebase deploy",
-        "deploy:prod": "firebase use default && npm run build:prod && firebase deploy"
+        "deploy:dev": "firebase use default && npm run build:dev && firebase deploy",
+        "deploy:prod": "firebase use prod && npm run build:prod && firebase deploy"
     },
     "dependencies": {
         "@babel/polyfill": "^7.0.0-rc.1",

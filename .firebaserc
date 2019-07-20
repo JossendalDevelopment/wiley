@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "wiley-app-rotf",
-    "dev": "wiley-app-rotf-dev"
+    "default": "wiley-app-rotf-dev",
+    "prod": "wiley-app-rotf"
   }
 }
