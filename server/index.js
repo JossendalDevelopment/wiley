@@ -3,9 +3,9 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-var pgp = require('pg-promise')(/* options */)
 // const ejwt = require('express-jwt');
 // const config = require('config');
+const db = require('./config/conn.js')
 
 const PORT = process.env.PORT || 3001;
 
@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 3001;
 const admin = require('firebase-admin');
 let serviceAccount;
 let db_url;
-console.log("PORT:", PORT)
 console.log("ENV:", process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
     serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_PROD);
@@ -28,10 +27,9 @@ admin.initializeApp({
     databaseURL: db_url,
 });
 
-// postgres initialization
-var db = pgp(process.env.DB_URL)
-
-const initPostgres = () => {
+// postgres connection test
+let retries = 20;
+const testPostgres = () => {
     // db.one('SELECT $1 AS value', 123)
     db.any('SELECT * FROM test')
         .then((data) => {
@@ -39,17 +37,15 @@ const initPostgres = () => {
         })
         .catch((error) => {
             console.log('INIT ERROR:', error)
-            console.log("RETRYING")
+            console.log("RETRIES LEFT...", retries)
+            if (retries === 0) return
             setTimeout(() => {
-                initPostgres()
-            }, 3000)
+                testPostgres();
+                retries--;
+            }, 20000 / retries)
         })
 }
-initPostgres();
-
-// routers
-const publicRouter = require('./routes/public-router');
-const authenticatedRouter = require('./routes/authenticated-router');
+testPostgres();
 
 var app = express();
 
@@ -60,7 +56,7 @@ app.use(express.urlencoded({ extended: true, limit: '30mb' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// this needs to be before use static to serve files and all routes requiring cors
+// this needs to be before app.use static to serve files and all routes requiring cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -79,10 +75,14 @@ app.get('/healthcheck', function (req, res) {
     res.send('I am happy and healthy\n');
 });
 
+// routers
+const publicRouter = require('./routes/public-router');
+const authenticatedRouter = require('./routes/authenticated-router');
 app.use('/', publicRouter);
 app.use('/api', authenticatedRouter);
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter);
 
+// start server
 const server = app.listen(PORT, () => {
     console.log('API Server listening on port ' + PORT);
 });

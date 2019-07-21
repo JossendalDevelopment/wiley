@@ -1,6 +1,7 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const formatResponse = require('../helpers/format-response.js');
+const postgres = require('../config/conn');
 const {
     getMetadataFile,
     // writeMetadataFile,
@@ -86,6 +87,37 @@ router.get('/get_all_events', (req, res) => {
 });
 
 // @METHOD: GET
+// @RETURNS: array of all events
+router.get('/get_all_events_postgres', (req, res) => {
+    postgres.any('SELECT * FROM events')
+        .then((data) => {
+            console.log("SUCCESS", data)
+            formatResponse(res, 'success', data);
+        })
+        .catch((error) => {
+            console.log("ERROR", error)
+            formatResponse(res, 'error', error);
+        });
+    // COLLECTION_REF.get()
+    //     .then(
+    //         querySnapshot => {
+    //             querySnapshot.forEach(doc => {
+    //                 let newDoc = doc.data();
+    //                 newDoc.id = doc.id;
+    //                 result.push(newDoc);
+    //             });
+    //             formatResponse(res, 'success', result);
+    //         },
+    //         error => {
+    //             formatResponse(res, 'error', error);
+    //         }
+    //     )
+    //     .catch(error => {
+    //         formatResponse(res, 'error', error);
+    //     });
+});
+
+// @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.get('/get_all_classified_events', (req, res) => {
     console.log("USING PORT", process.env.PORT)
@@ -114,6 +146,7 @@ router.get('/get_all_classified_events', (req, res) => {
 // @RETURNS: json array object
 // pulls metadata.json file for given day, loads it into firestore, and returns that json to client
 router.get('/set_yesterdays_events', async (req, res) => {
+    console.log("WRONG ONE")
     try {
         // this will return a json object of all events fom metadata.json file
         const eventsJson = await getMetadataFile();
@@ -133,6 +166,34 @@ router.get('/set_yesterdays_events', async (req, res) => {
                 });
         });
         res.json(eventsJson);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
+// @METHOD: GET
+// @RETURNS: json array object
+// pulls metadata.json file for given day, loads it into firestore, and returns that json to client
+router.get('/set_yesterdays_events_postgres', async (req, res) => {
+    try {
+        // this will return a json object of all events fom metadata.json file
+        const eventsJson = await getMetadataFile();
+        console.log("FROM JSON", eventsJson)
+        postgres.tx(t => {
+            const queries = eventsJson.map(event => {
+                return t.none('INSERT INTO events(id, event_id, image_filepath, image_filename, image_width, image_height, bbox_xmin, bbox_ymin, bbox_width, bbox_height, camera, inferenced_classification, inferenced_percentage, user_classification, classification_description, classified_by, modified_date, thumb_250x250) VALUES(${id}, ${event_id}, ${image_filepath}, ${image_filename}, ${image_width}, ${image_height}, ${bbox_xmin}, ${bbox_ymin}, ${bbox_width}, ${bbox_height}, ${camera}, ${inferenced_classification}, ${inferenced_percentage}, ${user_classification}, ${classification_description}, ${classified_by}, ${modified_date}, ${thumb_250x250})', event);
+            });
+            return t.batch(queries);
+        })
+            .then(data => {
+                console.log("SUCCESS", data)
+                res.json(eventsJson);
+            })
+            .catch(error => {
+                console.error("ERROR:", error)
+                res.json([]);
+            });
+
     } catch (error) {
         formatResponse(res, 'error', error);
     }

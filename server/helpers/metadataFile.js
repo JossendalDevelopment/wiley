@@ -1,5 +1,5 @@
 const http = require('http');
-const config = require('../config/production.js')
+const conf = require('../config/production')
 // const fs = require('fs');
 
 // TODO potential issue of someone trying to write to the json file from the wrong day
@@ -14,14 +14,13 @@ const createFilePath = () => {
         .getUTCDate() // TODO -1 because we want yesterdays images, foregoing this for ease of testing for now
         .toString()
         .padStart(2, '0');
-    return `${config.image_filepath}${year}/${month}/${day}/metadata.json`;
+    return `${conf.image_filepath}${year}/${month}/${day}/metadata.json`;
 };
 
 const getMetadataFile = () =>
     new Promise((resolve, reject) => {
         const metaFilePath = createFilePath();
-        console.log("FILE PATH:", metaFilePath)
-        console.log('Is your day correct?', metaFilePath);
+        console.log("METADATA FILE PATH:", metaFilePath)
 
         const get_options = {
             host: process.env.FILESERVER_BASE_URL || 'localhost', // change this from localhost on dev to fileserver(container name) in prod

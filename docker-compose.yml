@@ -21,6 +21,9 @@ services:
             target: 'prod-stage'
         # if nodemon needs to be setup for dev
         # command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./index.js
+        # depends_on:
+        #     db:
+        #         condition: service_healthy
         volumes:
             - ./server:/server:delegated
             - /server/node_modules
@@ -50,12 +53,17 @@ services:
     db:
         image: postgres:10-alpine
         restart: always
+        # healthcheck:
+        #     test: pg_isready -U postgres -h 127.0.0.1
         ports:
             # Only needed if you want to connect to management software
             - 5432:5432
         environment:
-            POSTGRES_PASSWORD: example
+            POSTGRES_USER: postgres
+            POSTGRES_DB: wiley
+            POSTGRES_PASSWORD: wiley_rotf_2019
         volumes:
+            - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
             - /Users/Jossendal/Desktop/dbs/wiley:/var/lib/postgresql/data
     adminer:
         image: adminer

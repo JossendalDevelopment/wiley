@@ -29,5 +29,6 @@ yarn-error.log*
 # docker
 docker-compose*.yml
 
-# streaming data files
+# fileserver
 streams
+filserver/public/mnt/*

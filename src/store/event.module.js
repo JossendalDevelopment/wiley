@@ -5,7 +5,9 @@ api.new('/api');
 export const eventHistory = {
     namespaced: true,
     state: {
+        // ssessionEvents are unclassified events currently being processed
         sessionEvents: [],
+        // all events TODO: dont get all events when the db starts to grow
         events: [],
         loading: true,
     },
@@ -33,9 +35,6 @@ export const eventHistory = {
         setSessionEvents(state, payload) {
             state.sessionEvents = payload;
         },
-        addEvents(state, payload) {
-            state.events = [...state.events, ...payload.events];
-        },
         deleteEvents(state) {
             state.events = [];
         },
@@ -61,8 +60,9 @@ export const eventHistory = {
                 return resp;
             });
         },
-        getAllEvents() {
+        getAllEvents({ commit }) {
             return api.getAllEvents().then(resp => {
+                commit('setEvents', resp.data)
                 return resp;
             });
         },
@@ -81,17 +81,11 @@ export const eventHistory = {
                 return;
             });
         },
-        // delete this next time you see it please
-        // // eslint-disable-next-line no-unused-vars
-        // addNewEvents({ commit }, payload) {
-        //     return api.addNewEvents(payload.events).then(resp => {
-        //         return resp;
-        //     });
-        // },
         // eslint-disable-next-line no-unused-vars
         setYesterdaysEvents({ commit }, payload) {
             return api.setYesterdaysEvents().then(resp => {
-                commit('setEvents', resp);
+                // commit('setEvents', resp);
+                // sets up newly imported, unclassified events
                 commit('setSessionEvents', resp);
                 return resp;
             });

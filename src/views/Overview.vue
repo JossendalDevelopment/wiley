@@ -32,6 +32,7 @@
 import VideoLiveFeed from "@/components/video--live-feed.vue";
 
 import format from "date-fns/format";
+import config from '../../config/production.js'
 
 export default {
   components: {
@@ -45,8 +46,8 @@ export default {
         camNumber: 1,
         camName: "Rail-EAST",
         sourceData: {
-          // These urls point to the file server, not the express api server
-          src: "http://localhost:3000/live/streams/one/480p.m3u8",
+          // These urls point to the file server, not the express api server, and are set in /config/production.js
+          src: `http://${config.rtsp_host}:${config.port}${config.rtsp_url_one}480p.m3u8`,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -56,7 +57,7 @@ export default {
         camNumber: 2,
         camName: "Rail-WEST",
         sourceData: {
-          src: "http://localhost:3000/live/streams/two/480p.m3u8",
+          src: `http://${config.rtsp_host}:${config.port}${config.rtsp_url_two}480p.m3u8`,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -67,22 +68,6 @@ export default {
   }),
   created() {
     this.startTime();
-  },
-  mounted() {
-    // WowzaPlayer.create("playerElement", {
-    //   license: process.env.VUE_APP_WOWZA_LICENSE,
-    //   title: "",
-    //   description: "",
-    //   sourceURL:
-    //     "http%3A%2F%2F192.168.50.109%3A1935%2Flive%2FBahay.stream%2Fplaylist.m3u8",
-    //   autoPlay: true,
-    //   volume: "75",
-    //   mute: false,
-    //   loop: false,
-    //   audioOnly: false,
-    //   uiShowQuickRewind: true,
-    //   uiQuickRewindSeconds: "30"
-    // });
   },
   destroyed() {
     clearInterval(this.timer);

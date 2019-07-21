@@ -160,8 +160,6 @@
   </v-layout>
 </template>
 <script>
-import firebase from "firebase";
-import "firebase/firestore";
 import DetailsCameraImage from "@/components/details--camera-image";
 // import VideoPlayer from '@/components/video-player.vue';
 import Dialog from "@/components/app-dialog.vue";
@@ -173,13 +171,11 @@ export default {
     "app-dialog": Dialog
   },
   data: () => ({
-    eventFirestoreWatcher: null,
     unclassifiedEvents: [],
     unclassifiedRemaining: 0,
     listeners: null,
     working: true,
     disabled: false,
-    loaded: false,
     currentEventIndex: 0,
     currentEvent: {},
     classificationDescription: ""
@@ -209,37 +205,17 @@ export default {
     };
     this.addListeners();
 
-    // watcher on classified_events collection in firestore. this will update all events in real time if one is changed
-    const db = firebase.firestore();
-    this.eventFirestoreWatcher = db
-      .collection("classified_events")
-      .where("user_classification", "==", null)
-      .limit(50)
-      .onSnapshot(
-        querySnapshot => {
-          let result = [];
-          querySnapshot.forEach(doc => {
-            let newDoc = doc.data();
-            result.push(newDoc);
-          });
-
-          // pushes all events to vuex store
-          this.$events.setEvents(result);
-          if (!this.loaded) {
-            // I only want this to run after first query but not on subsequent queries
-            this.setInitialEvent(result);
-          }
-
-          this.working = false;
-        },
-        error => {
-          console.error("Error in EventFirestoreWatcher:", error);
-          this.$notifyError("ERROR RETRIEVING EVENTS");
-        }
-      );
+    // get all events from postgres
+    this.$events.getAllEvents()
+    .then(res => {
+        console.log("SUCCESS", res.data)
+        this.setUnclassifiedEvents(res.data);
+    })
+    .catch(error => {
+        console.log("ERROR GETTING ALL EVENTS", error)
+    })
   },
   destroyed() {
-    this.eventFirestoreWatcher();
     this.removeListeners();
   },
   computed: {
@@ -256,7 +232,7 @@ export default {
     setThumb(evt) {
       this.currentEvent.thumb_250x250 = evt;
     },
-    setInitialEvent(events) {
+    setUnclassifiedEvents(events) {
       this.unclassifiedEvents = events.filter(evt => {
         return !evt.user_classification;
       });
@@ -266,7 +242,7 @@ export default {
       if (this.unclassifiedEvents.length > 0) {
         this.currentEvent = this.unclassifiedEvents[0];
       }
-      this.loaded = true;
+      this.working = false
     },
     addListeners() {
       // listeners on keystrokes need to be added and removed when the modals are open
@@ -330,7 +306,7 @@ export default {
         });
     },
     getTotalByType(type) {
-      return this.$events.sessionEvents.reduce((prev, next) => {
+      return this.$events.events.reduce((prev, next) => {
         if (next.user_classification === type) {
           prev++;
         }

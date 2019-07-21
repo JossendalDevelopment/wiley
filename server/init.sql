@@ -1,9 +1,7 @@
 CREATE TABLE test
 (
     id INT PRIMARY KEY,
-    messages VARCHAR (50) UNIQUE NOT NULL,
-    created_on TIMESTAMP,
-    last_login TIMESTAMP
+    messages VARCHAR (50) UNIQUE NOT NULL
 );
 
 INSERT INTO test
@@ -13,6 +11,7 @@ VALUES(1000, 'Youve made a successful query');
 CREATE TABLE events
 (
     id INT PRIMARY    KEY NOT NULL,
+    event_id TEXT,
     image_filepath TEXT NOT NULL,
     image_filename TEXT NOT NULL,
     image_width INT NOT NULL,

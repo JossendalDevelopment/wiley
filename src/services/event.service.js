@@ -35,7 +35,7 @@ instance.updateEvent = async function (event) {
 
 instance.getAllEvents = async function () {
     try {
-        const resp = await this.get('/get_all_events');
+        const resp = await this.get('/get_all_events_postgres');
         return resp.data;
     } catch (err) {
         return err;
@@ -54,7 +54,7 @@ instance.getAllClassifiedEvents = async function () {
 instance.setYesterdaysEvents = async function () {
     // take data from metadata.json file, parse it for only unclassified, and return array of events to be set in vuex store
     try {
-        const resp = await this.get('/set_yesterdays_events');
+        const resp = await this.get('/set_yesterdays_events_postgres');
         return resp.data;
     } catch (err) {
         return err;
