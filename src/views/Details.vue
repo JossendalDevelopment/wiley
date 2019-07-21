@@ -205,7 +205,9 @@ export default {
     };
     this.addListeners();
 
-    // get all events from postgres
+    // TODO gets all events from postgres so that the counters below the buttons show grand totals
+    // the main function of this page really only demands unclassified events.
+    // Should the counters be a grand total or maybe just a current session total
     this.$events.getAllEvents()
     .then(res => {
         console.log("SUCCESS", res.data)

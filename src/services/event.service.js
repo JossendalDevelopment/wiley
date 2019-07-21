@@ -53,7 +53,7 @@ instance.getAllEvents = async function () {
 
 instance.getAllClassifiedEvents = async function () {
     try {
-        const resp = await this.get('/get_all_classified_events');
+        const resp = await this.get('/get_all_classified_events_postgres');
         return resp.data;
     } catch (err) {
         return err;

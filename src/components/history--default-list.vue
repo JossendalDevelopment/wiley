@@ -24,7 +24,7 @@
           <span
             slot="list-info-top-right"
             class="app-list-item-date"
-          >{{ getDateTime(evt).toUpperCase() }}</span>
+          >{{ getDateTime(evt.modified_date).toUpperCase() }}</span>
           <span
             slot="list-info-bottom-left"
             class="app-list-item-username"
@@ -157,8 +157,8 @@ export default {
     }
   },
   methods: {
-    getDateTime(evt) {
-      return format(new Date(evt.timestamp.seconds), "MMM DD HH:MM:SS");
+    getDateTime(date) {
+      return format(new Date(date), "MMM DD HH:MM:SS");
     },
     focusTextarea() {
       this.$nextTick(() => {
@@ -198,6 +198,7 @@ export default {
         .then(() => {
           this.onClosedEditModal();
           this.$notifySuccess("UPDATE SUCCESSFUL");
+          this.$emit('update')
         })
         .catch(err => {
           console.error("ERROR", err);

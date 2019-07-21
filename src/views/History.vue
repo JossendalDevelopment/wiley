@@ -83,6 +83,7 @@
               :is="getComponent"
               :key="selectedEvent.type + 'selected'"
               :data="eventTypes[selectedEvent.type]"
+              :on:update="fetchHistory()"
               style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
             />
           </v-flex>
@@ -92,8 +93,8 @@
   </v-container>
 </template>
 <script>
-import firebase from "firebase";
-import "firebase/firestore";
+// import firebase from "firebase";
+// import "firebase/firestore";
 
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import FalseAlarmList from "@/components/history--false-alarm-list.vue";
@@ -120,27 +121,16 @@ export default {
     this.eventWatcher = null;
   },
   mounted() {
-    const db = firebase.firestore();
-    // this watcher will query initially and then run anytime the 'classified-events' collection changes
-    this.eventWatcher = db
-      .collection("classified_events")
-      .where("user_classification", ">", "")
-      .limit(50)
-      .onSnapshot(querySnapshot => {
-        this.$events.startLoading();
+      this.fetchHistory()
 
-        if (querySnapshot.empty) {
-          this.$events.stopLoading();
-          return;
-        }
+  },
+  methods: {
+    fetchHistory() {
+              this.$events.getAllClassifiedEvents()
+      .then(results => {
+        let events = results.data
 
-        let results = [];
-        querySnapshot.forEach(doc => {
-          let newDoc = doc.data();
-          newDoc.id = doc.id; // docs do not come with their respective ids by default
-          results.push(newDoc);
-        });
-        this.totalEvents = results;
+        this.totalEvents = events;
         this.eventTypes = new EventTypes();
         // TODO: make each type of event it's own Type
         // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
@@ -157,7 +147,7 @@ export default {
         //     false-alarm: (...)
         //     intruder: (...)
         // }
-        results.forEach(
+        events.forEach(
           item => {
             let cls = item.user_classification;
             this.eventTypes[cls] = {
@@ -174,25 +164,12 @@ export default {
             this.$events.stopLoading();
           }
         );
-      });
-    // TODO cache this response
-    // this.$events.getAllClassifiedEvents().then(resp => {
-    //   this.events = resp.data;
-    //   // sort out events by their classification
-    //   this.events.forEach(item => {
-    //     let cls = item.classifiedAs;
-    //     console.log("CLASS", cls);
-    //     this.eventTypes[cls] = {
-    //       ...this.eventTypes[cls],
-    //       count: this.eventTypes[cls].count
-    //         ? (this.eventTypes[cls].count += 1)
-    //         : 1
-    //     };
-    //     this.eventTypes[cls].events.push(item);
-    //   });
-    // });
-  },
-  methods: {
+      })
+      .catch(error => {
+          this.$notifyError("ERROR FINDING EVENT HISTORY")
+          throw new Error(error)
+      })
+    },
     percentage(value) {
       return (100 * value) / this.totalEvents.length;
     },

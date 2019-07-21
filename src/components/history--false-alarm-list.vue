@@ -21,7 +21,7 @@
             :src="evt.thumb_250x250"
           ></v-img>
           <span slot="list-info-top-left" class="app-list-item-username">{{ evt.classified_by }}</span>
-          <span slot="list-info-top-right" class="app-list-item-date">{{ getDate(evt) }}</span>
+          <span slot="list-info-top-right" class="app-list-item-date">{{ getDate(evt.modified_date) }}</span>
           <span
             slot="list-info-bottom-left"
             class="app-list-item-content"
@@ -157,8 +157,8 @@ export default {
     }
   },
   methods: {
-    getDate(evt) {
-      return format(new Date(evt.timestamp.seconds), "MMM DD");
+    getDate(date) {
+      return format(new Date(date), "MMM DD");
     },
     focusTextarea() {
       this.$nextTick(() => {
@@ -198,6 +198,7 @@ export default {
         .then(() => {
           this.onClosedEditModal();
           this.$notifySuccess("UPDATE SUCCESSFUL");
+          this.$emit('update')
         })
         .catch(err => {
           console.error("ERROR", err);
