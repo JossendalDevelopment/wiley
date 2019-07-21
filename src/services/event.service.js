@@ -24,9 +24,18 @@ instance.createEvent = async function (event) {
     }
 };
 
+// instance.updateEvent = async function (event) {
+//     try {
+//         const resp = await this.post('/update_event', { event });
+//         return resp.data;
+//     } catch (err) {
+//         return err;
+//     }
+// };
+
 instance.updateEvent = async function (event) {
     try {
-        const resp = await this.post('/update_event', { event });
+        const resp = await this.post('/update_event_postgres', { event });
         return resp.data;
     } catch (err) {
         return err;

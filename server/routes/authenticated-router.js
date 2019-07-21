@@ -63,6 +63,38 @@ router.post('/update_event', async (req, res) => {
     }
 });
 
+// @METHOD: POST
+// @PARAMS: new event object
+// @RETURNS: id string
+router.post('/update_event_postgres', async (req, res) => {
+    const event = req.body.event;
+    try {
+        // this will return a json object of all events fom metadata.json file
+        // const newEvents = await writeMetadataFile(event);
+        // console.log('NEW EVENTS', newEvents);
+        // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
+        postgres.none('UPDATE events SET user_classification = $1, classification_description = $2, modified_date = $3, thumb_250x250 = $4, classified_by = $5 WHERE id = $6',
+            [
+                event.user_classification,
+                event.classification_description,
+                new Date().toISOString(),
+                event.thumb_250x250,
+                event.classified_by,
+                event.id
+            ])
+            .then((response) => {
+                console.log("SUCCESS", response)
+                return formatResponse(res, 'success', event);
+            })
+            .catch(error => {
+                throw new Error(error)
+            });
+    } catch (error) {
+        console.log('ERROR', error);
+        formatResponse(res, 'error', error);
+    }
+});
+
 // @METHOD: GET
 // @RETURNS: array of all events
 router.get('/get_all_events', (req, res) => {
@@ -98,23 +130,6 @@ router.get('/get_all_events_postgres', (req, res) => {
             console.log("ERROR", error)
             formatResponse(res, 'error', error);
         });
-    // COLLECTION_REF.get()
-    //     .then(
-    //         querySnapshot => {
-    //             querySnapshot.forEach(doc => {
-    //                 let newDoc = doc.data();
-    //                 newDoc.id = doc.id;
-    //                 result.push(newDoc);
-    //             });
-    //             formatResponse(res, 'success', result);
-    //         },
-    //         error => {
-    //             formatResponse(res, 'error', error);
-    //         }
-    //     )
-    //     .catch(error => {
-    //         formatResponse(res, 'error', error);
-    //     });
 });
 
 // @METHOD: GET
