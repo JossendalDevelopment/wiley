@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+var pgp = require('pg-promise')(/* options */)
 // const ejwt = require('express-jwt');
 // const config = require('config');
 
@@ -26,6 +27,25 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: db_url,
 });
+
+// postgres initialization
+var db = pgp(process.env.DB_URL)
+
+const initPostgres = () => {
+    // db.one('SELECT $1 AS value', 123)
+    db.any('SELECT * FROM test')
+        .then((data) => {
+            console.log('INIT DATA:', data)
+        })
+        .catch((error) => {
+            console.log('INIT ERROR:', error)
+            console.log("RETRYING")
+            setTimeout(() => {
+                initPostgres()
+            }, 3000)
+        })
+}
+initPostgres();
 
 // routers
 const publicRouter = require('./routes/public-router');
