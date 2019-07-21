@@ -35,7 +35,7 @@ const initPostgres = () => {
     // db.one('SELECT $1 AS value', 123)
     db.any('SELECT * FROM test')
         .then((data) => {
-            console.log('INIT DATA:', data)
+            console.log('SUCCESS:', data)
         })
         .catch((error) => {
             console.log('INIT ERROR:', error)
