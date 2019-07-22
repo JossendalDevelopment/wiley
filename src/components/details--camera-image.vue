@@ -34,7 +34,7 @@
           <!-- Bounding box -->
           <rect
             :x="source.bbox_xmin"
-            :y="source.image_height - source.bbox_ymin"
+            :y="source.bbox_ymin"
             :width="source.bbox_width"
             :height="source.bbox_height"
             fill="transparent"
@@ -42,16 +42,10 @@
             stroke-width="5"
           />
           <!-- name/percentage box -->
-          <rect
-            :x="source.bbox_xmin"
-            :y="source.image_height - source.bbox_ymin"
-            width="80"
-            height="20"
-            fill="red"
-          />
+          <rect :x="source.bbox_xmin" :y="source.bbox_ymin" width="80" height="20" fill="red" />
           <text
             :x="source.bbox_xmin + 3"
-            :y="source.image_height - source.bbox_ymin + 14"
+            :y="source.bbox_ymin + 14"
             font-family="DIN Condensed"
             font-size="14"
             fill="black"
@@ -100,7 +94,7 @@ export default {
   }),
   mounted() {
     this.toDataURL(
-      `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
+      `${process.env.VUE_APP_FILESERVER_BASE_URL}/${this.source.image_filepath}/${this.source.image_filename}`
     ).then(dataUrl => {
       this.pngDataUrl = dataUrl;
       setTimeout(() => {
@@ -163,9 +157,12 @@ export default {
           (this.source.bbox_xmin + this.source.bbox_width / 2);
         let y =
           this.source.image_height / 2 -
-          (this.source.image_height -
-            this.source.bbox_ymin +
-            this.source.bbox_height / 2);
+          (this.source.bbox_ymin + this.source.bbox_height / 2);
+        // let y =
+        //   this.source.image_height / 2 -
+        //   (this.source.image_height -
+        //     this.source.bbox_ymin +
+        //     this.source.bbox_height / 2);
         // prevent an image from being translated beyond its x min/max, causing blank space
         let negX = x < 0 ? true : false;
         let negY = y < 0 ? true : false;
@@ -192,7 +189,7 @@ export default {
     source() {
       // recreate thumbnail every time source prop changes
       this.toDataURL(
-        `http://localhost:3000${this.source.image_filepath}/${this.source.image_filename}`
+        `${process.env.VUE_APP_FILESERVER_BASE_URL}/${this.source.image_filepath}/${this.source.image_filename}`
       ).then(dataUrl => {
         this.pngDataUrl = dataUrl;
         setTimeout(() => {

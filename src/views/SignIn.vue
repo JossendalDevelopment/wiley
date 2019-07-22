@@ -75,7 +75,6 @@
     <v-flex xs6 class="container-image" ml-0>
       <v-layout align-center justify-center fill-height>
         <v-img max-width="55%" :src="'/assets/images/wiley_logo_xl.png'" />
-        <pre>{{process}}</pre>
       </v-layout>
     </v-flex>
   </v-layout>
@@ -86,11 +85,7 @@ export default {
     employeeEmail: "",
     password: "",
     remember: false,
-    process: null
   }),
-  mounted() {
-      this.process = process.env
-  },
   methods: {
     async login() {
       // TODO decouple login success from setting events success or have alternate way to get events?

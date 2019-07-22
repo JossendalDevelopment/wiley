@@ -4,6 +4,6 @@
 module.exports = {
     // used in server/metaDataFile.js
     image_host: 'localhost',
-    image_filepath: '/mnt/sol2_video/east-inferenced/raw',
+    image_filepath: 'public/mnt/sol2_video/east-inferenced/raw',
     port: 3000,
 };

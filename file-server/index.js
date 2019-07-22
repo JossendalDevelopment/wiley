@@ -27,14 +27,14 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/healthcheck', function(req, res) {
+app.get('/healthcheck', function (req, res) {
     // do app logic here to determine if app is truly healthy
     // you should return 200 if healthy, and anything else will fail
     // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
     res.send('I am happy and healthy\n');
 });
 
-app.use('/file', publicRouter);
+app.use('/', publicRouter);
 
 const server = app.listen(PORT, () => {
     console.log('File Server listening on port ' + PORT);
@@ -75,7 +75,7 @@ let procs = [];
             );
         });
     }
-    process.on('exit', function() {
+    process.on('exit', function () {
         console.log('Terminating streaming processes on exit');
         procs.forEach(p => p.kill());
     });
@@ -86,7 +86,7 @@ let procs = [];
 ************************************************************* */
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 

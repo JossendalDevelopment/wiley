@@ -115,6 +115,7 @@ router.get('/get_all_classified_events', (req, res) => {
 // pulls metadata.json file for given day, loads it into firestore, and returns that json to client
 router.get('/set_yesterdays_events', async (req, res) => {
     try {
+        console.log("TRYING")
         // this will return a json object of all events fom metadata.json file
         const eventsJson = await getMetadataFile();
         // load all events into the database
