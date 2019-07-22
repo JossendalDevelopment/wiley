@@ -35,11 +35,11 @@ router.post('/create_event', (req, res) => {
 
 // @METHOD: POST
 // @PARAMS: new event object
-// @RETURNS: id string
+// @RETURNS: updated event object
 router.post('/update_event_postgres', async (req, res) => {
     const event = req.body.event;
     try {
-        // this will return a json object of all events fom metadata.json file
+        // this will return a the 
         // const newEvents = await writeMetadataFile(event);
         // console.log('NEW EVENTS', newEvents);
         // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
