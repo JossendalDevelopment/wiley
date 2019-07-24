@@ -74,6 +74,9 @@ const deleteUnverifiedJson = async (filepath) => {
     return await new Promise((resolve, reject) => {
         fs.unlink(path.join(__dirname, '../public', filepath), (err) => {
             console.log("DELETE ERROR", err)
+            if (err && err.code == 'ENOENT') {
+                resolve({ status: 200, message: "file does not exist" })
+            }
             err ? reject({ status: 500, message: err }) : resolve({ status: 200, message: "file deleted successfully" })
         });
     });

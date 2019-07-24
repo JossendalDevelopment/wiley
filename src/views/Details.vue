@@ -153,7 +153,7 @@
         slot="detailsButton"
         dark
         style="background-color:#FFF; color:black;"
-        :disabled="!classificationDescription"
+        :disabled="false"
         @click="setFalseAlarmClassification('false-alarm')"
       >Confirm</v-btn>
     </app-dialog>
@@ -222,6 +222,7 @@ export default {
             let newDoc = doc.data();
             result.push(newDoc);
           });
+          console.log("UNCLASIFIED COUNT", result.length)
 
           // pushes all events to vuex store
           this.$events.setEvents(result);
@@ -293,6 +294,7 @@ export default {
         );
         this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
         this.$refs.cameraImage.zoomOut();
+        this.disabled = false;
       }
       this.unclassifiedRemaining = this.unclassifiedEventsCount;
     },
@@ -318,7 +320,6 @@ export default {
         .then(() => {
           this.$notifyClassification(event.user_classification.toUpperCase());
           setTimeout(() => {
-            this.disabled = false;
             this.goNext();
             // timing the fade out transition with the classification animation
           }, 950);

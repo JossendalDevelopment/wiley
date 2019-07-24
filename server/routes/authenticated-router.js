@@ -40,11 +40,10 @@ router.post('/update_event', async (req, res) => {
     try {
         // this will return a json object of all events fom metadata.json file
         const writeResponse = await writeMetadataFile(event);
-        console.log('WRITE RESPONSE', writeResponse);
+        console.log('WRITE UPDATES RESPONSE', writeResponse);
         if (writeResponse.status !== 200) {
             return formatResponse(res, 'error', writeResponse.message);
         }
-        console.log("FIREBASE", event)
         // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
         COLLECTION_REF.doc(event.eventId)
             .update({

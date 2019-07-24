@@ -78,11 +78,8 @@ const writeMetadataFile = newEvent =>
                 reject({ statusCode: res.statusCode, message: 'Could not connect to filserver for writing' });
             }
 
-            res.on('data', chunk => {
-                console.log("MF RESP", JSON.parse(chunk));
-                resolve(JSON.parse(chunk));
-                // in case json file is huge, parse it in chunks
-                // body1.push(chunk);
+            res.on('data', data => {
+                resolve(JSON.parse(data));
             });
 
         });

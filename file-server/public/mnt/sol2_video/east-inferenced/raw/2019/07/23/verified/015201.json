@@ -6,7 +6,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -19,7 +19,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -30,7 +30,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -43,7 +43,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -54,7 +54,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -67,7 +67,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -78,7 +78,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -91,7 +91,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -102,7 +102,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -115,7 +115,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -126,7 +126,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -139,7 +139,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -150,7 +150,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -163,7 +163,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -174,7 +174,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -187,7 +187,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -198,7 +198,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -211,7 +211,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -222,7 +222,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -235,7 +235,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -246,7 +246,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -259,7 +259,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -270,7 +270,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -283,7 +283,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -294,7 +294,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -307,7 +307,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -318,7 +318,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -331,7 +331,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -342,7 +342,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -355,7 +355,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -366,7 +366,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -379,7 +379,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -390,7 +390,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -403,7 +403,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -414,7 +414,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -427,7 +427,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -438,7 +438,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -451,7 +451,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -462,7 +462,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -475,7 +475,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -486,7 +486,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -499,7 +499,7 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }{
@@ -510,7 +510,7 @@
  "camera": null,
  "classification_description": "",
  "classified_by": "admin@email.com",
- "eventId": "1TnVfuAlmsv4IcvMkdGc",
+ "eventId": "evDM4TGj5FcvayfU4Due",
  "id": "015201",
  "image_filename": "/detect_015201.jpg",
  "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
@@ -523,7 +523,31 @@
  "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
  "thumb_height": 230,
  "thumb_width": 250,
- "user_classification": "contractor",
+ "user_classification": "train",
+ "video_clip_filepath": null,
+ "video_clip_name": null
+}{
+ "bbox_height": "192",
+ "bbox_width": "208",
+ "bbox_xmin": "242",
+ "bbox_ymin": "107",
+ "camera": null,
+ "classification_description": "",
+ "classified_by": "admin@email.com",
+ "eventId": "evDM4TGj5FcvayfU4Due",
+ "id": "015201",
+ "image_filename": "/detect_015201.jpg",
+ "image_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23",
+ "image_height": "480",
+ "image_width": "640",
+ "inferenced_classification": "train",
+ "inferenced_percentage": "0.9543318",
+ "modified_date": null,
+ "thumb_filename": "thumb_015201.jpg",
+ "thumb_filepath": "/mnt/sol2_video/east-inferenced/raw/2019/07/23/thumbnails",
+ "thumb_height": 230,
+ "thumb_width": 250,
+ "user_classification": "train",
  "video_clip_filepath": null,
  "video_clip_name": null
 }

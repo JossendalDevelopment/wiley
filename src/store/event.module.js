@@ -27,6 +27,15 @@ export const eventHistory = {
                 }
             });
         },
+        updateSessionEvent(state, payload) {
+            state.sessionEvents = state.sessionEvents.map(event => {
+                if (event.id === payload.event.id) {
+                    return payload.event;
+                } else {
+                    return event;
+                }
+            });
+        },
         setEvents(state, payload) {
             state.events = payload;
         },
@@ -55,7 +64,7 @@ export const eventHistory = {
         },
         // eslint-disable-next-line no-unused-vars
         updateEvent({ commit }, payload) {
-            // commit('updateEvent', payload);
+            commit('updateSessionEvent', payload);
             commit('startLoading');
             return api.updateEvent(payload.event).then(resp => {
                 return resp;
