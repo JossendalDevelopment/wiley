@@ -30,5 +30,7 @@ yarn-error.log*
 docker-compose*.yml
 
 # /file-server data files
-file-server/public/live/streams/*
-file-server/public/mnt/*
+file-server/public/live/streams/one/*
+file-server/public/live/streams/two/*
+file-server/public/mnt/sol2_video/east-inferenced/*
+file-server/public/mnt/sol2_video/west-inferenced/*
