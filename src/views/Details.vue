@@ -334,7 +334,6 @@ export default {
         if (next.user_classification === type) {
           prev++;
         }
-        console.log("COUNT", prev)
         return prev;
       }, 0);
     },

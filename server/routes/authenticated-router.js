@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const formatResponse = require('../helpers/format-response.js');
 const {
     getMetadataFile,
-    // writeMetadataFile,
+    writeMetadataFile,
 } = require('../helpers/metadataFile.js');
 
 var router = express.Router();
@@ -39,8 +39,12 @@ router.post('/update_event', async (req, res) => {
     const event = req.body.event;
     try {
         // this will return a json object of all events fom metadata.json file
-        // const newEvents = await writeMetadataFile(event);
-        // console.log('NEW EVENTS', newEvents);
+        const writeResponse = await writeMetadataFile(event);
+        console.log('WRITE RESPONSE', writeResponse);
+        if (writeResponse.status !== 200) {
+            return formatResponse(res, 'error', writeResponse.message);
+        }
+        console.log("FIREBASE", event)
         // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
         COLLECTION_REF.doc(event.eventId)
             .update({
@@ -57,7 +61,7 @@ router.post('/update_event', async (req, res) => {
                 return formatResponse(res, 'error', error);
             });
     } catch (error) {
-        console.log('ERROR', error);
+        console.log('ERROR IN /update_event', error);
         formatResponse(res, 'error', error);
     }
 });
@@ -88,7 +92,6 @@ router.get('/get_all_events', (req, res) => {
 // @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.get('/get_all_classified_events', (req, res) => {
-    console.log("USING PORT", process.env.PORT)
     let result = [];
     COLLECTION_REF.where('user_classification', '>', '')
         .get()
@@ -115,7 +118,6 @@ router.get('/get_all_classified_events', (req, res) => {
 // pulls metadata.json file for given day, loads it into firestore, and returns that json to client
 router.get('/set_yesterdays_events', async (req, res) => {
     try {
-        console.log("TRYING")
         // this will return a json object of all events fom metadata.json file
         const eventsJson = await getMetadataFile();
         // load all events into the database

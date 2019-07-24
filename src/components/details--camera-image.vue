@@ -44,15 +44,15 @@
           <!-- name/percentage box -->
           <rect :x="source.bbox_xmin" :y="source.bbox_ymin" width="80" height="20" fill="red" />
           <text
-            :x="source.bbox_xmin + 3"
-            :y="source.bbox_ymin + 14"
+            :x="+source.bbox_xmin + 4"
+            :y="+source.bbox_ymin + 14"
             font-family="DIN Condensed"
             font-size="14"
             fill="black"
-          >{{ source.inferenced_classification }} {{ source.inferenced_percentage}}%</text>
+          >{{ source.inferenced_classification }} {{ (+source.inferenced_percentage * 100).toFixed(0) }}%</text>
           <!-- black info box -->
           <rect
-            :x="source.image_width - 175"
+            :x="+source.image_width - 175"
             :y="5"
             :width="170"
             :height="20"
@@ -61,7 +61,7 @@
             stroke-width="1"
           />
           <text
-            :x="source.image_width - 165"
+            :x="+source.image_width - 165"
             :y="20"
             font-family="DIN Condensed"
             font-size="14"
@@ -152,17 +152,15 @@ export default {
     setScale() {
       if (this.zoomed) {
         let img = document.querySelector("#svgimage").getBoundingClientRect();
+
         let x =
-          this.source.image_width / 2 -
-          (this.source.bbox_xmin + this.source.bbox_width / 2);
+          +this.source.image_width / 2 -
+          (+this.source.bbox_xmin + +this.source.bbox_width / 2);
+
         let y =
-          this.source.image_height / 2 -
-          (this.source.bbox_ymin + this.source.bbox_height / 2);
-        // let y =
-        //   this.source.image_height / 2 -
-        //   (this.source.image_height -
-        //     this.source.bbox_ymin +
-        //     this.source.bbox_height / 2);
+          +this.source.image_height / 2 -
+          (+this.source.bbox_ymin + +this.source.bbox_height / 2);
+
         // prevent an image from being translated beyond its x min/max, causing blank space
         let negX = x < 0 ? true : false;
         let negY = y < 0 ? true : false;

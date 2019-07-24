@@ -6,15 +6,13 @@ const exec = require('child_process').exec;
 
 const PORT = process.env.PORT || 3000;
 
-// routers
-const publicRouter = require('./routes/public-router');
 
 var app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: '30mb' }));
+app.use(express.urlencoded({ extended: true, limit: '30mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -33,6 +31,9 @@ app.get('/healthcheck', function (req, res) {
     // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
     res.send('I am happy and healthy\n');
 });
+
+// routers
+const publicRouter = require('./routes/public-router');
 
 app.use('/', publicRouter);
 

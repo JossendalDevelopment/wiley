@@ -20,6 +20,13 @@
             class="app-list-item-image"
             :src="evt.thumb_250x250"
           ></v-img>
+          <!-- <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
+            :src="generateThumbUrl(evt)"
+          ></v-img>-->
           <span slot="list-info-top-left" class="app-list-item-username">{{ evt.classified_by }}</span>
           <span slot="list-info-top-right" class="app-list-item-date">{{ getDate(evt) }}</span>
           <span
@@ -53,6 +60,13 @@
               class="edit-modal-image"
               :src="selectedForEdit && selectedForEdit.thumb_250x250"
             ></v-img>
+            <!-- <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
+            :src="selectedForEdit && generateThumbUrl(selectedForEdit)"
+            ></v-img>-->
           </v-flex>
           <v-flex xs8 pa-3>
             <v-btn
@@ -157,6 +171,9 @@ export default {
     }
   },
   methods: {
+    generateThumbUrl(evt) {
+      return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;
+    },
     getDate(evt) {
       return format(new Date(evt.timestamp.seconds), "MMM DD");
     },
