@@ -72,16 +72,16 @@
           </v-flex>
           <v-flex mx-1>
             <v-btn
-              @click="setClassification('contractor')"
+              @click="setClassification('train')"
               flat
               :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('contractor')"
+              :style="selected('train')"
               large
             >
-              contractor
+              train
               <span class="control-numeral">2</span>
             </v-btn>
-            <p class="control-text text-xs-center">{{ getTotalByType('contractor') }}</p>
+            <p class="control-text text-xs-center">{{ getTotalByType('train') }}</p>
           </v-flex>
           <v-flex mx-1>
             <v-btn
@@ -189,7 +189,7 @@ export default {
       if (String.fromCharCode(e.keyCode) === "1") {
         this.setClassification("employee");
       } else if (String.fromCharCode(e.keyCode) === "2") {
-        this.setClassification("contractor");
+        this.setClassification("train");
       } else if (String.fromCharCode(e.keyCode) === "3") {
         this.setClassification("intruder");
       } else if (String.fromCharCode(e.keyCode) === "4") {

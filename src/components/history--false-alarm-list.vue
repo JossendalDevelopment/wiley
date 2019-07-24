@@ -80,9 +80,9 @@
               block
               flat
               class="classification-btn"
-              @click="() => setNewClass('contractor')"
-              :style="newClass === 'contractor' ? selectedClass : ''"
-            >contractor</v-btn>
+              @click="() => setNewClass('train')"
+              :style="newClass === 'train' ? selectedClass : ''"
+            >train</v-btn>
             <v-btn
               block
               flat
