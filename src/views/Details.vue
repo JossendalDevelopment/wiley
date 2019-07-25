@@ -186,15 +186,15 @@ export default {
   }),
   created() {
     this.listeners = e => {
-      if (String.fromCharCode(e.keyCode) === "1") {
+      if (String.fromCharCode(e.keyCode) === "1" || e.keyCode === 97) {
         this.setClassification("employee");
-      } else if (String.fromCharCode(e.keyCode) === "2") {
+      } else if (String.fromCharCode(e.keyCode) === "2" || e.keyCode === 98) {
         this.setClassification("train");
-      } else if (String.fromCharCode(e.keyCode) === "3") {
+      } else if (String.fromCharCode(e.keyCode) === "3" || e.keyCode === 99) {
         this.setClassification("intruder");
-      } else if (String.fromCharCode(e.keyCode) === "4") {
+      } else if (String.fromCharCode(e.keyCode) === "4" || e.keyCode === 100) {
         this.setClassification("animal");
-      } else if (String.fromCharCode(e.keyCode) === "5") {
+      } else if (String.fromCharCode(e.keyCode) === "5" || e.keyCode === 101) {
         this.openFalseAlarmModal();
       } else if (e.keyCode === 32) {
         // space bar zoom in/out
@@ -222,7 +222,6 @@ export default {
             let newDoc = doc.data();
             result.push(newDoc);
           });
-          console.log("UNCLASIFIED COUNT", result.length)
 
           // pushes all events to vuex store
           this.$events.setEvents(result);
@@ -294,7 +293,12 @@ export default {
         );
         this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
         this.$refs.cameraImage.zoomOut();
-        this.disabled = false;
+        setTimeout(() => {
+            // the buttons need to be disabled until all the svg layers can be loaded 
+            // in order to create the thumbnail correctly
+            // TODO add disable function to vuex
+            this.disabled = false;
+        }, 900)
       }
       this.unclassifiedRemaining = this.unclassifiedEventsCount;
     },

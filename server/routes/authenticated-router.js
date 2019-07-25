@@ -9,7 +9,6 @@ const {
 var router = express.Router();
 
 const db = admin.firestore();
-console.log("DB CONNECTION:", db)
 const COLLECTION_REF = db.collection('classified_events');
 
 router.get('/authenticated', (req, res) => {
@@ -45,24 +44,19 @@ router.post('/update_event', async (req, res) => {
         if (writeResponse.status !== 200) {
             return formatResponse(res, 'error', writeResponse.message);
         }
-        // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
-        COLLECTION_REF.doc(event.eventId)
+        console.log("EVENT ID", event.eventId)
+        await COLLECTION_REF.doc(event.eventId)
             .update({
                 user_classification: event.user_classification,
                 classification_description: event.classification_description,
                 timestamp: admin.firestore.FieldValue.serverTimestamp(),
-                thumb_250x250: event.thumb_250x250,
+                thumb_250x250: event.thumb_250x250 || null,
                 classified_by: event.classified_by,
             })
-            .then(() => {
-                return formatResponse(res, 'success', event.id);
-            })
-            .catch(error => {
-                return formatResponse(res, 'error', error);
-            });
+        return formatResponse(res, 'success', event.id);
     } catch (error) {
         console.log('ERROR IN /update_event', error);
-        formatResponse(res, 'error', error);
+        formatResponse(res, 'update event error', error);
     }
 });
 
@@ -151,38 +145,23 @@ router.get('/set_yesterdays_events', async (req, res) => {
     try {
         // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
+
         console.log("RETRIEVED JSON DATA - SHOULD RETURN 50:", eventsJson.length)
-        console.log("EVENT TYPE:", typeof eventsJson[0])
         // load all events into the database
         eventsJson.forEach((event, idx) => {
-            let batch = db.batch();
-            let newEventRef = COLLECTION_REF.doc();
             if (hasAllKeys(event)) {
-                batch.set(newEventRef, event);
-                batch.update(newEventRef, { event_id: newEventRef.id });
+                COLLECTION_REF.doc(event.id).set({
+                    ...event,
+                    eventId: event.id,
+                    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+                })
             } else {
                 console.log("JSON FAILED:", eventsJson[idx])
             }
-            batch.commit().catch(error => {
-                console.log("BATCH UPDATE ERROR:", error)
-                // throw new Error(error);
-            });
-
-            // COLLECTION_REF.add(event)
-            // .then(docRef => {
-            //     COLLECTION_REF.doc(docRef.id).update({
-            //         eventId: docRef.id,
-            //         timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            //     });
-            //     formatResponse(res, 'success', docRef.id);
-            // })
-            // .catch(error => {
-            //     formatResponse(res, 'error', error);
-            // });
         });
         res.json(eventsJson);
     } catch (error) {
-        console.log("BATCH ERROR:", error)
+        console.log(" ERROR:", error)
         formatResponse(res, 'error', error);
     }
 });
