@@ -9,6 +9,7 @@ const {
 var router = express.Router();
 
 const db = admin.firestore();
+console.log("DB CONNECTION:", db)
 const COLLECTION_REF = db.collection('classified_events');
 
 router.get('/authenticated', (req, res) => {
@@ -116,25 +117,68 @@ router.get('/get_all_classified_events', (req, res) => {
 // @RETURNS: json array object
 // pulls metadata.json file for given day, loads it into firestore, and returns that json to client
 router.get('/set_yesterdays_events', async (req, res) => {
+    const hasAllKeys = obj => {
+        const keys = [
+            "bbox_height",
+            "bbox_width",
+            "bbox_xmin",
+            "bbox_ymin",
+            "camera",
+            "classification_description",
+            "classified_by",
+            "eventId",
+            "id",
+            "image_filename",
+            "image_filepath",
+            "image_height",
+            "image_width",
+            "inferenced_classification",
+            "inferenced_percentage",
+            "modified_date",
+            "thumb_filename",
+            "thumb_filepath",
+            "thumb_height",
+            "thumb_width",
+            "user_classification",
+            "video_clip_filepath",
+            "video_clip_name"
+        ];
+        return keys.every((item) => {
+            return obj.hasOwnProperty(item);
+        });
+    };
+
     try {
         // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
         console.log("RETRIEVED JSON DATA - SHOULD RETURN 50:", eventsJson.length)
+        console.log("EVENT TYPE:", typeof eventsJson[0])
         // load all events into the database
-        eventsJson.forEach(event => {
+        eventsJson.forEach((event, idx) => {
             let batch = db.batch();
             let newEventRef = COLLECTION_REF.doc();
-            batch.set(newEventRef, event);
-            batch.update(newEventRef, { eventId: newEventRef.id });
-            batch
-                .commit()
-                .then(() => {
-                    // the response object of a batch is batch data. Maybe validate batches or something?
-                })
-                .catch(error => {
-                    console.log("BATCH UPDATE ERROR:", error)
-                    throw new Error(error);
-                });
+            if (hasAllKeys(event)) {
+                batch.set(newEventRef, event);
+                batch.update(newEventRef, { event_id: newEventRef.id });
+            } else {
+                console.log("JSON FAILED:", eventsJson[idx])
+            }
+            batch.commit().catch(error => {
+                console.log("BATCH UPDATE ERROR:", error)
+                // throw new Error(error);
+            });
+
+            // COLLECTION_REF.add(event)
+            // .then(docRef => {
+            //     COLLECTION_REF.doc(docRef.id).update({
+            //         eventId: docRef.id,
+            //         timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            //     });
+            //     formatResponse(res, 'success', docRef.id);
+            // })
+            // .catch(error => {
+            //     formatResponse(res, 'error', error);
+            // });
         });
         res.json(eventsJson);
     } catch (error) {
