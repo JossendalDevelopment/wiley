@@ -28,7 +28,7 @@ yarn-error.log*
 *.sw?
 
 # docker
-docker-compose*.yml
+**/docker-compose*.yml
 
 # /file-server data files
 file-server/public/live/streams/one/*
