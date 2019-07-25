@@ -3,6 +3,7 @@ const Event = require('../types/Event');
 
 const getMetadataFile = () =>
     new Promise((resolve, reject) => {
+        console.log("FILESERVER_BASE_URL:", process.env.FILESERVER_BASE_URL)
         const get_options = {
             host: process.env.FILESERVER_BASE_URL || 'localhost', // change this from localhost on dev to fileserver(container name) in prod
             port: '3000',
@@ -21,7 +22,7 @@ const getMetadataFile = () =>
 
             if (res.statusCode < 200 || res.statusCode >= 300) {
                 // First reject
-                reject('statusCode:', res.statusCode);
+                reject(new Error({ statusCode: res.statusCode, message: 'Get metadata file request failed on connection' }));
             }
 
             var body = [];
@@ -37,14 +38,14 @@ const getMetadataFile = () =>
                     // resolve load all events into the database
                     resolve(body);
                 } catch (e) {
-                    reject(e);
+                    reject(new Error({ statusCode: res.statusCode, message: 'Get metadata file request failed on parsing of buffer' }));
                 }
             });
         });
         get_req.end();
         get_req.on('error', error => {
             console.error('ERROR GETTING YESTERDAYS EVENTS:', error);
-            reject(error);
+            reject(new Error({ statusCode: 500, message: 'Get metadata file request failed' }));
         });
     });
 
@@ -75,7 +76,7 @@ const writeMetadataFile = newEvent =>
             // otherwise we get back binary
             if (res.statusCode < 200 || res.statusCode >= 300) {
                 // First reject
-                reject({ statusCode: res.statusCode, message: 'Could not connect to filserver for writing' });
+                reject(new Error({ statusCode: res.statusCode, message: 'Could not connect to filserver for writing' }));
             }
 
             res.on('data', data => {
@@ -84,8 +85,8 @@ const writeMetadataFile = newEvent =>
 
         });
         post_req.on('error', error => {
-            console.error('ERROR IN WRITE REQUEST:', error);
-            reject(error);
+            console.error('ERROR IN WRITE REQUEST:');
+            reject(new Error({ statusCode: 500, message: error }));
         });
         post_req.write(postData)
         post_req.end();

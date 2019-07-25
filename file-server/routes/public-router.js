@@ -35,7 +35,7 @@ const arrayFromJsonFiles = async (filepath) => {
     return await new Promise((resolve, reject) => {
         fs.readdir(filepath, async (err, filenames) => {
             let promises = []
-            if (err) reject({ status: 500, message: err })
+            if (err) reject(new Error({ status: 500, message: err }))
             for (let i = 0; i < 25; i++) {
                 filenames[i] && promises.push(readFileContents(filepath, filenames[i]))
             }
@@ -48,16 +48,17 @@ const readFileContents = async (filepath, file) => {
     // does the actual reading for arrayFromJsonFiles
     return await new Promise((resolve, reject) => {
         fs.readFile(`${filepath}/${file}`, 'utf-8', async (err, content) => {
-            console.log("PARSE ERROR", err)
-            err ? reject({ status: 500, message: err }) : resolve(JSON.parse(content));
+            err ? reject(new Error({ status: 500, message: err })) : resolve(JSON.parse(content));
         })
     })
 };
 
 const createNewJsonFile = async (filepath, data) => {
     // write json with updated classification to /verified directory
-    const fileWriteStream = fs.createWriteStream(path.join(__dirname, '../public', filepath));
-    fileWriteStream.on('error', (err) => Promise.reject({ status: 500, message: err }))
+    const pathname = path.join(__dirname, '../public', filepath);
+    console.log("DELETING FILES AT:", pathname)
+    const fileWriteStream = fs.createWriteStream(pathname);
+    fileWriteStream.on('error', (err) => Promise.reject(new Error({ status: 500, message: err })))
 
     for (let i = 0; i < 1e6; i++) {
         const ableToWrite = fileWriteStream.write(JSON.stringify(data, null, 1));
@@ -72,12 +73,13 @@ const createNewJsonFile = async (filepath, data) => {
 const deleteUnverifiedJson = async (filepath) => {
     // delete unverified json file after it has been classified
     return await new Promise((resolve, reject) => {
-        fs.unlink(path.join(__dirname, '../public', filepath), (err) => {
-            console.log("DELETE ERROR", err)
+        const pathname = path.join(__dirname, '../public', filepath);
+        console.log("DELETING FILES AT:", pathname)
+        fs.unlink(pathname, (err) => {
             if (err && err.code == 'ENOENT') {
                 resolve({ status: 200, message: "file does not exist" })
             }
-            err ? reject({ status: 500, message: err }) : resolve({ status: 200, message: "file deleted successfully" })
+            err ? reject(new Error({ status: 500, message: err })) : resolve({ status: 200, message: "file deleted successfully" })
         });
     });
 };

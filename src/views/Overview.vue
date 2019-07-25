@@ -31,6 +31,7 @@
 <script>
 import VideoLiveFeed from "@/components/video--live-feed.vue";
 
+import config from '../../config/production';
 import format from "date-fns/format";
 
 export default {
@@ -46,7 +47,7 @@ export default {
         camName: "Rail-EAST",
         sourceData: {
           // These urls point to the file server, not the express api server
-          src: "http://localhost:3000/live/streams/one/480p.m3u8",
+          src: config.stream_data_one,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -56,7 +57,7 @@ export default {
         camNumber: 2,
         camName: "Rail-WEST",
         sourceData: {
-          src: "http://localhost:3000/live/streams/two/480p.m3u8",
+          src: config.stream_data_two,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"

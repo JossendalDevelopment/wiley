@@ -117,8 +117,9 @@ router.get('/get_all_classified_events', (req, res) => {
 // pulls metadata.json file for given day, loads it into firestore, and returns that json to client
 router.get('/set_yesterdays_events', async (req, res) => {
     try {
-        // this will return a json object of all events fom metadata.json file
+        // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
+        console.log("RETRIEVED JSON DATA - SHOULD RETURN 50:", eventsJson.length)
         // load all events into the database
         eventsJson.forEach(event => {
             let batch = db.batch();
@@ -131,11 +132,13 @@ router.get('/set_yesterdays_events', async (req, res) => {
                     // the response object of a batch is batch data. Maybe validate batches or something?
                 })
                 .catch(error => {
+                    console.log("BATCH UPDATE ERROR:", error)
                     throw new Error(error);
                 });
         });
         res.json(eventsJson);
     } catch (error) {
+        console.log("BATCH ERROR:", error)
         formatResponse(res, 'error', error);
     }
 });
