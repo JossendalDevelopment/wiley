@@ -33,4 +33,5 @@ yarn-error.log*
 # /file-server data files
 file-server/public/live/streams/one/*.ts
 file-server/public/live/streams/two/*.ts
-file-server/public/mnt/sol2_video/*
+file-server/public/mnt/sol2_video/east-inferenced/*/
+file-server/public/mnt/sol2_video/west-inferenced/*/
