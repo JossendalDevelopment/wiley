@@ -6,15 +6,13 @@ const exec = require('child_process').exec;
 
 const PORT = process.env.PORT || 3000;
 
-// routers
-const publicRouter = require('./routes/public-router');
 
 var app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: '30mb' }));
+app.use(express.urlencoded({ extended: true, limit: '30mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -27,14 +25,17 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/healthcheck', function(req, res) {
+app.get('/healthcheck', function (req, res) {
     // do app logic here to determine if app is truly healthy
     // you should return 200 if healthy, and anything else will fail
     // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
     res.send('I am happy and healthy\n');
 });
 
-app.use('/file', publicRouter);
+// routers
+const publicRouter = require('./routes/public-router');
+
+app.use('/', publicRouter);
 
 const server = app.listen(PORT, () => {
     console.log('File Server listening on port ' + PORT);
@@ -75,7 +76,7 @@ let procs = [];
             );
         });
     }
-    process.on('exit', function() {
+    process.on('exit', function () {
         console.log('Terminating streaming processes on exit');
         procs.forEach(p => p.kill());
     });
@@ -86,7 +87,7 @@ let procs = [];
 ************************************************************* */
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 

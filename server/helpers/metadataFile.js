@@ -1,31 +1,13 @@
 const http = require('http');
-const conf = require('../config/production')
-// const fs = require('fs');
-
-// TODO potential issue of someone trying to write to the json file from the wrong day
-
-const createFilePath = () => {
-    // create filepath from yesterdays date
-    const date = new Date();
-    const year = date.getFullYear();
-    let month = date.getMonth() + 1; // months are zero indexed
-    month = month.toString().padStart(2, '0');
-    const day = date
-        .getUTCDate() // TODO -1 because we want yesterdays images, foregoing this for ease of testing for now
-        .toString()
-        .padStart(2, '0');
-    return `${conf.image_filepath}${year}/${month}/${day}/metadata.json`;
-};
+const Event = require('../types/Event');
 
 const getMetadataFile = () =>
     new Promise((resolve, reject) => {
-        const metaFilePath = createFilePath();
-        console.log("METADATA FILE PATH:", metaFilePath)
-
+        console.log("FILESERVER_BASE_URL:", process.env.FILESERVER_BASE_URL)
         const get_options = {
             host: process.env.FILESERVER_BASE_URL || 'localhost', // change this from localhost on dev to fileserver(container name) in prod
             port: '3000',
-            path: metaFilePath,
+            path: '/metadata',
             method: 'GET',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -33,13 +15,14 @@ const getMetadataFile = () =>
         };
 
         const get_req = http.request(get_options, res => {
-            // get back json in utf8
+            // uncomment below to get back json in utf8
             // res.setEncoding('utf8');
+
             // otherwise we get back binary
 
             if (res.statusCode < 200 || res.statusCode >= 300) {
                 // First reject
-                reject('statusCode:', res.statusCode);
+                reject(new Error({ status: res.statusCode, message: 'Get metadata file request failed on connection' }));
             }
 
             var body = [];
@@ -54,39 +37,60 @@ const getMetadataFile = () =>
                     body = JSON.parse(Buffer.concat(body).toString());
                     // resolve load all events into the database
                     resolve(body);
-                } catch (e) {
-                    reject(e);
+                } catch (error) {
+                    console.log("ERROR PARSING JSON:", error)
+                    reject(new Error({ status: res.statusCode, message: 'Get metadata file request failed on parsing of buffer' }));
                 }
             });
         });
         get_req.end();
         get_req.on('error', error => {
             console.error('ERROR GETTING YESTERDAYS EVENTS:', error);
-            reject(error);
+            reject(new Error({ status: 500, message: 'Get metadata file request failed' }));
         });
     });
 
 // Writing to this file is probably not needed anymore
 const writeMetadataFile = newEvent =>
     new Promise((resolve, reject) => {
-        getMetadataFile()
-            .then(eventsJson => {
-                console.log('Found Events for writing', eventsJson);
-                const events = eventsJson
-                    .filter(event => event.id != newEvent.id)
-                    .concat(newEvent);
-                // write to json file here
-                // http post request to file server
-                // fs.writeFile(createFilePath(), events, err => {
-                //     if (err) {
-                //         return console.log('Error writing file: ' + err);
-                //     }
-                // });
-                resolve(events);
-            })
-            .catch(error => {
-                reject('Error writing to MetaData file', error);
+        // strip out thumb datauri
+        let trimmedEventData = new Event(newEvent)
+        delete trimmedEventData.thumb_250x250;
+
+        const postData = JSON.stringify(trimmedEventData)
+
+        const post_options = {
+            host: process.env.FILESERVER_BASE_URL || 'localhost', // change this from localhost on dev to fileserver(container name) in prod
+            port: '3000',
+            path: '/write_metadata',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': postData.length
+            },
+        };
+
+        const post_req = http.request(post_options, (res) => {
+            // uncomment below to get back json in utf8
+            // res.setEncoding('utf8');
+
+            // otherwise we get back binary
+            if (res.statusCode < 200 || res.statusCode >= 300) {
+                // First reject
+                reject(new Error({ status: res.statusCode, message: 'Could not connect to filserver for writing' }));
+            }
+
+            res.on('data', data => {
+                resolve(JSON.parse(data));
             });
+
+        });
+        post_req.on('error', error => {
+            console.error('ERROR IN WRITE REQUEST:');
+            reject(new Error({ status: 500, message: error }));
+        });
+        post_req.write(postData)
+        post_req.end();
     });
 
 module.exports = { getMetadataFile, writeMetadataFile };

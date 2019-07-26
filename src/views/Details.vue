@@ -72,16 +72,16 @@
           </v-flex>
           <v-flex mx-1>
             <v-btn
-              @click="setClassification('contractor')"
+              @click="setClassification('train')"
               flat
               :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('contractor')"
+              :style="selected('train')"
               large
             >
-              contractor
+              train
               <span class="control-numeral">2</span>
             </v-btn>
-            <p class="control-text text-xs-center">{{ getTotalByType('contractor') }}</p>
+            <p class="control-text text-xs-center">{{ getTotalByType('train') }}</p>
           </v-flex>
           <v-flex mx-1>
             <v-btn
@@ -153,7 +153,7 @@
         slot="detailsButton"
         dark
         style="background-color:#FFF; color:black;"
-        :disabled="!classificationDescription"
+        :disabled="false"
         @click="setFalseAlarmClassification('false-alarm')"
       >Confirm</v-btn>
     </app-dialog>
@@ -182,15 +182,15 @@ export default {
   }),
   created() {
     this.listeners = e => {
-      if (String.fromCharCode(e.keyCode) === "1") {
+      if (String.fromCharCode(e.keyCode) === "1" || e.keyCode === 97) {
         this.setClassification("employee");
-      } else if (String.fromCharCode(e.keyCode) === "2") {
-        this.setClassification("contractor");
-      } else if (String.fromCharCode(e.keyCode) === "3") {
+      } else if (String.fromCharCode(e.keyCode) === "2" || e.keyCode === 98) {
+        this.setClassification("train");
+      } else if (String.fromCharCode(e.keyCode) === "3" || e.keyCode === 99) {
         this.setClassification("intruder");
-      } else if (String.fromCharCode(e.keyCode) === "4") {
+      } else if (String.fromCharCode(e.keyCode) === "4" || e.keyCode === 100) {
         this.setClassification("animal");
-      } else if (String.fromCharCode(e.keyCode) === "5") {
+      } else if (String.fromCharCode(e.keyCode) === "5" || e.keyCode === 101) {
         this.openFalseAlarmModal();
       } else if (e.keyCode === 32) {
         // space bar zoom in/out
@@ -271,6 +271,12 @@ export default {
         );
         this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
         this.$refs.cameraImage.zoomOut();
+        setTimeout(() => {
+            // the buttons need to be disabled until all the svg layers can be loaded 
+            // in order to create the thumbnail correctly
+            // TODO add disable function to vuex
+            this.disabled = false;
+        }, 900)
       }
       this.unclassifiedRemaining = this.unclassifiedEventsCount;
     },
@@ -296,7 +302,6 @@ export default {
         .then(() => {
           this.$notifyClassification(event.user_classification.toUpperCase());
           setTimeout(() => {
-            this.disabled = false;
             this.goNext();
             // timing the fade out transition with the classification animation
           }, 950);
@@ -312,7 +317,6 @@ export default {
         if (next.user_classification === type) {
           prev++;
         }
-        console.log("COUNT", prev)
         return prev;
       }, 0);
     },

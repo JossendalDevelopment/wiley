@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-dist
+# dist
 
 # local env files
 */.env
@@ -11,6 +11,7 @@ dist
 serviceAccountKey.json
 wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json
 wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
+**/production.js
 
 # Log files
 npm-debug.log*
@@ -27,8 +28,16 @@ yarn-error.log*
 *.sw?
 
 # docker
-docker-compose*.yml
+**/docker-compose*.yml
 
+<<<<<<< HEAD
 # fileserver
 streams
 filserver/public/mnt/*
+=======
+# /file-server data files
+file-server/public/live/streams/one/*.ts
+file-server/public/live/streams/two/*.ts
+file-server/public/mnt/sol2_video/east-inferenced/*/
+file-server/public/mnt/sol2_video/west-inferenced/*/
+>>>>>>> develop

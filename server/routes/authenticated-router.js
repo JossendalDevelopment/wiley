@@ -4,7 +4,7 @@ const formatResponse = require('../helpers/format-response.js');
 const postgres = require('../config/conn');
 const {
     getMetadataFile,
-    // writeMetadataFile,
+    writeMetadataFile,
 } = require('../helpers/metadataFile.js');
 
 var router = express.Router();
@@ -40,9 +40,9 @@ router.post('/update_event_postgres', async (req, res) => {
     const event = req.body.event;
     try {
         // this will return a the 
-        // const newEvents = await writeMetadataFile(event);
-        // console.log('NEW EVENTS', newEvents);
-        // find EVENT in EVENTSJSON, replace it, and write it to writeMetadataFile()
+        const writeResponse = await writeMetadataFile(event);
+        console.log('WRITE RESPONSE', writeResponse);
+
         postgres.none('UPDATE events SET user_classification = $1, classification_description = $2, modified_date = $3, thumb_250x250 = $4, classified_by = $5 WHERE id = $6',
             [
                 event.user_classification,
@@ -59,8 +59,8 @@ router.post('/update_event_postgres', async (req, res) => {
                 throw new Error(error)
             });
     } catch (error) {
-        console.log('ERROR', error);
-        formatResponse(res, 'error', error);
+        console.log('ERROR IN /update_event', error);
+        formatResponse(res, 'update event error', error);
     }
 });
 
@@ -93,7 +93,7 @@ router.get('/get_all_classified_events_postgres', (req, res) => {
 // pulls metadata.json file for given day, loads it into postgres container, and returns that json to client
 router.get('/set_yesterdays_events_postgres', async (req, res) => {
     try {
-        // this will return a json object of all events fom metadata.json file
+        // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
 
         postgres.tx(t => {
@@ -112,6 +112,7 @@ router.get('/set_yesterdays_events_postgres', async (req, res) => {
             });
 
     } catch (error) {
+        console.log(" ERROR:", error);
         formatResponse(res, 'error', error);
     }
 });

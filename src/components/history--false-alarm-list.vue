@@ -20,8 +20,18 @@
             class="app-list-item-image"
             :src="evt.thumb_250x250"
           ></v-img>
+          <!-- <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
+            :src="generateThumbUrl(evt)"
+          ></v-img>-->
           <span slot="list-info-top-left" class="app-list-item-username">{{ evt.classified_by }}</span>
-          <span slot="list-info-top-right" class="app-list-item-date">{{ getDate(evt.modified_date) }}</span>
+          <span
+            slot="list-info-top-right"
+            class="app-list-item-date"
+          >{{ getDate(evt.modified_date) }}</span>
           <span
             slot="list-info-bottom-left"
             class="app-list-item-content"
@@ -53,6 +63,13 @@
               class="edit-modal-image"
               :src="selectedForEdit && selectedForEdit.thumb_250x250"
             ></v-img>
+            <!-- <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
+            :src="selectedForEdit && generateThumbUrl(selectedForEdit)"
+            ></v-img>-->
           </v-flex>
           <v-flex xs8 pa-3>
             <v-btn
@@ -66,9 +83,9 @@
               block
               flat
               class="classification-btn"
-              @click="() => setNewClass('contractor')"
-              :style="newClass === 'contractor' ? selectedClass : ''"
-            >contractor</v-btn>
+              @click="() => setNewClass('train')"
+              :style="newClass === 'train' ? selectedClass : ''"
+            >train</v-btn>
             <v-btn
               block
               flat
@@ -157,8 +174,11 @@ export default {
     }
   },
   methods: {
-    getDate(date) {
-      return format(new Date(date), "MMM DD");
+    generateThumbUrl(evt) {
+      return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;
+    },
+    getDate(evt) {
+      return format(new Date(evt.timestamp.seconds), "MMM DD");
     },
     focusTextarea() {
       this.$nextTick(() => {
@@ -198,7 +218,7 @@ export default {
         .then(() => {
           this.onClosedEditModal();
           this.$notifySuccess("UPDATE SUCCESSFUL");
-          this.$emit('update')
+          this.$emit("update");
         })
         .catch(err => {
           console.error("ERROR", err);

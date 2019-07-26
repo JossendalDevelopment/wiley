@@ -82,8 +82,8 @@
 <script>
 export default {
   data: () => ({
-    employeeEmail: "",
-    password: "",
+    employeeEmail: "admin@email.com",
+    password: "password",
     remember: false,
   }),
   methods: {

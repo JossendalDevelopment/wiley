@@ -1,7 +1,5 @@
 module.exports = {
     // used in views/overview.vue
-    rtsp_url_one: '/live/streams/one/',
-    rtsp_url_two: '/live/streams/two/',
-    rtsp_host: 'localhost',
-    port: 3000,
+    stream_data_one: 'http://localhost:3000/live/streams/one/480p.m3u8',
+    stream_data_two: 'http://localhost:3000/live/streams/two/480p.m3u8',
 };

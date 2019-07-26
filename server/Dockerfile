@@ -23,10 +23,10 @@ COPY --chown=node:node . .
 CMD ["node", "index.js"]
 
 
-FROM prod-stage as dev-stage
+# FROM prod-stage as dev-stage
 
-ENV NODE_ENV=development
+# ENV NODE_ENV=development
 
-RUN npm install --only=development
+# RUN npm install --only=development
 
-CMD ["node", "index.js"]
+# CMD ["node", "index.js"]
