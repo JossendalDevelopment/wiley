@@ -33,13 +33,18 @@ const createDeletePath = (eventData) => {
 const arrayFromJsonFiles = async (filepath) => {
     // read 25 json files from each camera directory
     return await new Promise((resolve, reject) => {
+        console.log("FILEPATH", filepath)
         fs.readdir(filepath, async (err, filenames) => {
             let promises = []
-            if (err) reject(new Error({ status: 500, message: err }))
-            for (let i = 0; i < 25; i++) {
-                filenames[i] && promises.push(readFileContents(filepath, filenames[i]))
+            if (err) reject(new Error(err))
+            try {
+                for (let i = 0; i < 25; i++) {
+                    filenames[i] && promises.push(readFileContents(filepath, filenames[i]))
+                }
+                resolve(Promise.all(promises))
+            } catch (error) {
+                reject(new Error(error))
             }
-            resolve(Promise.all(promises))
         });
     });
 };

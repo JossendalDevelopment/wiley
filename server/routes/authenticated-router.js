@@ -156,12 +156,12 @@ router.get('/set_yesterdays_events', async (req, res) => {
                     timestamp: admin.firestore.FieldValue.serverTimestamp(),
                 })
             } else {
-                console.log("JSON FAILED:", eventsJson[idx])
+                console.log("JSON FAILED:", eventsJson[idx]);
             }
         });
         res.json(eventsJson);
     } catch (error) {
-        console.log(" ERROR:", error)
+        console.log(" ERROR:", error);
         formatResponse(res, 'error', error);
     }
 });
