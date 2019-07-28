@@ -20,25 +20,16 @@ instance.createEvent = async function (event) {
         const resp = await this.post('/create_event', { event });
         return resp.data;
     } catch (err) {
-        return err;
+        return { status: 500, msg: err };
     }
 };
-
-// instance.updateEvent = async function (event) {
-//     try {
-//         const resp = await this.post('/update_event', { event });
-//         return resp.data;
-//     } catch (err) {
-//         return err;
-//     }
-// };
 
 instance.updateEvent = async function (event) {
     try {
         const resp = await this.post('/update_event_postgres', { event });
         return resp.data;
     } catch (err) {
-        return err;
+        return { status: 500, msg: err };
     }
 };
 
@@ -47,7 +38,7 @@ instance.getAllEvents = async function () {
         const resp = await this.get('/get_all_events_postgres');
         return resp.data;
     } catch (err) {
-        return err;
+        return { status: 500, msg: err };
     }
 };
 
@@ -56,7 +47,7 @@ instance.getAllClassifiedEvents = async function () {
         const resp = await this.get('/get_all_classified_events_postgres');
         return resp.data;
     } catch (err) {
-        return err;
+        return { status: 500, msg: err };
     }
 };
 
@@ -66,7 +57,7 @@ instance.setYesterdaysEvents = async function () {
         const resp = await this.get('/set_yesterdays_events_postgres');
         return resp.data;
     } catch (err) {
-        return err;
+        return { status: 500, msg: err };
     }
 };
 

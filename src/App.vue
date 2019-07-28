@@ -66,7 +66,7 @@
       <notifications
         group="app-notifications"
         :max="1"
-        :duration="2000"
+        :duration="3000"
         style="bottom:5%; right:5%;"
         position="right bottom"
       >

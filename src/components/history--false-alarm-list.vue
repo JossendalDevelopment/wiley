@@ -174,11 +174,11 @@ export default {
     }
   },
   methods: {
+    getDate(date) {
+      return format(new Date(date), "MMM DD");
+    },
     generateThumbUrl(evt) {
       return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;
-    },
-    getDate(evt) {
-      return format(new Date(evt.timestamp.seconds), "MMM DD");
     },
     focusTextarea() {
       this.$nextTick(() => {

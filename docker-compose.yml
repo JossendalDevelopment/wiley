@@ -27,6 +27,7 @@ services:
         volumes:
             - ./server:/server:delegated
             - /server/node_modules
+            # - /etc/localtime:/etc/localtime:ro
         ports:
             - 3001:3001 #exposed only for testing and required for healthcheck script
         environment:

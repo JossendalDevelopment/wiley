@@ -1,8 +1,8 @@
 const http = require('http');
 const Event = require('../types/Event');
 
-const getMetadataFile = () =>
-    new Promise((resolve, reject) => {
+const getMetadataFile = () => {
+    return new Promise((resolve, reject) => {
         console.log("FILESERVER_BASE_URL:", process.env.FILESERVER_BASE_URL)
         const get_options = {
             host: process.env.FILESERVER_BASE_URL || 'localhost', // change this from localhost on dev to fileserver(container name) in prod
@@ -22,7 +22,7 @@ const getMetadataFile = () =>
 
             if (res.statusCode < 200 || res.statusCode >= 300) {
                 // First reject
-                reject(new Error({ status: res.statusCode, message: 'Get metadata file request failed on connection' }));
+                return reject(new Error('Get metadata file request failed on connection'));
             }
 
             var body = [];
@@ -38,17 +38,18 @@ const getMetadataFile = () =>
                     // resolve load all events into the database
                     resolve(body);
                 } catch (error) {
-                    console.log("ERROR PARSING JSON:", error)
-                    reject(new Error({ status: res.statusCode, message: 'Get metadata file request failed on parsing of buffer' }));
+                    console.error("ERROR PARSING JSON:", error)
+                    return reject(new Error('Get metadata file request failed on parsing of buffer'));
                 }
             });
         });
         get_req.end();
         get_req.on('error', error => {
             console.error('ERROR GETTING YESTERDAYS EVENTS:', error);
-            reject(new Error({ status: 500, message: 'Get metadata file request failed' }));
+            return reject(new Error('Get metadata file request failed'));
         });
     });
+};
 
 // Writing to this file is probably not needed anymore
 const writeMetadataFile = newEvent =>

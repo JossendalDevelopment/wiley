@@ -1,9 +1,9 @@
 const formatResponse = (res, type, data) => {
     if (type === "error") {
-        return res.status(500).json({ message: "error", data });
+        res.status(500).json({ msg: data });
     } else if (type === "success") {
-        return res.status(200).json({ message: "success", data });
+        res.status(200).json(data);
     }
 };
-  
+
 module.exports = formatResponse;

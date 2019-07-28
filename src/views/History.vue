@@ -83,7 +83,7 @@
               :is="getComponent"
               :key="selectedEvent.type + 'selected'"
               :data="eventTypes[selectedEvent.type]"
-              :on:update="fetchHistory()"
+              :on:update="fetchHistory"
               style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
             />
           </v-flex>
@@ -121,54 +121,52 @@ export default {
     this.eventWatcher = null;
   },
   mounted() {
-      this.fetchHistory()
-
+    this.fetchHistory();
   },
   methods: {
-    fetchHistory() {
-              this.$events.getAllClassifiedEvents()
-      .then(results => {
-        let events = results.data
-
-        this.totalEvents = events;
-        this.eventTypes = new EventTypes();
-        // TODO: make each type of event it's own Type
-        // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
-        // in EventTypes and splits up the query results by their type. Sample below
-        // EventTypes {
-        //     animal: {
-        //         name: String,
-        //         count: Number
-        //         type: String,
-        //         events: Array
-        //     },
-        //     contractor: (...)
-        //     employee: (...)
-        //     false-alarm: (...)
-        //     intruder: (...)
-        // }
-        events.forEach(
-          item => {
-            let cls = item.user_classification;
-            this.eventTypes[cls] = {
-              ...this.eventTypes[cls],
-              count: this.eventTypes[cls].count
-                ? (this.eventTypes[cls].count += 1)
-                : 1
-            };
-            this.eventTypes[cls].events.push(item);
+    async fetchHistory() {
+        try {
+            const response = await this.$events.getAllClassifiedEvents()
+            console.log("HISTORY", response)
+            if (response.status && response.status === 500) {
+                this.$notifyError(
+                    "ERROR GETTING ARCHIVED EVENTS. PLEASE TRY AGAIN LATER"
+                );
+                return;
+            }
+            let events = response;
+            this.totalEvents = events;
+            this.eventTypes = new EventTypes();
+            // TODO: make each type of event it's own Type
+            // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
+            // in EventTypes and splits up the query results by their type. Sample below
+            // EventTypes {
+            //     animal: {
+            //         name: String,
+            //         count: Number
+            //         type: String,
+            //         events: Array
+            //     },
+            //     contractor: (...)
+            //     employee: (...)
+            //     false-alarm: (...)
+            //     intruder: (...)
+            // }
+            events.forEach(item => {
+                let cls = item.user_classification;
+                this.eventTypes[cls] = {
+                    ...this.eventTypes[cls],
+                    count: this.eventTypes[cls].count
+                    ? (this.eventTypes[cls].count += 1)
+                    : 1
+                };
+                this.eventTypes[cls].events.push(item);
+            });
             this.$events.stopLoading();
-          },
-          error => {
-            console.error("Error in EventWatcher:", error);
-            this.$events.stopLoading();
-          }
-        );
-      })
-      .catch(error => {
-          this.$notifyError("ERROR FINDING EVENT HISTORY")
-          throw new Error(error)
-      })
+        } catch (error) {
+            console.error("ERROR GETTING ALL EVENTS", error);
+            this.$notifyError("ERROR FINDING EVENT HISTORY");
+        }
     },
     percentage(value) {
       return (100 * value) / this.totalEvents.length;

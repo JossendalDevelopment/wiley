@@ -208,14 +208,8 @@ export default {
     // TODO gets all events from postgres so that the counters below the buttons show grand totals
     // the main function of this page really only demands unclassified events.
     // Should the counters be a grand total or maybe just a current session total
-    this.$events.getAllEvents()
-    .then(res => {
-        console.log("SUCCESS", res.data)
-        this.setUnclassifiedEvents(res.data);
-    })
-    .catch(error => {
-        console.log("ERROR GETTING ALL EVENTS", error)
-    })
+    this.getAllEvents();
+    // this.setUnclassifiedEvents(this.$events.events);
   },
   destroyed() {
     this.removeListeners();
@@ -244,7 +238,7 @@ export default {
       if (this.unclassifiedEvents.length > 0) {
         this.currentEvent = this.unclassifiedEvents[0];
       }
-      this.working = false
+      this.working = false;
     },
     addListeners() {
       // listeners on keystrokes need to be added and removed when the modals are open
@@ -272,11 +266,11 @@ export default {
         this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
         this.$refs.cameraImage.zoomOut();
         setTimeout(() => {
-            // the buttons need to be disabled until all the svg layers can be loaded 
-            // in order to create the thumbnail correctly
-            // TODO add disable function to vuex
-            this.disabled = false;
-        }, 900)
+          // the buttons need to be disabled until all the svg layers can be loaded
+          // in order to create the thumbnail correctly
+          // TODO add disable function to vuex
+          this.disabled = false;
+        }, 900);
       }
       this.unclassifiedRemaining = this.unclassifiedEventsCount;
     },
@@ -296,21 +290,44 @@ export default {
       this.classificationDescription = "";
       this.updateEvent(this.currentEvent);
     },
-    updateEvent(event) {
-      this.$events
-        .updateEvent(event)
-        .then(() => {
-          this.$notifyClassification(event.user_classification.toUpperCase());
-          setTimeout(() => {
-            this.goNext();
-            // timing the fade out transition with the classification animation
-          }, 950);
-        })
-        .catch(error => {
-          this.disabled = false;
-          console.error(error);
-          this.$notifyError("FAILED TO CLASSIFY EVENT");
-        });
+    async getAllEvents() {
+      try {
+        const response = await this.$events.getAllEvents();
+        console.log("CLIENT RESP", response);
+        if (response.status && response.status === 500) {
+          this.$notifyError(
+            "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
+          );
+          return;
+        }
+        this.setUnclassifiedEvents(response);
+      } catch (error) {
+        console.error("ERROR GETTING ALL EVENTS", error);
+        this.$notifyError(
+          "ERROR GETTING HISTORICAL EVENTS. PLEASE TRY AGAIN LATER."
+        );
+      }
+    },
+    async updateEvent(event) {
+      try {
+        const response = await this.$events.updateEvent(event);
+        if (response.status && response.status === 500) {
+          this.$notifyError(
+            "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
+          );
+          return;
+        }
+        this.$notifyClassification(event.user_classification.toUpperCase());
+
+        setTimeout(() => {
+          this.goNext();
+          // timing the fade out transition with the classification animation
+        }, 950);
+      } catch (error) {
+        this.disabled = false;
+        console.error("ERROR CLASSIFYING EVENT", error);
+        this.$notifyError("ERROR CLASSIFYING EVENT. PLEASE TRY AGAIN LATER.");
+      }
     },
     getTotalByType(type) {
       return this.$events.events.reduce((prev, next) => {

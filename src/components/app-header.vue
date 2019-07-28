@@ -40,12 +40,13 @@ export default {
   },
   computed: {
     unclassifiedEventCount() {
-      return this.$events.events.reduce((prev, next) => {
-        if (next.user_classification === null) {
-          prev++;
-        }
-        return prev;
-      }, 0);
+      return this.$events.sessionEvents.length;
+      //   return this.$events.events.reduce((prev, next) => {
+      //     if (next.user_classification === null) {
+      //       prev++;
+      //     }
+      //     return prev;
+      //   }, 0);
     }
   }
 };

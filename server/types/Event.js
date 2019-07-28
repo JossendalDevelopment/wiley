@@ -25,6 +25,7 @@ Object.defineProperty(Event, 'template', {
             "modified_date": null,
             "thumb_filename": "",
             "thumb_filepath": "",
+            "thumb_250x250": null,
             "thumb_height": null,
             "thumb_width": null,
             "user_classification": null,

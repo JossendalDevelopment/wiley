@@ -12,7 +12,11 @@ export default new Vuex.Store({
     plugins: [
         new VuexPersistence({
             storage: window.localStorage,
-            modules: ['authentication', 'cameraAlert', 'eventHistory'],
+            modules: [
+                'authentication',
+                'cameraAlert',
+                // 'eventHistory'
+            ],
         }).plugin,
     ],
     modules: {

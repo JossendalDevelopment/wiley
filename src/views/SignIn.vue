@@ -84,7 +84,7 @@ export default {
   data: () => ({
     employeeEmail: "admin@email.com",
     password: "password",
-    remember: false,
+    remember: false
   }),
   methods: {
     async login() {
@@ -94,14 +94,22 @@ export default {
           this.employeeEmail,
           this.password
         );
+
         if (authResp.status === 500) {
-          this.$notifyError("Invalid email and/or password");
+          this.$notifyError("INVALID EMAIL AND/OR PASSWORD");
           return;
         }
-        await this.$events.setYesterdaysEvents();
+
+        const response = await this.$events.setYesterdaysEvents();
+
+        if (response.status === 500) {
+          this.$notifyError(
+            "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
+          );
+        }
       } catch (error) {
         this.$notifyError(
-          "Error getting todays events. Please try again later"
+          "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
         );
       } finally {
         // if auth fails, router guards will kick you back to login screen

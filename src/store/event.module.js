@@ -71,7 +71,7 @@ export const eventHistory = {
         },
         getAllEvents({ commit }) {
             return api.getAllEvents().then(resp => {
-                commit('setEvents', resp.data)
+                commit('setEvents', resp)
                 return resp;
             });
         },
@@ -94,7 +94,6 @@ export const eventHistory = {
         setYesterdaysEvents({ commit }, payload) {
             return api.setYesterdaysEvents().then(resp => {
                 // commit('setEvents', resp);
-                // sets up newly imported, unclassified events
                 commit('setSessionEvents', resp);
                 return resp;
             });

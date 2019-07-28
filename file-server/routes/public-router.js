@@ -5,18 +5,19 @@ const conf = require('../config/production');
 
 const router = express.Router();
 
-const createReadDirPaths = () => {
+const createReadDirPaths = (less = 1) => {
     // create filepath from yesterdays date
-    const today = new Date();
     let yesterday = new Date()
-    yesterday.setDate(today.getDate() - 1) // -1 because we want yesterdays images
+    console.log("DATE", yesterday.getDate())
+    yesterday.setDate(yesterday.getDate() - less) // -1 because we want yesterdays images
     const year = yesterday.getFullYear();
     let month = yesterday.getMonth() + 1; // months are zero indexed
     month = month.toString().padStart(2, '0');
     let day = yesterday.getDate().toString().padStart(2, '0');
+    console.log("DAY", day)
 
     // hardcoded for dev
-    // return [`${conf.image_filepath_east}/2019/07/23/unverified`, `${conf.image_filepath_west}/2019/07/23/unverified`]
+    // return [`${conf.image_filepath_east}/2019/07/26/unverified`, `${conf.image_filepath_west}/2019/07/26/unverified`]
     return [`${conf.image_filepath_east}/${year}/${month}/${day}/unverified/`, `${conf.image_filepath_west}/${year}/${month}/${day}/unverified/`]
 };
 
@@ -35,42 +36,61 @@ const arrayFromJsonFiles = async (filepath) => {
     return await new Promise((resolve, reject) => {
         console.log("FILEPATH", filepath)
         fs.readdir(filepath, async (err, filenames) => {
-            let promises = []
-            if (err) reject(new Error(err))
+            if (err) reject(new Error(err));
+
             try {
-                for (let i = 0; i < 25; i++) {
-                    filenames[i] && promises.push(readFileContents(filepath, filenames[i]))
+                if (!filenames.length) {
+                    resolve("No Unclasified events available");
                 }
-                resolve(Promise.all(promises))
+
+                let promises = [];
+
+                for (let i = 0; i < 25; i++) {
+                    filenames[i] && promises.push(readFileContents(filepath, filenames[i]));
+                }
+                resolve(Promise.all(promises));
             } catch (error) {
-                reject(new Error(error))
+                reject(new Error(error));
             }
         });
-    });
+    }).
+        catch(error => {
+            console.log('caught in arrayFromJsonFiles', error.message);
+            return { status: 500, msg: "No such file or directory" };
+        });
 };
 
 const readFileContents = async (filepath, file) => {
     // does the actual reading for arrayFromJsonFiles
     return await new Promise((resolve, reject) => {
         fs.readFile(`${filepath}/${file}`, 'utf-8', async (err, content) => {
-            err ? reject(new Error({ status: 500, message: err })) : resolve(JSON.parse(content));
+            err ? reject(new Error(err)) : resolve(JSON.parse(content));
         })
-    })
+    }).
+        catch(error => {
+            console.log('caught in readFileContents', error.message);
+            return { status: 500, msg: "No such file or directory" };
+        });
 };
 
 const createNewJsonFile = async (filepath, data) => {
     // write json with updated classification to /verified directory
     const pathname = path.join(__dirname, '../public', filepath);
-    console.log("DELETING FILES AT:", pathname)
+    console.log("DELETING FILES AT:", pathname);
+
     const fileWriteStream = fs.createWriteStream(pathname);
-    fileWriteStream.on('error', (err) => Promise.reject(new Error({ status: 500, message: err })))
+    fileWriteStream.on('error', (err) => Promise.reject(new Error(err)));
 
     for (let i = 0; i < 1e6; i++) {
         const ableToWrite = fileWriteStream.write(JSON.stringify(data, null, 1));
         if (!ableToWrite) {
             return await new Promise(resolve => {
                 fileWriteStream.once('drain', resolve({ status: 200, message: "file created successfully" }));
-            });
+            }).
+                catch(error => {
+                    console.log('caught in createNewJsonFile', error.message);
+                    return { status: 500, msg: "No such file or directory" };
+                });
         }
     }
 };
@@ -84,9 +104,21 @@ const deleteUnverifiedJson = async (filepath) => {
             if (err && err.code == 'ENOENT') {
                 resolve({ status: 200, message: "file does not exist" })
             }
-            err ? reject(new Error({ status: 500, message: err })) : resolve({ status: 200, message: "file deleted successfully" })
+            err ? reject(new Error(err)) : resolve({ status: 200, message: "file deleted successfully" })
         });
-    });
+    }).
+        catch(error => {
+            console.log('caught in createNewJsonFile', error.message);
+            return { status: 500, msg: "No such file or directory" };
+        });
+};
+
+const formatResponse = (res, type, data) => {
+    if (type === "error") {
+        res.status(500).json({ message: "error", data });
+    } else if (type === "success") {
+        res.status(200).json({ message: "success", data });
+    }
 };
 
 /* *********   ROUTES   **************** */
@@ -96,22 +128,36 @@ router.get('/', (req, res) => {
 });
 
 router.get('/metadata', async (req, res) => {
-    let dirPaths = createReadDirPaths();
-    let cam1 = await arrayFromJsonFiles(dirPaths[0]);
-    let cam2 = await arrayFromJsonFiles(dirPaths[1]);
-    res.json(cam1.concat(cam2));
+    try {
+        let dirPaths = createReadDirPaths();
+        let cam1 = await arrayFromJsonFiles(dirPaths[0]);
+        let cam2 = await arrayFromJsonFiles(dirPaths[1]);
+        if (cam1.status === 500 || cam2.status === 500) {
+            formatResponse(res, 'error', "COULD NOT LOCATE DATA FOR CAMERA");
+        } else {
+            res.json(cam1.concat(cam2));
+        }
+    } catch (error) {
+        console.error('ERROR IN FILESERVER', error);
+        formatResponse(res, 'error', error);
+    }
 });
 
 router.post('/write_metadata', async (req, res) => {
-    const data = req.body;
-    let filepath = createWritePath(data);
-    let removalFilepath = createDeletePath(data);
-    let writeResult = await createNewJsonFile(filepath, data);
-    let deleteResult = await deleteUnverifiedJson(removalFilepath);
-    if (writeResult.status === 200 && deleteResult.status === 200) {
-        res.json({ status: 200 });
-    } else {
-        res.json({ status: 500 });
+    try {
+        const data = req.body;
+        let filepath = createWritePath(data);
+        let removalFilepath = createDeletePath(data);
+        let writeResult = await createNewJsonFile(filepath, data);
+        let deleteResult = await deleteUnverifiedJson(removalFilepath);
+        if (writeResult.status === 500 && deleteResult.status === 500) {
+            formatResponse(res, 'error', "COULD NOT WRITE TO JSON FILES");
+        } else {
+            formatResponse(res, 'success', "WRITE SUCCESSFUL");
+        }
+    } catch (error) {
+        console.error('ERROR IN FILESERVER', error);
+        formatResponse(res, 'error', error);
     }
 });
 
