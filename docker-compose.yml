@@ -19,8 +19,6 @@ services:
         build:
             context: ./server
             target: 'prod-stage'
-        # if nodemon needs to be setup for dev
-        # command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./index.js
         # depends_on:
         #     db:
         #         condition: service_healthy
@@ -31,10 +29,10 @@ services:
         ports:
             - 3001:3001 #exposed only for testing and required for healthcheck script
         environment:
-            # this is used in metadataFile.js, should default to localhost in dev and fileserver container name in prod
+            # FILESERVER_BASE_URL should default to localhost in dev and fileserver container name in prod
             - FILESERVER_BASE_URL=fileserver
             - NODE_ENV=production
-            # These files need to be retrieved from firebase and placed in `server/certs`
+            # These files need to be retrieved from firebase and placed in `/server/certs`
             - GOOGLE_APPLICATION_CREDENTIALS_DEV=./certs/wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
             - GOOGLE_APPLICATION_CREDENTIALS_PROD=./certs/wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json
     fileserver:
@@ -48,9 +46,6 @@ services:
             # replace these with live rtsp urls
             - IP_CAM_RTSP_URL_ONE=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
             - IP_CAM_RTSP_URL_TWO=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
-            # these were for my local camera
-            # - IP_CAM_RTSP_URL_ONE=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0
-            # - IP_CAM_RTSP_URL_TWO=rtsp://<username>:<password>@<ip_address>/cam/realmonitor?channel=1subtype=0
     db:
         image: postgres:10-alpine
         restart: always
@@ -65,6 +60,7 @@ services:
             POSTGRES_PASSWORD: wiley_rotf_2019
         volumes:
             - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+            # the /wiley part of the url needs to match the POSTGRES_DB env var
             - /Users/Jossendal/Desktop/dbs/wiley:/var/lib/postgresql/data
     adminer:
         image: adminer

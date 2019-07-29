@@ -16,7 +16,7 @@ const createReadDirPaths = (less = 1) => {
     console.log("DAY", day)
 
     // hardcoded for dev
-    return [`${conf.image_filepath_east}/2019/07/23/unverified`, `${conf.image_filepath_west}/2019/07/23/unverified`]
+    return [`${conf.image_filepath_east}/2019/07/24/unverified`, `${conf.image_filepath_west}/2019/07/24/unverified`]
     // return [`${conf.image_filepath_east}/${year}/${month}/${day}/unverified/`, `${conf.image_filepath_west}/${year}/${month}/${day}/unverified/`]
 };
 

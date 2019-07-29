@@ -28,21 +28,21 @@ admin.initializeApp({
 });
 
 // postgres connection test
-let retries = 20;
+let retries = 50;
 const testPostgres = () => {
     // db.one('SELECT $1 AS value', 123)
     db.any('SELECT * FROM test')
         .then((data) => {
-            console.log('SUCCESS:', data)
+            console.log('DB INIT SUCCESS:', data)
         })
         .catch((error) => {
-            console.log('INIT ERROR:', error)
+            console.log('DB INIT ERROR:', error)
             console.log("RETRIES LEFT...", retries)
-            if (retries === 0) return
+            if (retries === 0) return;
             setTimeout(() => {
                 testPostgres();
                 retries--;
-            }, 20000 / retries)
+            }, 50000 / retries)
         })
 }
 testPostgres();
