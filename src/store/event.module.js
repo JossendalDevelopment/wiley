@@ -61,17 +61,24 @@ export const eventHistory = {
                 return resp;
             });
         },
-        // eslint-disable-next-line no-unused-vars
         updateEvent({ commit }, payload) {
-            commit('updateSessionEvent', payload);
-            commit('startLoading');
+            // commit('startLoading');
             return api.updateEvent(payload.event).then(resp => {
+                commit('updateSessionEvent', payload);
+                // commit('stopLoading');
                 return resp;
             });
         },
         getAllEvents({ commit }) {
             return api.getAllEvents().then(resp => {
                 commit('setEvents', resp)
+                return resp;
+            });
+        },
+        getFiftyEvents({ commit }) {
+            return api.getFiftyEvents().then(resp => {
+                // commit('setEvents', resp)
+                commit('setSessionEvents', resp)
                 return resp;
             });
         },
@@ -83,17 +90,15 @@ export const eventHistory = {
         setEvents({ commit }, payload) {
             commit('setEvents', payload.events);
         },
-        // eslint-disable-next-line no-unused-vars
-        deleteEvents(context, payload) {
-            context.commit('deleteEvents');
-            return api.deleteEvents().then(() => {
-                return;
+        deleteEvents({ commit }) {
+            commit('deleteEvents');
+            return api.deleteEvents().then(resp => {
+                return resp;
             });
         },
         // eslint-disable-next-line no-unused-vars
         setYesterdaysEvents({ commit }, payload) {
             return api.setYesterdaysEvents().then(resp => {
-                // commit('setEvents', resp);
                 commit('setSessionEvents', resp);
                 return resp;
             });

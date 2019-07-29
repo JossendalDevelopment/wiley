@@ -42,6 +42,15 @@ instance.getAllEvents = async function () {
     }
 };
 
+instance.getFiftyEvents = async function () {
+    try {
+        const resp = await this.get('/get_fifty_unclassified_events_postgres');
+        return resp.data;
+    } catch (err) {
+        return { status: 500, msg: err };
+    }
+};
+
 instance.getAllClassifiedEvents = async function () {
     try {
         const resp = await this.get('/get_all_classified_events_postgres');
@@ -71,9 +80,9 @@ instance.setYesterdaysEvents = async function () {
 //     }
 // };
 
-instance.deleteEvents = async function (events) {
+instance.deleteEvents = async function () {
     try {
-        const resp = await this.post('/delete_events', { events });
+        const resp = await this.get('/delete_events');
         return resp.data;
     } catch (err) {
         return err;

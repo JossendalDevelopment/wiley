@@ -29,4 +29,4 @@ CMD ["node", "index.js"]
 
 # RUN npm install --only=development
 
-# CMD ["node", "index.js"]
+# CMD ["nodemon", "index.js"]

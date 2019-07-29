@@ -30,6 +30,9 @@ export default {
                     event.getAllEvents = () => {
                         return store.dispatch('eventHistory/getAllEvents', {});
                     };
+                    event.getFiftyEvents = () => {
+                        return store.dispatch('eventHistory/getFiftyEvents', {});
+                    };
                     event.getAllClassifiedEvents = () => {
                         return store.dispatch(
                             'eventHistory/getAllClassifiedEvents',

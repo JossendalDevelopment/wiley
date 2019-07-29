@@ -36,19 +36,18 @@ export default {
     async logout() {
       await this.$auth.logout();
       this.$router.replace("/sign_in");
-    }
+    },
   },
   computed: {
     unclassifiedEventCount() {
-      return this.$events.sessionEvents.length;
-      //   return this.$events.events.reduce((prev, next) => {
-      //     if (next.user_classification === null) {
-      //       prev++;
-      //     }
-      //     return prev;
-      //   }, 0);
-    }
-  }
+        return this.$events.sessionEvents.reduce((prev, next) => {
+          if (!next.user_classification) {
+            prev++;
+          }
+          return prev;
+        }, 0);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

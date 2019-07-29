@@ -13,14 +13,20 @@
     <v-layout v-else row wrap>
       <v-flex xs6 d-flex v-for="(evt) in data.events" :key="evt.eventId">
         <app-list-item small>
-          <v-img
+          <!-- <v-img
             slot="list-image"
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
             :src="evt.thumb_250x250"
+          ></v-img> -->
+          <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
+            :src="evt && generateThumbUrl(evt)"
           ></v-img>
-          <!-- <span slot="list-info-top-left">{{ evt.cam_name.toUpperCase() }}</span> -->
           <span
             slot="list-info-top-right"
             class="app-list-item-date"
@@ -45,14 +51,20 @@
       <template slot="modalcontent">
         <v-layout class="modal-content" v-if="selectedForEdit">
           <v-flex xs4 ma-3 mt-4>
-            <v-img
+            <!-- <v-img
               slot="list-image"
               contain
               :aspect-ratio="1/1"
               class="edit-modal-image"
               :src="selectedForEdit.thumb_250x250"
+            ></v-img> -->
+            <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="edit-modal-image"
+            :src="selectedForEdit && generateThumbUrl(selectedForEdit)"
             ></v-img>
-            <!-- :src="`http://localhost:3000${selectedForEdit.image_filepath}/${selectedForEdit.image_filename}`" -->
           </v-flex>
           <v-flex xs8 pa-3>
             <v-btn
@@ -159,6 +171,9 @@ export default {
   methods: {
     getDateTime(date) {
       return format(new Date(date), "MMM DD HH:MM:SS");
+    },
+    generateThumbUrl(evt) {
+      return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;
     },
     focusTextarea() {
       this.$nextTick(() => {

@@ -1,12 +1,11 @@
 const express = require('express');
-const formatResponse = require('../helpers/format-response.js');
-// const { dataURLToFile, dataURIToBlob } = require('../helpers/dataURIToBlob.js');
 const db = require('../config/conn');
+const Event = require('../types/Event.js');
 const {
     getMetadataFile,
     writeMetadataFile,
-} = require('../helpers/metadataFile.js');
-const Event = require('../types/Event.js');
+    formatResponse,
+} = require('../helpers');
 
 var router = express.Router();
 
@@ -47,7 +46,7 @@ router.post('/update_event_postgres', async (req, res) => {
         await db.none('UPDATE events SET user_classification = $1, classification_description = $2, modified_date = $3, thumb_250x250 = $4, classified_by = $5 WHERE id = $6',
             [
                 event.user_classification,
-                event.classification_description,
+                event.classification_description || null,
                 new Date().toISOString(),
                 event.thumb_250x250,
                 event.classified_by,
@@ -73,6 +72,17 @@ router.get('/get_all_events_postgres', async (req, res) => {
 });
 
 // @METHOD: GET
+// @RETURNS: array of 50 unclassified events with priority on persons
+router.get('/get_fifty_unclassified_events_postgres', async (req, res) => {
+    try {
+        const response = await db.any("SELECT * FROM events WHERE user_classification IS NULL ORDER BY inferenced_classification = 'person' DESC LIMIT 50;");
+        formatResponse(res, 'success', response);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
+// @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.get('/get_all_classified_events_postgres', async (req, res) => {
     try {
@@ -91,15 +101,16 @@ router.get('/set_yesterdays_events_postgres', async (req, res) => {
     try {
         // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
+        console.log("EVENTS TO BE INSERTED TO DB", eventsJson.length)
 
-        await db.tx(t => {
+        const response = await db.tx(t => {
             const queries = eventsJson.map(event => {
                 event.thumb_250x250 = null;
-                return t.none('INSERT INTO events(id, event_id, image_filepath, image_filename, image_width, image_height, bbox_xmin, bbox_ymin, bbox_width, bbox_height, camera, inferenced_classification, inferenced_percentage, user_classification, classification_description, classified_by, modified_date, thumb_filename, thumb_filepath, thumb_250x250) VALUES(${id}, ${eventId}, ${image_filepath}, ${image_filename}, ${image_width}, ${image_height}, ${bbox_xmin}, ${bbox_ymin}, ${bbox_width}, ${bbox_height}, ${camera}, ${inferenced_classification}, ${inferenced_percentage}, ${user_classification}, ${classification_description}, ${classified_by}, ${modified_date}, ${thumb_250x250}, ${thumb_filename}, ${thumb_filepath}) ON CONFLICT (id) DO NOTHING', event);
+                return t.one('INSERT INTO events(id, image_filepath, image_filename, image_width, image_height, bbox_xmin, bbox_ymin, bbox_width, bbox_height, camera, inferenced_classification, inferenced_percentage, user_classification, classification_description, classified_by, modified_date, thumb_filename, thumb_filepath, thumb_250x250) VALUES(${id}, ${image_filepath}, ${image_filename}, ${image_width}, ${image_height}, ${bbox_xmin}, ${bbox_ymin}, ${bbox_width}, ${bbox_height}, ${camera}, ${inferenced_classification}, ${inferenced_percentage}, ${user_classification}, ${classification_description}, ${classified_by}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', event);
             });
             return t.batch(queries);
         });
-
+        console.log("INSERT BATCH RESPONSE:", response)
         res.json(eventsJson);
     } catch (error) {
         console.error("ERROR SETTING EVENTS:", error);
@@ -107,11 +118,20 @@ router.get('/set_yesterdays_events_postgres', async (req, res) => {
     }
 });
 
+router.get('/get_count_by_type', async (req, res) => {
+    try {
+        const response = await db.any('SELECT user_classification, COUNT(*) AS count FROM events WHERE user_classification IS NOT NULL GROUP BY user_classification;');
+        formatResponse(res, 'success', response);
+    } catch (error) {
+        console.error("ERROR GETTING EVENT COUNTS:", error);
+        formatResponse(res, 'error', error);
+    }
+})
+
 // @METHOD: DELETE
 // @RETURNS: object of batch deletion data
-router.post('/delete_events', async (req, res) => {
-    // helper to clear firestore as a collection cannot be deleted wholesale. each document must be deleted indiviually
-    // This will batch deletions. Only used to support resetting data for demo use
+router.get('/delete_events', async (req, res) => {
+    // This will batch deletions of entire events table. Only used to support resetting data for demo use
     // OTHERWISE VERY DANGEROUS!!!!!!!!!!!!!!!
 
     try {

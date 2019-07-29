@@ -58,7 +58,10 @@ router.beforeEach(async (to, from, next) => {
     // a url based method to reset dummy data for purpose of demo
     if (to.redirectedFrom && to.redirectedFrom.includes('clear')) {
         try {
-            await store.dispatch('eventHistory/deleteEvents', {});
+            const response = await store.dispatch('eventHistory/deleteEvents', {});
+            if (response.status === 500) {
+                console.log("Error in router")
+            }
             next('/training');
         } catch (error) {
             throw new Error(error);

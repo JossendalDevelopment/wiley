@@ -89,6 +89,19 @@ export default {
   components: {
     "app-header": AppHeader
   },
+//   mounted() {
+//     let Userback = window.Userback || {};
+//     Userback.access_token = '7500|0|VVHLALuJlr5psmNJnPsu3lcBcG9VqLEH1LlaWdQgAsjgOmVRyF';
+
+//     (function(id) {
+//         if (document.getElementById(id)) {return;}
+//         var s = document.createElement('script');
+//         s.id = id;
+//         s.src = 'https://static.userback.io/widget/v1.js';
+//         var parent_node = document.head || document.body;
+//         parent_node.appendChild(s);
+//     })('userback-sdk');
+//   },
   data: () => ({
     alert: true,
     tab: null,
@@ -123,14 +136,6 @@ export default {
       let alert = this.$cameraAlert.alertData;
       return `1 ${alert.detectedObject} identified in ${alert.camName}`;
     },
-    unclassifiedEventCount() {
-      return this.$events.events.reduce((prev, next) => {
-        if (!next.classified) {
-          prev++;
-        }
-        return prev;
-      }, 0);
-    }
   }
 };
 </script>

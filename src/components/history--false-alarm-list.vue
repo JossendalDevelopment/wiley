@@ -13,20 +13,20 @@
     <v-layout v-else row wrap justify-center>
       <v-flex xs12 v-for="(evt) in data.events" :key="evt.eventId">
         <app-list-item>
-          <v-img
-            slot="list-image"
-            contain
-            :aspect-ratio="1/1"
-            class="app-list-item-image"
-            :src="evt.thumb_250x250"
-          ></v-img>
           <!-- <v-img
             slot="list-image"
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
+            :src="evt.thumb_250x250"
+          ></v-img> -->
+          <v-img
+            slot="list-image"
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
             :src="generateThumbUrl(evt)"
-          ></v-img>-->
+          ></v-img>
           <span slot="list-info-top-left" class="app-list-item-username">{{ evt.classified_by }}</span>
           <span
             slot="list-info-top-right"
@@ -56,20 +56,20 @@
       <template slot="modalcontent">
         <v-layout class="modal-background">
           <v-flex xs4 ma-3 mt-4>
-            <v-img
+            <!-- <v-img
               slot="list-image"
               contain
               :aspect-ratio="1/1"
               class="edit-modal-image"
               :src="selectedForEdit && selectedForEdit.thumb_250x250"
-            ></v-img>
-            <!-- <v-img
+            ></v-img> -->
+            <v-img
             slot="list-image"
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
             :src="selectedForEdit && generateThumbUrl(selectedForEdit)"
-            ></v-img>-->
+            ></v-img>
           </v-flex>
           <v-flex xs8 pa-3>
             <v-btn
