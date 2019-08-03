@@ -6,16 +6,29 @@
 <template>
   <v-container grid-list-xl fill-height px-0 class="overview-container" v-test-ref="'container'">
     <v-layout column>
-      <v-layout row wrap align-center>
-        <v-flex xs6 v-for="stream in streams" :key="stream.id">
+      <v-layout row align-center>
+        <!-- <v-flex xs6 v-for="stream in streams" :key="stream.id"> -->
+        <v-flex xs6>
           <v-card class="card-container" flat>
-            <video-live-feed :stream="stream" />
-            <!-- <div id="playerElement" style="width:100%; height:0; padding:0 0 56.25% 0"></div> -->
+            <!-- <video-live-feed :stream="stream" /> -->
+            <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div>
             <v-card-title>
-              <span
-                class="cam-name"
-                v-test-ref="'vid-title'"
-              >{{ stream.camName.toUpperCase().replace(/-/, ' ') }}</span>
+              <span class="cam-name" v-test-ref="'vid-title'">
+                <!-- {{ stream.camName.toUpperCase().replace(/-/, ' ') }} -->
+                RAIL EAST
+              </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card class="card-container" flat>
+            <!-- <video-live-feed :stream="stream" /> -->
+            <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div>
+            <v-card-title>
+              <span class="cam-name" v-test-ref="'vid-title'">
+                <!-- {{ stream.camName.toUpperCase().replace(/-/, ' ') }} -->
+                RAIL WEST
+              </span>
             </v-card-title>
           </v-card>
         </v-flex>
@@ -29,20 +42,19 @@
 </template>
 
 <script>
-import VideoLiveFeed from "@/components/video--live-feed.vue";
+// import VideoLiveFeed from "@/components/video--live-feed.vue";
 
 import format from "date-fns/format";
 import config from "../../config/production.js";
 
 export default {
   components: {
-    "video-live-feed": VideoLiveFeed
+    // "video-live-feed": VideoLiveFeed
   },
   data: () => ({
     working: true,
     streams: [
       {
-        id: 100,
         camNumber: 1,
         camName: "Rail-EAST",
         sourceData: {
@@ -53,7 +65,6 @@ export default {
         staticImage: "/assets/images/ref_raileast.jpg"
       },
       {
-        id: 200,
         camNumber: 2,
         camName: "Rail-WEST",
         sourceData: {
@@ -68,6 +79,39 @@ export default {
   }),
   created() {
     this.startTime();
+  },
+  mounted() {
+    // eslint-disable-next-line
+    WowzaPlayer.create("cameraEast", {
+      license: process.env.VUE_APP_WOWZA_LICENSE,
+      title: "",
+      description: "",
+      sourceURL:
+        "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
+      autoPlay: true,
+      volume: "75",
+      mute: true,
+      loop: false,
+      audioOnly: false,
+      uiShowQuickRewind: true,
+      uiQuickRewindSeconds: "30"
+    });
+
+    // eslint-disable-next-line
+    WowzaPlayer.create("cameraWest", {
+      license: process.env.VUE_APP_WOWZA_LICENSE,
+      title: "",
+      description: "",
+      sourceURL:
+        "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
+      autoPlay: true,
+      volume: "75",
+      mute: true,
+      loop: false,
+      audioOnly: false,
+      uiShowQuickRewind: true,
+      uiQuickRewindSeconds: "30"
+    });
   },
   destroyed() {
     clearInterval(this.timer);

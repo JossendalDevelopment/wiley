@@ -44,7 +44,7 @@ const arrayFromJsonFiles = async (filepath) => {
 
             try {
                 if (!filenames.length) {
-                    resolve("No Unclasified events available");
+                    resolve([]);
                 }
 
                 let promises = [];

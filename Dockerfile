@@ -14,7 +14,6 @@ RUN npm install --only=production && npm cache clean --force
 COPY . .
 
 CMD ["npm", "run", "build"]
-# CMD ["./node_modules/\\@vue/cli-service/bin/vue-cli-service.js", "build"]
 
 # production stage
 FROM nginx:1.16-alpine as production-stage

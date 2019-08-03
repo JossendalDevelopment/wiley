@@ -42,7 +42,7 @@ static_params+=" -g ${key_frames_interval} -keyint_min ${key_frames_interval} -h
 # static_params+=" -hls_playlist_type vod "
 
 # misc params
-misc_params="-hide_banner -y"
+misc_params="-hide_banner -y -thread_queue_size 512"
 
 master_playlist="#EXTM3U
 #EXT-X-VERSION:3
@@ -68,12 +68,14 @@ for rendition in "${renditions[@]}"; do
 #   this will override scale and enforce original aspect ratio
 #   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}:force_original_aspect_ratio=decrease"
   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}"
-  cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k -b:a ${audiorate}"
+  cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k"
   cmd+=" -hls_segment_filename ${target}/${name}_%03d.ts ${target}/${name}.m3u8"
   
   # add rendition entry in the master playlist
   master_playlist+="#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},RESOLUTION=${resolution}\n${name}.m3u8\n"
+
 done
+
 
 # start conversion
 echo -e "Executing command:\nffmpeg ${misc_params} -i ${source} ${cmd}"
@@ -83,3 +85,8 @@ ffmpeg ${misc_params} -i ${source} ${cmd}
 echo -e "${master_playlist}" > ${target}/playlist.m3u8
 
 echo "Done - encoded HLS is at ${target}/"
+
+until $cmd ; do
+    echo "restarting ffmpeg command..."
+    sleep 2
+done
