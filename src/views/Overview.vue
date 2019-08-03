@@ -4,11 +4,11 @@
     The initial configuration of each stream is set here
 </notes>
 <template>
-  <v-container grid-list-xl fill-height px-0 class="overview-container" v-test-ref="'container'">
+  <v-layout fill-height px-0 pt-1 mx-2 class="overview-container" v-test-ref="'container'">
     <v-layout column>
-      <v-layout row align-center>
+      <v-layout row align-center justify-space-between>
         <!-- <v-flex xs6 v-for="stream in streams" :key="stream.id"> -->
-        <v-flex xs6>
+        <v-flex xs6 px-1>
           <v-card class="card-container" flat>
             <!-- <video-live-feed :stream="stream" /> -->
             <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div>
@@ -20,7 +20,7 @@
             </v-card-title>
           </v-card>
         </v-flex>
-        <v-flex xs6>
+        <v-flex xs6 px-1>
           <v-card class="card-container" flat>
             <!-- <video-live-feed :stream="stream" /> -->
             <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div>
@@ -38,7 +38,7 @@
         <p class="clock timer">{{ dateTime }}</p>
       </v-layout>
     </v-layout>
-  </v-container>
+  </v-layout>
 </template>
 
 <script>
@@ -53,6 +53,8 @@ export default {
   },
   data: () => ({
     working: true,
+    eastCamStream: null,
+    westCamStream: null,
     streams: [
       {
         camNumber: 1,
@@ -81,45 +83,66 @@ export default {
     this.startTime();
   },
   mounted() {
-    // eslint-disable-next-line
-    WowzaPlayer.create("cameraEast", {
-      license: process.env.VUE_APP_WOWZA_LICENSE,
-      title: "",
-      description: "",
-      sourceURL:
-        "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
-      autoPlay: true,
-      volume: "75",
-      mute: true,
-      loop: false,
-      audioOnly: false,
-      uiShowQuickRewind: true,
-      uiQuickRewindSeconds: "30"
-    });
+    this.eastCamStream === null
+      ? // eslint-disable-next-line
+        (this.eastCamStream = WowzaPlayer.create("cameraEast", {
+          license: process.env.VUE_APP_WOWZA_LICENSE,
+          title: "",
+          description: "",
+          sourceURL:
+            "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
+          autoPlay: true,
+          volume: "0",
+          mute: true,
+          loop: false,
+          audioOnly: false,
+          uiShowQuickRewind: true,
+          uiQuickRewindSeconds: "30",
+          uiShowPlaybackControls: false
+        }))
+      : null;
 
-    // eslint-disable-next-line
-    WowzaPlayer.create("cameraWest", {
-      license: process.env.VUE_APP_WOWZA_LICENSE,
-      title: "",
-      description: "",
-      sourceURL:
-        "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
-      autoPlay: true,
-      volume: "75",
-      mute: true,
-      loop: false,
-      audioOnly: false,
-      uiShowQuickRewind: true,
-      uiQuickRewindSeconds: "30"
+    this.westCamStream === null
+      ? // eslint-disable-next-line
+        (this.westCamStream = WowzaPlayer.create("cameraWest", {
+          license: process.env.VUE_APP_WOWZA_LICENSE,
+          title: "",
+          description: "",
+          sourceURL:
+            "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
+          autoPlay: true,
+          volume: "0",
+          mute: true,
+          loop: false,
+          audioOnly: false,
+          uiShowQuickRewind: true,
+          uiQuickRewindSeconds: "30"
+        }))
+      : null;
+  },
+  beforeRouteLeave(to, from, next) {
+    // called when the route that renders this component is about to
+    // be navigated away from.
+    // has access to `this` component instance.
+    // Needed because the page with changing before wowza players could be properly destroyed
+    this.stopPlayers().then(() => {
+      next();
     });
   },
-  destroyed() {
+  beforeDestroy() {
     clearInterval(this.timer);
   },
   methods: {
     startTime() {
       this.dateTime = format(new Date(), "hh:mm:ss");
       this.timer = setTimeout(this.startTime, 1000);
+    },
+    stopPlayers() {
+      return new Promise(resolve => {
+        this.eastCamStream !== null ? this.eastCamStream.destroy() : null;
+        this.westCamStream !== null ? this.westCamStream.destroy() : null;
+        resolve();
+      });
     }
   }
 };
@@ -129,10 +152,12 @@ export default {
   background-color: var(--v-secondaryDark2-base);
   letter-spacing: 2.5px;
   font-family: "DIN Condensed";
+  justify-content: center;
 }
 .card-container {
   background-color: var(--v-secondaryDark2-base);
   color: #fff;
+  width: 100%;
 }
 .cam-name {
   font-size: 24px;

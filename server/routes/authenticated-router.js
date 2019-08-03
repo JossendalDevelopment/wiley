@@ -87,7 +87,6 @@ router.get('/get_fifty_unclassified_events_postgres', async (req, res) => {
 router.get('/get_all_classified_events_postgres', async (req, res) => {
     try {
         const response = await db.any('SELECT * FROM events WHERE user_classification IS NOT NULL');
-        console.log("GET ALL CLASSIFIED", response);
         formatResponse(res, 'success', response);
     } catch (error) {
         formatResponse(res, 'error', error);

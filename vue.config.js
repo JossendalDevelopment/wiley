@@ -20,7 +20,14 @@ module.exports = {
     //             resourceQuery: '/blockType=notes/'
     //         })
     //   },
-    configureWebpack: {},
+    configureWebpack: {
+        optimization: {
+            splitChunks: {
+                minSize: 10000,
+                maxSize: 250000,
+            }
+        }
+    },
     chainWebpack: config => {
         config.plugin('preload').tap(options => {
             // included by vue. Attempt to preload images

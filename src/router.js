@@ -7,6 +7,11 @@ import NotFound from '@/views/NotFound.vue';
 import Overview from '@/views/Overview.vue';
 import History from '@/views/History.vue';
 import SignIn from '@/views/SignIn.vue';
+// const CameraDetailsPage = () => import(/* webpackChunkName: "group-views" */ '@/views/Details.vue');
+// const NotFound = () => import(/* webpackChunkName: "group-notFound" */ '@/views/NotFound.vue');
+// const Overview = () => import(/* webpackChunkName: "group-views" */ '@/views/Overview.vue');
+// const History = () => import(/* webpackChunkName: "group-views" */ '@/views/History.vue');
+// const SignIn = () => import(/* webpackChunkName: "group-auth" */ '@/views/SignIn.vue');
 
 import store from '@/store';
 
