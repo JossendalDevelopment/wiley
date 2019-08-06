@@ -11,7 +11,7 @@
       >THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S</span>
     </v-layout>
     <v-layout v-else row wrap justify-center>
-      <v-flex xs12 v-for="(evt) in data.events" :key="evt.eventId">
+      <v-flex xs12 v-for="(evt) in data.events" :key="evt.id">
         <app-list-item>
           <!-- <v-img
             slot="list-image"
@@ -25,7 +25,7 @@
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
-            :src="generateThumbUrl(evt)"
+            :src="evt && generateThumbUrl(evt)"
           ></v-img>
           <span slot="list-info-top-left" class="app-list-item-username">{{ evt.classified_by }}</span>
           <span

@@ -11,7 +11,7 @@
       >THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S</span>
     </v-layout>
     <v-layout v-else row wrap>
-      <v-flex xs6 d-flex v-for="(evt) in data.events" :key="evt.eventId">
+      <v-flex xs6 d-flex v-for="(evt) in data.events" :key="evt.id + 'default'">
         <app-list-item small>
           <!-- <v-img
             slot="list-image"
@@ -128,7 +128,7 @@
           @keyup.enter.exact="saveDescription()"
           @keydown.enter.shift.exact="newline"
           placeholder="Please leave a reason for registering this event as a false alarm"
-          v-model="classificationDescription"
+          v-model="classification_description"
         />
       </template>
       <v-btn
@@ -161,7 +161,7 @@ export default {
   data: () => ({
     selectedForEdit: null,
     newClass: null,
-    classificationDescription: ""
+    classification_description: ""
   }),
   computed: {
     selectedClass() {
@@ -191,7 +191,7 @@ export default {
     onClosedEditModal() {
       this.newClass = null;
       this.selectedForEdit = null;
-      this.classificationDescription = "";
+      this.classification_description = "";
     },
     openFalseAlarmModal() {
       this.$refs.editmodal.close();
@@ -199,7 +199,7 @@ export default {
       this.$refs.falsealarm.open();
     },
     saveDescription() {
-      this.selectedForEdit.classification_description = this.classificationDescription.trim();
+      this.selectedForEdit.classification_description = this.classification_description.trim();
       this.$refs.falsealarm.close();
       this.saveEdits();
     },

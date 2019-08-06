@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import CameraDetailsPage from '@/views/Details.vue';
 import NotFound from '@/views/NotFound.vue';
@@ -21,13 +22,6 @@ export const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-        {
-            path: '/',
-            component: Overview,
-            meta: {
-                requiresAuth: true,
-            },
-        },
         { path: '/sign_in', name: 'signIn', component: SignIn },
         {
             path: '/overview',
@@ -36,6 +30,7 @@ export const router = new Router({
             meta: {
                 requiresAuth: true,
             },
+            alias: '/'
         },
         {
             path: '/training',
