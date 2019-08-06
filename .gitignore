@@ -30,6 +30,7 @@ yarn-error.log*
 # docker
 **/docker-compose*.yml
 docker-compose.yml
+Dockerfile-dev
 
 # fileserver
 streams
