@@ -19,7 +19,7 @@
             :aspect-ratio="1/1"
             class="app-list-item-image"
             :src="evt.thumb_250x250"
-          ></v-img> -->
+          ></v-img>-->
           <v-img
             slot="list-image"
             contain
@@ -62,13 +62,13 @@
               :aspect-ratio="1/1"
               class="edit-modal-image"
               :src="selectedForEdit && selectedForEdit.thumb_250x250"
-            ></v-img> -->
+            ></v-img>-->
             <v-img
-            slot="list-image"
-            contain
-            :aspect-ratio="1/1"
-            class="app-list-item-image"
-            :src="selectedForEdit && generateThumbUrl(selectedForEdit)"
+              slot="list-image"
+              contain
+              :aspect-ratio="1/1"
+              class="app-list-item-image"
+              :src="selectedForEdit && generateThumbUrl(selectedForEdit)"
             ></v-img>
           </v-flex>
           <v-flex xs8 pa-3>
@@ -140,7 +140,7 @@
         slot="detailsButton"
         dark
         style="background-color:#FFF; color:black;"
-        :disabled="classification_description.trim() === ''"
+        :disabled="false"
         @click="saveDescription()"
       >Confirm</v-btn>
     </app-dialog>
@@ -199,8 +199,8 @@ export default {
       this.classification_description = "";
     },
     openFalseAlarmModal() {
-      this.newClass = "false-alarm";
       this.$refs.editmodal.close();
+      this.newClass = "false-alarm";
       this.$refs.falsealarm.open();
     },
     saveDescription() {
@@ -216,6 +216,7 @@ export default {
       this.$events
         .updateEvent(event)
         .then(() => {
+          this.$refs.editmodal.close();
           this.onClosedEditModal();
           this.$notifySuccess("UPDATE SUCCESSFUL");
           this.$emit("update");
@@ -264,9 +265,6 @@ export default {
   background-color: var(--v-secondaryDark-base);
   color: #fff;
   padding: 20px;
-}
-.edit-modal-image {
-  //   margin: 10px;
 }
 .classification-btn {
   border: 1px solid var(--v-border-base);

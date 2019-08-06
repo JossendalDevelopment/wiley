@@ -19,7 +19,7 @@
         </v-badge>
       </v-tab>
 
-      <v-tab to="/history" exact>
+      <v-tab to="/archive" exact>
         <h2 class="nav-btn">Archive</h2>
       </v-tab>
       <v-spacer></v-spacer>
@@ -36,18 +36,18 @@ export default {
     async logout() {
       await this.$auth.logout();
       this.$router.replace("/sign_in");
-    },
+    }
   },
   computed: {
     unclassifiedEventCount() {
-        return this.$events.sessionEvents.reduce((prev, next) => {
-          if (!next.user_classification) {
-            prev++;
-          }
-          return prev;
-        }, 0);
-    },
-  },
+      return this.$events.sessionEvents.reduce((prev, next) => {
+        if (!next.user_classification) {
+          prev++;
+        }
+        return prev;
+      }, 0);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -78,7 +78,6 @@ export default {
   position: absolute;
   top: -1px;
   right: 12px;
-  //   height: 28px;
   width: 80px;
   background-color: var(--v-secondaryDark-base);
   border: 1px solid var(--v-border-base);

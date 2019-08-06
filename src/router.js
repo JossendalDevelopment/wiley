@@ -5,12 +5,12 @@ import firebase from 'firebase';
 import CameraDetailsPage from '@/views/Details.vue';
 import NotFound from '@/views/NotFound.vue';
 import Overview from '@/views/Overview.vue';
-import History from '@/views/History.vue';
+import Archive from '@/views/Archive.vue';
 import SignIn from '@/views/SignIn.vue';
 // const CameraDetailsPage = () => import(/* webpackChunkName: "group-views" */ '@/views/Details.vue');
 // const NotFound = () => import(/* webpackChunkName: "group-notFound" */ '@/views/NotFound.vue');
 // const Overview = () => import(/* webpackChunkName: "group-views" */ '@/views/Overview.vue');
-// const History = () => import(/* webpackChunkName: "group-views" */ '@/views/History.vue');
+// const Archive = () => import(/* webpackChunkName: "group-views" */ '@/views/Archive.vue');
 // const SignIn = () => import(/* webpackChunkName: "group-auth" */ '@/views/SignIn.vue');
 
 import store from '@/store';
@@ -23,7 +23,6 @@ export const router = new Router({
     routes: [
         {
             path: '/',
-            name: 'overview',
             component: Overview,
             meta: {
                 requiresAuth: true,
@@ -47,9 +46,9 @@ export const router = new Router({
             },
         },
         {
-            path: '/history',
-            name: 'history',
-            component: History,
+            path: '/archive',
+            name: 'archive',
+            component: Archive,
             meta: {
                 requiresAuth: true,
             },

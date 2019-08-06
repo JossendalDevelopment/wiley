@@ -1,7 +1,4 @@
 <notes>
-    TODO: RENAME - This view, despite being named 'history' is now being called 'archive'
-    Sorry about the hacky css in the `.app-card` class. The font has a lot of built in padding that is unavoidable 
-    for the time being. Look in to getting a re-formatted font.
 </notes>
 <template>
   <v-container fill-height fluid pa-0 ml-0 mr-0 grid-list-lg class="history-container">
@@ -83,7 +80,7 @@
               :is="getComponent"
               :key="selectedEvent.type + 'selected'"
               :data="eventTypes[selectedEvent.type]"
-              :on:update="fetchHistory"
+              :on:update="fetchHistory()"
               style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
             />
           </v-flex>
@@ -97,8 +94,8 @@
 // import "firebase/firestore";
 
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
-import FalseAlarmList from "@/components/history--false-alarm-list.vue";
-import DefaultList from "@/components/history--default-list.vue";
+import FalseAlarmList from "@/components/archive--false-alarm-list.vue";
+import DefaultList from "@/components/archive--default-list.vue";
 
 import EventTypes from "@/types/eventTypes";
 
