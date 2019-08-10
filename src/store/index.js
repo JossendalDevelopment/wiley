@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 
-import { cameraAlert } from './alert.module';
+import { alert } from './alert.module';
 import { authentication } from './auth.module';
 import { eventHistory } from './event.module';
 
@@ -14,14 +14,14 @@ export default new Vuex.Store({
             storage: window.localStorage,
             modules: [
                 'authentication',
-                'cameraAlert',
+                'alert',
                 'eventHistory'
             ],
         }).plugin,
     ],
     modules: {
         authentication,
-        cameraAlert,
+        alert,
         eventHistory,
     },
 });

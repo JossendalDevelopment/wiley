@@ -25,3 +25,41 @@ export const testref = {
         }
     },
 };
+
+export const flash = {
+    bind(el) {
+        // if (!binding.value) {
+        //     throw new Error(
+        //         "Custom directive 'v-flash' is missing a required value."
+        //     );
+        // }
+        if (el) {
+            let bg = 'red'
+            let timesRun = 0;
+            el.style.background = bg
+            // while (count > 0) {
+            let interval = setInterval(() => {
+                timesRun += 1;
+                if (timesRun === 7) {
+                    clearInterval(interval);
+                } else {
+                    if (bg === 'red') {
+                        el.classList.remove("error")
+                        // el.classList.add("success")
+                        bg = 'white'
+                        // el.setAttribute('color', '#FFF')
+                        el.style.backgroundColor = '#FFF';
+                        el.style.color = 'red';
+                    } else {
+                        // el.classList.remove("success")
+                        // el.classList.add("error")
+                        bg = 'red'
+                        // el.setAttribute('color', 'red')
+                        el.style.backgroundColor = 'red';
+                        el.style.color = '#FFF';
+                    }
+                }
+            }, 400)
+        }
+    }
+}

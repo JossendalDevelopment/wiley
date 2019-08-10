@@ -11,27 +11,28 @@
     TODO redo the badge in css only, the numerals aren't centering properly with v-badge and are being cheesed a bit
 </notes>
 <template>
-  <div id="app">
+  <div id="app" style="position: relative">
     <!-- Page header alert -->
     <v-alert
-      :value="$cameraAlert.showHeader"
-      color="error"
-      light
+      :value="$alert.showHeader"
+      v-flash
       transition="slide-y-transition"
-      dismissible
-      style="margin-top:0px; margin-bottom:0px; padding-right:2rem;"
+      style=" margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 65px; z-index: 1000;"
+      @click="goToAlertDetails()"
     >
       <v-layout align-center justify-center>
         <span
-          style="cursor: pointer;"
-          @click="goToAlertDetails()"
+          style="cursor: pointer; flex-grow: 1;"
           class="text-xs-center mb-0 headline"
         >{{ formatAlertText }}</span>
-        <a
-          class="ml-3"
-          style="text-decoration:underline; cursor:pointer;"
-        >Snooze alerts for 1 minute?</a>
       </v-layout>
+      <v-btn
+        @click="$alert.hideAlertHeader()"
+        dark
+        flat
+        small
+        class="clear-alert-btn"
+      >TURN OFF ALARM</v-btn>
     </v-alert>
 
     <v-app id="inspire">
@@ -89,19 +90,22 @@ export default {
   components: {
     "app-header": AppHeader
   },
-//   mounted() {
-//     let Userback = window.Userback || {};
-//     Userback.access_token = '7500|0|VVHLALuJlr5psmNJnPsu3lcBcG9VqLEH1LlaWdQgAsjgOmVRyF';
-
-//     (function(id) {
-//         if (document.getElementById(id)) {return;}
-//         var s = document.createElement('script');
-//         s.id = id;
-//         s.src = 'https://static.userback.io/widget/v1.js';
-//         var parent_node = document.head || document.body;
-//         parent_node.appendChild(s);
-//     })('userback-sdk');
-//   },
+  mounted() {
+    console.log("BIFF", this.$alert);
+    //     let Userback = window.Userback || {};
+    //     Userback.access_token = '7500|0|VVHLALuJlr5psmNJnPsu3lcBcG9VqLEH1LlaWdQgAsjgOmVRyF';
+    //     (function(id) {
+    //         if (document.getElementById(id)) {return;}
+    //         var s = document.createElement('script');
+    //         s.id = id;
+    //         s.src = 'https://static.userback.io/widget/v1.js';
+    //         var parent_node = document.head || document.body;
+    //         parent_node.appendChild(s);
+    //     })('userback-sdk');
+  },
+  methods: {
+    goToAlertDetails() {}
+  },
   data: () => ({
     alert: true,
     tab: null,
@@ -133,16 +137,16 @@ export default {
   }),
   computed: {
     formatAlertText() {
-      let alert = this.$cameraAlert.alertData;
-      return `1 ${alert.detectedObject} identified in ${alert.camName}`;
-    },
+      let alert = this.$alert.alertData;
+      return `${alert.inferenced_classification.toUpperCase()}`;
+    }
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #app > div.v-alert.error > a > i {
   /* overrides alert header bars' cancel icon color to white */
-  color: white;
+  color: #fff;
 }
 
 .v-btn--active {
@@ -152,5 +156,28 @@ export default {
 }
 .app-container {
   background-color: var(--v-secondaryDark-base);
+}
+.clear-alert-btn {
+  position: fixed;
+  top: 14px;
+  right: 12px;
+  // width: 80px;
+  background-color: var(--v-accent-base);
+  border: 1px solid #fff;
+}
+
+.alert-flash {
+  animation: blink 0.2s 20 alternate;
+}
+
+@keyframes blink {
+  from {
+    background-color: var(--v-accent-base);
+    color: #fff;
+  }
+  to {
+    background-color: #fff;
+    color: var(--v-accent-base);
+  }
 }
 </style>

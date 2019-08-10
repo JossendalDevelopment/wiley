@@ -9,7 +9,11 @@
       <v-layout row align-center justify-space-between>
         <!-- <v-flex xs6 v-for="stream in streams" :key="stream.id"> -->
         <v-flex xs6 px-1>
-          <v-card class="card-container" flat>
+          <v-card
+            class="card-container"
+            :class="$alert.showHeader && $alert.alertData.camera === 'east' ? 'alert-active' : null"
+            flat
+          >
             <!-- <video-live-feed :stream="stream" /> -->
             <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div>
             <v-card-title>
@@ -21,7 +25,11 @@
           </v-card>
         </v-flex>
         <v-flex xs6 px-1>
-          <v-card class="card-container" flat>
+          <v-card
+            class="card-container"
+            :class="$alert.showHeader && $alert.alertData.camera === 'west' ? 'alert-active' : null"
+            flat
+          >
             <!-- <video-live-feed :stream="stream" /> -->
             <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div>
             <v-card-title>
@@ -33,10 +41,13 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <v-layout column align-end justify-end v-test-ref="'clock-container'">
+      <v-layout align-center justify-center>
+        <v-btn>MUTE</v-btn>
+      </v-layout>
+      <!-- <v-layout column align-end justify-end v-test-ref="'clock-container'">
         <p class="clock label">TIME</p>
         <p class="clock timer">{{ dateTime }}</p>
-      </v-layout>
+      </v-layout>-->
     </v-layout>
   </v-layout>
 </template>
@@ -44,7 +55,7 @@
 <script>
 // import VideoLiveFeed from "@/components/video--live-feed.vue";
 
-import format from "date-fns/format";
+// import format from "date-fns/format";
 import config from "../../config/production.js";
 
 export default {
@@ -75,12 +86,12 @@ export default {
         },
         staticImage: "/assets/images/ref_raileast.jpg"
       }
-    ],
-    dateTime: null,
-    timer: null
+    ]
+    // dateTime: null,
+    // timer: null
   }),
   created() {
-    this.startTime();
+    // this.startTime();
   },
   mounted() {
     this.eastCamStream === null
@@ -133,10 +144,10 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
-    startTime() {
-      this.dateTime = format(new Date(), "hh:mm:ss");
-      this.timer = setTimeout(this.startTime, 1000);
-    },
+    // startTime() {
+    //   this.dateTime = format(new Date(), "hh:mm:ss");
+    //   this.timer = setTimeout(this.startTime, 1000);
+    // },
     stopPlayers() {
       return new Promise(resolve => {
         this.eastCamStream !== null ? this.eastCamStream.destroy() : null;
@@ -172,6 +183,10 @@ export default {
   &.timer {
     font-size: 64px;
   }
+}
+.alert-active {
+  border: 1px solid var(--v-accent-base);
+  background-color: var(--v-accent-base);
 }
 </style>
 

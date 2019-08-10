@@ -2,6 +2,7 @@
   <div v-if="$auth.status.loggedIn" class="app-toolbar">
     <v-tabs centered class="tab-container">
       <v-tabs-slider color="red" style="height: 5px;"></v-tabs-slider>
+      <v-btn @click="createDummyAlarm()" dark flat small class="alert-btn">ALERT</v-btn>
       <v-spacer></v-spacer>
 
       <v-tab to="/overview" exact>
@@ -28,6 +29,8 @@
   </div>
 </template>
 <script>
+import Alert from "../types/Alert";
+
 export default {
   data: () => ({
     tab: null
@@ -36,6 +39,11 @@ export default {
     async logout() {
       await this.$auth.logout();
       this.$router.replace("/sign_in");
+    },
+    createDummyAlarm() {
+      this.$alert.createAlert(
+        new Alert({ inferenced_classification: "Coyote", camera: "east" })
+      );
     }
   },
   computed: {
@@ -80,6 +88,14 @@ export default {
   right: 12px;
   width: 80px;
   background-color: var(--v-secondaryDark-base);
+  border: 1px solid var(--v-border-base);
+}
+.alert-btn {
+  position: absolute;
+  top: -1px;
+  left: 12px;
+  width: 80px;
+  background-color: var(--v-accent-base);
   border: 1px solid var(--v-border-base);
 }
 </style>

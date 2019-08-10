@@ -4,25 +4,25 @@ export default {
     install(Vue) {
         Vue.mixin({
             computed: {
-                "$cameraAlert"() {
-                    var alert = store.getters['cameraAlert/alert'];
+                "$alert"() {
+                    var alert = store.getters['alert/alert'];
                     alert.createAlert = (alertData) => {
-                        return store.dispatch('cameraAlert/createAlert', {
+                        return store.dispatch('alert/createAlert', {
                             alertData
                         });
                     };
                     alert.clearAlert = () => {
-                        return store.dispatch('cameraAlert/clearAlert');
+                        return store.dispatch('alert/clearAlert');
                     };
                     alert.showAlertHeader = () => {
-                        return store.dispatch('cameraAlert/showAlertHeader');
+                        return store.dispatch('alert/showAlertHeader');
                     };
                     alert.hideAlertHeader = () => {
-                        return store.dispatch('cameraAlert/hideAlertHeader');
+                        return store.dispatch('alert/hideAlertHeader');
                     };
                     return alert;
                 }
             }
         });
     }
-}
+};

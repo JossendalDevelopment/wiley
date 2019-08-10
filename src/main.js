@@ -8,10 +8,10 @@ import store from './store/index';
 
 import AuthPlugin from '@/plugins/auth.js';
 import Notifications from '@/plugins/notifications.js';
-import CameraAlertPlugin from '@/plugins/cameraAlert.js';
+import AlertPlugin from '@/plugins/alert.js';
 import EventHistoryPlugin from '@/plugins/event.js';
 
-import { trim, testref } from '@/directives/global.js';
+import { trim, testref, flash } from '@/directives/global.js';
 
 import 'vuetify/dist/vuetify.min.css';
 import 'video.js/dist/video-js.css';
@@ -29,11 +29,12 @@ firebase.initializeApp({
 
 Vue.config.productionTip = false;
 Vue.use(AuthPlugin);
-Vue.use(CameraAlertPlugin);
+Vue.use(AlertPlugin);
 Vue.use(EventHistoryPlugin);
 Vue.use(Notifications);
 Vue.directive('trim', trim);
 Vue.directive('test-ref', testref);
+Vue.directive('flash', flash);
 
 new Vue({
     router,

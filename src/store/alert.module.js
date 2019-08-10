@@ -1,11 +1,9 @@
-import AlertData from '@/types/cameraAlertType';
-// import api from '../services/api.service';
-// api.new('/api');
+import Alert from '@/types/Alert';
 
-export const cameraAlert = {
+export const alert = {
     namespaced: true,
     state: {
-        alertData: {...new AlertData()},
+        alertData: new Alert(),
         active: false,
         showHeader: false,
     },
@@ -16,14 +14,15 @@ export const cameraAlert = {
     },
     mutations: {
         createAlert: (state, payload) => {
-            state.alertData = payload.alertData;
+            state.alertData = new Alert(payload.alertData);
             state.active = true;
         },
         clearAlert: state => {
-            state.alertData = new AlertData();
+            state.alertData = new Alert();
             state.active = false;
         },
         showAlertHeader: state => {
+            console.log("SHOWING")
             state.showHeader = true;
         },
         hideAlertHeader: state => {
