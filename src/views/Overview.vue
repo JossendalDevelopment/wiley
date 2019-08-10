@@ -11,16 +11,22 @@
         <v-flex xs6 px-1>
           <v-card
             class="card-container"
+            v-flash="$alert.showHeader"
             :class="$alert.showHeader && $alert.alertData.camera === 'east' ? 'alert-active' : null"
             flat
           >
             <!-- <video-live-feed :stream="stream" /> -->
             <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div>
             <v-card-title>
-              <span class="cam-name" v-test-ref="'vid-title'">
-                <!-- {{ stream.camName.toUpperCase().replace(/-/, ' ') }} -->
-                RAIL EAST
-              </span>
+              <v-layout justify-space-between align-center>
+                <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
+                <router-link
+                  to="null"
+                  v-show="$alert.showHeader && $alert.alertData.camera === 'east'"
+                  class="my-0 cam-link"
+                  flat
+                >VIEW</router-link>
+              </v-layout>
             </v-card-title>
           </v-card>
         </v-flex>
@@ -33,16 +39,21 @@
             <!-- <video-live-feed :stream="stream" /> -->
             <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div>
             <v-card-title>
-              <span class="cam-name" v-test-ref="'vid-title'">
-                <!-- {{ stream.camName.toUpperCase().replace(/-/, ' ') }} -->
-                RAIL WEST
-              </span>
+              <v-layout justify-space-between align-center>
+                <span class="cam-name" v-test-ref="'vid-title'">RAIL WEST</span>
+                <router-link
+                  to="null"
+                  v-show="$alert.showHeader && $alert.alertData.camera === 'west'"
+                  class="my-0 cam-link"
+                  flat
+                >VIEW</router-link>
+              </v-layout>
             </v-card-title>
           </v-card>
         </v-flex>
       </v-layout>
       <v-layout align-center justify-center>
-        <v-btn>MUTE</v-btn>
+        <overview-mute />
       </v-layout>
       <!-- <v-layout column align-end justify-end v-test-ref="'clock-container'">
         <p class="clock label">TIME</p>
@@ -57,10 +68,12 @@
 
 // import format from "date-fns/format";
 import config from "../../config/production.js";
+import OverviewMute from "../components/overview--mute";
 
 export default {
   components: {
     // "video-live-feed": VideoLiveFeed
+    "overview-mute": OverviewMute
   },
   data: () => ({
     working: true,
@@ -170,8 +183,14 @@ export default {
   color: #fff;
   width: 100%;
 }
-.cam-name {
-  font-size: 24px;
+.cam {
+  &-name {
+    font-size: 24px;
+  }
+  &-link {
+    font-size: 24px;
+    text-decoration: none;
+  }
 }
 .clock {
   color: #fff;

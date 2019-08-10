@@ -15,16 +15,13 @@
     <!-- Page header alert -->
     <v-alert
       :value="$alert.showHeader"
-      v-flash
+      v-flash="$alert.showHeader"
       transition="slide-y-transition"
-      style=" margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 65px; z-index: 1000;"
+      style="margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 65px; z-index: 200; background-color: 'red'"
       @click="goToAlertDetails()"
     >
       <v-layout align-center justify-center>
-        <span
-          style="cursor: pointer; flex-grow: 1;"
-          class="text-xs-center mb-0 headline"
-        >{{ formatAlertText }}</span>
+        <span class="text-xs-center mb-0 alert-text">{{ formatAlertText }}</span>
       </v-layout>
       <v-btn
         @click="$alert.hideAlertHeader()"
@@ -138,7 +135,7 @@ export default {
   computed: {
     formatAlertText() {
       let alert = this.$alert.alertData;
-      return `${alert.inferenced_classification.toUpperCase()}`;
+      return alert && `${alert.inferenced_classification.toUpperCase()}`;
     }
   }
 };
@@ -168,6 +165,11 @@ export default {
 
 .alert-flash {
   animation: blink 0.2s 20 alternate;
+}
+.alert-text {
+  font-family: "Din Condensed";
+  font-size: 30px;
+  letter-spacing: 2.5px;
 }
 
 @keyframes blink {

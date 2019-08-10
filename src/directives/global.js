@@ -27,39 +27,41 @@ export const testref = {
 };
 
 export const flash = {
-    bind(el) {
-        // if (!binding.value) {
-        //     throw new Error(
-        //         "Custom directive 'v-flash' is missing a required value."
-        //     );
-        // }
-        if (el) {
-            let bg = 'red'
-            let timesRun = 0;
-            el.style.background = bg
-            // while (count > 0) {
-            let interval = setInterval(() => {
-                timesRun += 1;
-                if (timesRun === 7) {
-                    clearInterval(interval);
-                } else {
-                    if (bg === 'red') {
-                        el.classList.remove("error")
-                        // el.classList.add("success")
-                        bg = 'white'
-                        // el.setAttribute('color', '#FFF')
-                        el.style.backgroundColor = '#FFF';
-                        el.style.color = 'red';
-                    } else {
-                        // el.classList.remove("success")
-                        // el.classList.add("error")
-                        bg = 'red'
-                        // el.setAttribute('color', 'red')
-                        el.style.backgroundColor = 'red';
-                        el.style.color = '#FFF';
-                    }
-                }
-            }, 400)
-        }
+    bind(el, binding) {
+        flasher(el, binding)
+    },
+    update(el, binding) {
+        flasher(el, binding)
     }
-}
+};
+
+const flasher = (el, binding) => {
+    if (el && binding.value) {
+        el.style.backgroundColor = 'red';
+        let bg = true
+        let timesRun = 0;
+        let interval = setInterval(() => {
+            timesRun += 1;
+            if (timesRun === 11) {
+                clearInterval(interval);
+            } else {
+                if (bg) {
+                    // if used on a v-alert, there is a default class of 'error' that overrides style.backgroundColor
+                    // so remove it
+                    el.classList.remove("error")
+                    bg = !bg
+                    el.style.backgroundColor = '#FFF';
+                    el.style.borderColor = '#FFF';
+                    el.style.color = 'red';
+                } else {
+                    bg = !bg
+                    el.style.backgroundColor = 'red';
+                    el.style.borderColor = 'red';
+                    el.style.color = '#FFF';
+                }
+            }
+        }, 200)
+    } else if (el) {
+        el.style.backgroundColor = null;
+    }
+};

@@ -3,7 +3,7 @@ import Alert from '@/types/Alert';
 export const alert = {
     namespaced: true,
     state: {
-        alertData: new Alert(),
+        alertData: null,
         active: false,
         showHeader: false,
     },
@@ -18,7 +18,7 @@ export const alert = {
             state.active = true;
         },
         clearAlert: state => {
-            state.alertData = new Alert();
+            state.alertData = null;
             state.active = false;
         },
         showAlertHeader: state => {
@@ -42,6 +42,7 @@ export const alert = {
             commit('showAlertHeader');
         },
         hideAlertHeader({ commit }) {
+            commit('clearAlert');
             commit('hideAlertHeader');
         },
     },
