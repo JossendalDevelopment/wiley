@@ -14,7 +14,6 @@ Object.defineProperty(Event, 'template', {
             "camera": null,
             "classification_description": null,
             "classified_by": null,
-            "eventId": null,
             "id": "",
             "image_filename": "",
             "image_filepath": "",

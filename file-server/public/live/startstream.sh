@@ -10,14 +10,15 @@ renditions=(
 # resolution  bitrate  audio-rate
 #  "426x240    400k    64k"
 #   "640x360    800k     96k"      # 360 p
-  "842x480    1400k    128k"   # 480 p
+#   "842x480    1400k    128k"   # 480 p
+  "640x480    800k    128k"   # 480 p
 #   "1280x720   2800k    128k"   # HD 720 p
 #   "1920x1080  5000k    192k"   # FULL HD
 )
 
-segment_target_duration=4       # try to create a new segment every X seconds
+segment_target_duration=10       # try to create a new segment every X seconds
 max_bitrate_ratio=1.07          # maximum accepted bitrate fluctuations
-rate_monitor_buffer_ratio=1.5   # maximum buffer size between bitrate conformance checks
+rate_monitor_buffer_ratio=1.2   # maximum buffer size between bitrate conformance checks
 
 #########################################################################
 
@@ -55,7 +56,7 @@ for rendition in "${renditions[@]}"; do
   # rendition fields
   resolution="$(echo ${rendition} | cut -d ' ' -f 1)"
   bitrate="$(echo ${rendition} | cut -d ' ' -f 2)"
-  audiorate="$(echo ${rendition} | cut -d ' ' -f 3)"
+#   audiorate="$(echo ${rendition} | cut -d ' ' -f 3)"
 
   # calculated fields
   width="$(echo ${resolution} | grep -oE '^[[:digit:]]+')"

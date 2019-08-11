@@ -15,8 +15,8 @@
             :class="$alert.showHeader && $alert.alertData.camera === 'east' ? 'alert-active' : null"
             flat
           >
-            <!-- <video-live-feed :stream="stream" /> -->
-            <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div>
+            <overview-live-feed :stream="streams[0]" />
+            <!-- <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
             <v-card-title>
               <v-layout justify-space-between align-center>
                 <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
@@ -36,8 +36,8 @@
             :class="$alert.showHeader && $alert.alertData.camera === 'west' ? 'alert-active' : null"
             flat
           >
-            <!-- <video-live-feed :stream="stream" /> -->
-            <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div>
+            <overview-live-feed :stream="streams[1]" />
+            <!-- <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
             <v-card-title>
               <v-layout justify-space-between align-center>
                 <span class="cam-name" v-test-ref="'vid-title'">RAIL WEST</span>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-// import VideoLiveFeed from "@/components/video--live-feed.vue";
+import OverviewLiveFeed from "@/components/overview--live-feed.vue";
 
 // import format from "date-fns/format";
 import config from "../../config/production.js";
@@ -72,7 +72,7 @@ import OverviewMute from "../components/overview--mute";
 
 export default {
   components: {
-    // "video-live-feed": VideoLiveFeed
+    "overview-live-feed": OverviewLiveFeed,
     "overview-mute": OverviewMute
   },
   data: () => ({
@@ -107,42 +107,41 @@ export default {
     // this.startTime();
   },
   mounted() {
-    this.eastCamStream === null
-      ? // eslint-disable-next-line
-        (this.eastCamStream = WowzaPlayer.create("cameraEast", {
-          license: process.env.VUE_APP_WOWZA_LICENSE,
-          title: "",
-          description: "",
-          sourceURL:
-            "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
-          autoPlay: true,
-          volume: "0",
-          mute: true,
-          loop: false,
-          audioOnly: false,
-          uiShowQuickRewind: true,
-          uiQuickRewindSeconds: "30",
-          uiShowPlaybackControls: false
-        }))
-      : null;
-
-    this.westCamStream === null
-      ? // eslint-disable-next-line
-        (this.westCamStream = WowzaPlayer.create("cameraWest", {
-          license: process.env.VUE_APP_WOWZA_LICENSE,
-          title: "",
-          description: "",
-          sourceURL:
-            "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
-          autoPlay: true,
-          volume: "0",
-          mute: true,
-          loop: false,
-          audioOnly: false,
-          uiShowQuickRewind: true,
-          uiQuickRewindSeconds: "30"
-        }))
-      : null;
+    // this.eastCamStream === null
+    //   ? // eslint-disable-next-line
+    //     (this.eastCamStream = WowzaPlayer.create("cameraEast", {
+    //       license: process.env.VUE_APP_WOWZA_LICENSE,
+    //       title: "",
+    //       description: "",
+    //       sourceURL:
+    //         "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
+    //       autoPlay: true,
+    //       volume: "0",
+    //       mute: true,
+    //       loop: false,
+    //       audioOnly: false,
+    //       uiShowQuickRewind: true,
+    //       uiQuickRewindSeconds: "30",
+    //       uiShowPlaybackControls: false
+    //     }))
+    //   : null;
+    // this.westCamStream === null
+    //   ? // eslint-disable-next-line
+    //     (this.westCamStream = WowzaPlayer.create("cameraWest", {
+    //       license: process.env.VUE_APP_WOWZA_LICENSE,
+    //       title: "",
+    //       description: "",
+    //       sourceURL:
+    //         "http%3A%2F%2F0.0.0.0%3A1935%2FWiley%2FBahay.stream%2Fplaylist.m3u8",
+    //       autoPlay: true,
+    //       volume: "0",
+    //       mute: true,
+    //       loop: false,
+    //       audioOnly: false,
+    //       uiShowQuickRewind: true,
+    //       uiQuickRewindSeconds: "30"
+    //     }))
+    //   : null;
   },
   beforeRouteLeave(to, from, next) {
     // called when the route that renders this component is about to

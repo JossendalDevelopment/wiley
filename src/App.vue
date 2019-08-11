@@ -80,6 +80,7 @@
   </div>
 </template>
 <script>
+import io from "socket.io-client";
 import AppHeader from "@/components/app-header.vue";
 
 export default {
@@ -88,7 +89,6 @@ export default {
     "app-header": AppHeader
   },
   mounted() {
-    console.log("BIFF", this.$alert);
     //     let Userback = window.Userback || {};
     //     Userback.access_token = '7500|0|VVHLALuJlr5psmNJnPsu3lcBcG9VqLEH1LlaWdQgAsjgOmVRyF';
     //     (function(id) {
@@ -99,11 +99,16 @@ export default {
     //         var parent_node = document.head || document.body;
     //         parent_node.appendChild(s);
     //     })('userback-sdk');
+    this.socket.on("TRIGGER_ALARM", data => {
+      console.log("RECEIVED", data);
+      this.$alert.createAlert(data);
+    });
   },
   methods: {
     goToAlertDetails() {}
   },
   data: () => ({
+    socket: io("http://localhost:3001"),
     alert: true,
     tab: null,
     animation: {

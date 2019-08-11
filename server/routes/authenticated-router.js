@@ -100,12 +100,11 @@ router.get('/set_yesterdays_events_postgres', async (req, res) => {
     try {
         // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
-        console.log("EVENTS TO BE INSERTED TO DB", eventsJson.length)
 
         const response = await db.tx(t => {
             const queries = eventsJson.map(event => {
-                // event.thumb_250x250 = null;
-                return t.one('INSERT INTO events(id, image_filepath, image_filename, image_width, image_height, bbox_xmin, bbox_ymin, bbox_width, bbox_height, camera, inferenced_classification, inferenced_percentage, user_classification, classification_description, classified_by, modified_date, thumb_filename, thumb_filepath, thumb_250x250) VALUES(${id}, ${image_filepath}, ${image_filename}, ${image_width}, ${image_height}, ${bbox_xmin}, ${bbox_ymin}, ${bbox_width}, ${bbox_height}, ${camera}, ${inferenced_classification}, ${inferenced_percentage}, ${user_classification}, ${classification_description}, ${classified_by}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
+
+                return t.one('INSERT INTO alerts(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name) VALUES(${bbox_height}, ${bbox_width}, ${bbox_xmin}, ${bbox_ymin}, ${camera}, ${classification_description}, ${classified_by}, ${id}, ${image_filename}, ${image_filepath}, ${image_height}, ${image_width}, ${inferenced_classification}, ${inferenced_percentage}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}, ${thumb_height}, ${thumb_width}, ${user_classification}, ${video_clip_filepath}, ${video_clip_name}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
             });
             return t.batch(queries);
         });

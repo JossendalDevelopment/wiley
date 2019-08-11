@@ -2,7 +2,7 @@
   <span>
     <v-btn @click="$refs.mute.open()" flat dark large>MUTE ALARM</v-btn>
 
-    <app-dialog ref="mute" lazy v-on:closed="null" v-on:opened="null">
+    <app-dialog ref="mute" lazy>
       <!-- <template slot="modaltitle">SELECT HOW LONG YOU WOULD LIKE TO MUTE ALARMS</template> -->
       <template slot="modalcontent">
         <v-layout column align-center justify-center fill-height>

@@ -39,7 +39,7 @@ export default {
       controls: true,
       liveui: true,
       responsive: true,
-      aspectRatio: "16:9",
+      aspectRatio: "4:3",
       loop: false,
       fill: true,
       muted: true,

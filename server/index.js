@@ -48,6 +48,8 @@ const testPostgres = () => {
 testPostgres();
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // request limits here extended to allow for passing base64 data uri when creating thumbnail
 // in routes/authenticated-router /update_event route
@@ -58,7 +60,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // this needs to be before app.use static to serve files and all routes requiring cors
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5001');
+    res.header('Access-Control-Allow-Credentials', true);
     res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
@@ -67,6 +70,19 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+/* ***********************************************************
+ SOCKET IO
+************************************************************* */
+io.on('connection', function (socket) {
+    console.log('SOCKET.IO CONNECTED', socket.id);
+});
+
+// Make io accessible to our router
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 app.get('/healthcheck', function (req, res) {
     // docker healthcheck - do app logic here to determine if app is truly healthy
@@ -83,9 +99,10 @@ app.use('/api', authenticatedRouter);
 // app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter);
 
 // start server
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('API Server listening on port ' + PORT);
 });
+
 
 /* ***********************************************************
  ERROR HANDLING
