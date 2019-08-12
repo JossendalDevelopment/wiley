@@ -84,9 +84,31 @@ router.get('/get_fifty_unclassified_events_postgres', async (req, res) => {
 
 // @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
-router.get('/get_all_classified_events_postgres', async (req, res) => {
+router.post('/get_archived_events_postgres', async (req, res) => {
+    console.log("ARCHIVED PARAMS", req.body.params)
+    let params = req.body.params;
+
     try {
-        const response = await db.any('SELECT * FROM events WHERE user_classification IS NOT NULL');
+        const response = await db.any(`SELECT * FROM events WHERE user_classification IS NOT NULL ORDER BY modified_date LIMIT ${params.limit}`);
+        formatResponse(res, 'success', response);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
+// @METHOD: GET
+// @RETURN: 
+router.get('/get_events_count', async (req, res) => {
+    try {
+        const response = await db.any(`SELECT  
+                sum(case when user_classification = 'animal' then 1 else 0 end) as Animal,
+                sum(case when user_classification = 'intruder' then 1 else 0 end) as Intruder,
+                sum(case when user_classification = 'train' then 1 else 0 end) as Train,
+                sum(case when user_classification = 'employee' then 1 else 0 end) as Employee,
+                sum(case when user_classification = 'false-alarm' then 1 else 0 end) as FasleAlarm,
+                sum(case when user_classification IS NOT NULL then 1 else 0 end) as Total
+            from events;`
+        );
         formatResponse(res, 'success', response);
     } catch (error) {
         formatResponse(res, 'error', error);
@@ -104,7 +126,7 @@ router.get('/set_yesterdays_events_postgres', async (req, res) => {
         const response = await db.tx(t => {
             const queries = eventsJson.map(event => {
 
-                return t.one('INSERT INTO alerts(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name) VALUES(${bbox_height}, ${bbox_width}, ${bbox_xmin}, ${bbox_ymin}, ${camera}, ${classification_description}, ${classified_by}, ${id}, ${image_filename}, ${image_filepath}, ${image_height}, ${image_width}, ${inferenced_classification}, ${inferenced_percentage}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}, ${thumb_height}, ${thumb_width}, ${user_classification}, ${video_clip_filepath}, ${video_clip_name}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
+                return t.one('INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name) VALUES(${bbox_height}, ${bbox_width}, ${bbox_xmin}, ${bbox_ymin}, ${camera}, ${classification_description}, ${classified_by}, ${id}, ${image_filename}, ${image_filepath}, ${image_height}, ${image_width}, ${inferenced_classification}, ${inferenced_percentage}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}, ${thumb_height}, ${thumb_width}, ${user_classification}, ${video_clip_filepath}, ${video_clip_name}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
             });
             return t.batch(queries);
         });

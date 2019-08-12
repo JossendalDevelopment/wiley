@@ -10,22 +10,22 @@
         <!-- card row -->
         <v-flex shrink>
           <v-layout justify-center align-center class="app-card-container" pa-2>
-            <template v-for="(item, i) in eventTypes">
+            <template v-for="(item, i) in counts">
               <v-flex
                 xs4
                 d-flex
                 class="app-card"
-                :class="selectedEvent.type === item.type ? 'app-card-selected' : ''"
+                :class="selectedEvent.type === item ? 'app-card-selected' : ''"
                 :key="i + 'card'"
                 @click="selectEventType(item)"
               >
                 <v-layout align-center>
                   <v-flex py-0>
-                    <p class="name mb-0">{{ item.name.toUpperCase() }}</p>
-                    <p class="count mb-0">{{ item.count }}</p>
+                    <p class="name mb-0">{{ i.toUpperCase() }}</p>
+                    <p class="count mb-0">{{ item }}</p>
                   </v-flex>
                   <v-flex pa-0 pr-1 text-xs-right style="margin-bottom: -10px;">
-                    <p class="percentage mb-0">{{ Math.round(percentage(item.count)) || 0 }}%</p>
+                    <p class="percentage mb-0">{{ Math.round(percentage(item)) || 0 }}%</p>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -64,23 +64,27 @@
                       <option v-for="item in filterOptions" :key="item">{{ item }}</option>
                     </select>
                   </div>
-                  <div class="select-container">
+                  <!-- <div class="select-container">
                     <span class="text">ARRANGE BY</span>
                     <select class="select" @change="sortBy($event)">
                       <option v-for="item in sortOptions" :key="item">{{ item }}</option>
                     </select>
-                  </div>
+                  </div>-->
                 </v-layout>
               </v-flex>
             </v-layout>
           </v-flex>
           <!-- dynamic component -->
-          <v-flex style="width:70%; position:relative; height:100%;" class="list-container">
+          <v-flex
+            @scroll="onScroll"
+            style="width:70%; position:relative; height:100%;"
+            class="list-container"
+          >
             <component
               :is="getComponent"
               :key="selectedEvent.type + 'selected'"
               :data="eventTypes[selectedEvent.type]"
-              :on:update="fetchHistory()"
+              :on:update="fetchHistory"
               style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
             />
           </v-flex>
@@ -105,25 +109,29 @@ export default {
   },
   data: () => ({
     totalEvents: [],
-    eventWatcher: null,
     eventTypes: new EventTypes(),
     selectedEvent: { name: "Animal", type: "animal", count: 0 },
-    filterOptions: ["This Week", "Today", "Last Week", "All"],
-    sortOptions: ["Recent", "User", "Camera", "All"]
+    filterOptions: ["All", "Today", "This Week", "Last Week"],
+    counts: {}
   }),
   created() {
     this.$events.startLoading();
   },
-  destroyed() {
-    this.eventWatcher = null;
-  },
   mounted() {
+    this.getEventsCountByType();
     this.fetchHistory();
   },
   methods: {
+    onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+      if (scrollTop + clientHeight >= scrollHeight) {
+        console.log("AT THE BOTTOM!!!!!!!!!!!!");
+      }
+    },
     async fetchHistory() {
+      console.log("FETCH");
       try {
-        const response = await this.$events.getAllClassifiedEvents();
+        const response = await this.$events.getArchivedEvents({ limit: 10 });
+        console.log("RESP", response);
         if (response.status && response.status === 500) {
           this.$notifyError(
             "ERROR GETTING ARCHIVED EVENTS. PLEASE TRY AGAIN LATER"
@@ -164,8 +172,13 @@ export default {
         this.$notifyError("ERROR FINDING EVENT HISTORY");
       }
     },
+    async getEventsCountByType() {
+      const response = await this.$events.getEventsCount();
+      console.log("COUNT RECEIVED", response[0]);
+      this.counts = response[0];
+    },
     percentage(value) {
-      return (100 * value) / this.totalEvents.length;
+      return (100 * value) / this.counts.total;
     },
     filterBy(e) {
       console.log(e.target.value);

@@ -51,9 +51,18 @@ instance.getFiftyEvents = async function () {
     }
 };
 
-instance.getAllClassifiedEvents = async function () {
+instance.getArchivedEvents = async function (params) {
     try {
-        const resp = await this.get('/get_all_classified_events_postgres');
+        const resp = await this.post('/get_archived_events_postgres', { ...params });
+        return resp.data;
+    } catch (err) {
+        return { status: 500, msg: err };
+    }
+};
+
+instance.getEventsCount = async function () {
+    try {
+        const resp = await this.get('/get_events_count');
         return resp.data;
     } catch (err) {
         return { status: 500, msg: err };

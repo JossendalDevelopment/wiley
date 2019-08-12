@@ -33,10 +33,14 @@ export default {
                     event.getFiftyEvents = () => {
                         return store.dispatch('eventHistory/getFiftyEvents', {});
                     };
-                    event.getAllClassifiedEvents = () => {
+                    event.getEventsCount = () => {
+                        return store.dispatch('eventHistory/getEventsCount', {})
+                    }
+                    event.getArchivedEvents = (params) => {
                         return store.dispatch(
-                            'eventHistory/getAllClassifiedEvents',
-                            {}
+                            'eventHistory/getArchivedEvents', {
+                                params
+                            }
                         );
                     };
                     event.listenForEventsChanges = () => {

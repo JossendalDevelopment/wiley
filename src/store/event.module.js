@@ -87,6 +87,16 @@ export const eventHistory = {
                 return resp;
             });
         },
+        getArchivedEvents(context, payload) {
+            return api.getArchivedEvents(payload).then(resp => {
+                return resp;
+            });
+        },
+        getEventsCount() {
+            return api.getEventsCount().then(resp => {
+                return resp;
+            });
+        },
         setEvents({ commit }, payload) {
             commit('setEvents', payload.events);
         },
