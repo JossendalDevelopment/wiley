@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+var cron = require('node-cron');
 require('dotenv').config();
 // const ejwt = require('express-jwt');
 // const config = require('config');
@@ -9,43 +10,8 @@ const db = require('./config/conn.js')
 
 const PORT = process.env.PORT || 3001;
 
-// firebase initialization
-const admin = require('firebase-admin');
-let serviceAccount;
-let db_url;
 console.log("ENV:", process.env.NODE_ENV)
-if (process.env.NODE_ENV === 'production') {
-    serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_PROD);
-    db_url = 'https://wiley-app-rotf.firebaseio.com';
-} else {
-    serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS_DEV);
-    db_url = 'https://wiley-app-rotf-dev.firebaseio.com'
-}
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: db_url,
-});
-
-// postgres connection test
-let retries = 50;
-const testPostgres = () => {
-    // db.one('SELECT $1 AS value', 123)
-    db.any('SELECT * FROM test')
-        .then((data) => {
-            console.log('DB INIT SUCCESS:', data)
-        })
-        .catch((error) => {
-            console.log('DB INIT ERROR:', error)
-            console.log("RETRIES LEFT...", retries)
-            if (retries === 0) return;
-            setTimeout(() => {
-                testPostgres();
-                retries--;
-            }, 50000 / retries)
-        })
-}
-testPostgres();
 
 var app = express();
 var server = require('http').Server(app);
@@ -72,6 +38,33 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* ***********************************************************
+ CHRON JOB
+************************************************************* */
+
+// Every day at midnight we want to clear alerts that were not classified
+// as there will be thousands a day initially
+
+// # ┌────────────── second (optional)
+// # │ ┌──────────── minute
+// # │ │ ┌────────── hour
+// # │ │ │ ┌──────── day of month
+// # │ │ │ │ ┌────── month
+// # │ │ │ │ │ ┌──── day of week
+// # │ │ │ │ │ │
+// # │ │ │ │ │ │
+// # * * * * * *
+
+let sched = '* * 0 * * *';
+cron.schedule(sched, async () => {
+    console.log('TASK: running chron job at midnight... Clearing "alerts" from database...');
+    try {
+        await db.none('TRUNCATE alerts; DELETE FROM alerts;');
+    } catch (error) {
+        console.error("ERROR RUNNING CHRON:", error);
+    }
+});
+
+/* ***********************************************************
  SOCKET IO
 ************************************************************* */
 io.on('connection', function (socket) {
@@ -84,6 +77,33 @@ app.use((req, res, next) => {
     next();
 });
 
+/* ***********************************************************
+  POSTGRES CONNECTION TEST
+************************************************************* */
+
+let retries = 50;
+const testPostgres = () => {
+    // db.one('SELECT $1 AS value', 123)
+    db.any('SELECT * FROM test')
+        .then((data) => {
+            console.log('DB INIT SUCCESS:', data)
+        })
+        .catch((error) => {
+            console.log('DB INIT ERROR:', error)
+            console.log("RETRIES LEFT...", retries)
+            if (retries === 0) return;
+            setTimeout(() => {
+                testPostgres();
+                retries--;
+            }, 50000 / retries)
+        })
+}
+testPostgres();
+
+/* ***********************************************************
+  DOCKER CONTAINER HEALTHCHECK ROUTE
+************************************************************* */
+
 app.get('/healthcheck', function (req, res) {
     // docker healthcheck - do app logic here to determine if app is truly healthy
     // you should return 200 if healthy, and anything else will fail
@@ -91,7 +111,10 @@ app.get('/healthcheck', function (req, res) {
     res.send('I am happy and healthy\n');
 });
 
-// routers
+/* ***********************************************************
+  ROUTERS
+************************************************************* */
+
 const publicRouter = require('./routes/public-router');
 const authenticatedRouter = require('./routes/authenticated-router');
 app.use('/', publicRouter);
@@ -113,14 +136,14 @@ app.use(function (req, res, next) {
     next(createError(404));
 });
 
-// ******************************************************************
+/* ******************************************************************
 // FOR DOCKER NODE CONFIGURATION: place in index.js or ./bin/www
-// ******************************************************************
-//
+***************************************************************** */
+
 // you need this code so node will watch for exit signals
 // node by default doesn't handle SIGINT/SIGTERM
 // docker containers use SIGINT and SIGTERM to properly exit
-//
+
 // signals also aren't handeled by npm:
 // https://github.com/npm/npm/issues/4603
 // https://github.com/npm/npm/pull/10868
