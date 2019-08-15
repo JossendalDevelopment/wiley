@@ -57,6 +57,16 @@ TODO loading component while fetching images
           >SELECT OR USE YOUR KEYBOARD</p>
         </v-flex>
         <v-layout style="width:100%;" justify-space-between v-test-ref="'bottom-buttons-container'">
+
+            <events--class-button 
+                v-for="el in 6"
+                type="employee" 
+                :key="el"
+                v-on:classification="setClassification($event)"
+                :selected="true" 
+                :index="el"
+                :disabled="false"/>
+
             <v-btn
               @click="setClassification('employee')"
               flat
@@ -167,6 +177,7 @@ import VideoPlayer from '@/components/video-player.vue';
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import Dialog from "@/components/app-dialog.vue";
 import EventsActiveList from '@/components/events--active-list.vue';
+import EventsClassButton from '@/components/events--class-button.vue';
 
 export default {
   components: {
@@ -174,7 +185,8 @@ export default {
     'video-player': VideoPlayer,
     "app-dialog": Dialog,
     "app-loading-spinner": AppLoadingSpinner,
-    'events--active-list': EventsActiveList
+    'events--active-list': EventsActiveList,
+    'events--class-button': EventsClassButton
   },
   data: () => ({
     events: [],
@@ -439,31 +451,31 @@ export default {
   background-color: var(--v-buttonBlack-base);
   color: #fff;
 }
-.control {
-  &-btn {
-    width: 16%;
-    font-size: 20px;
-    letter-spacing: 1.5px;
-    position: relative;
-    margin: 0;
-  }
-  &-text {
-    // width: 100%;
-    margin: 0 auto;
-    color: var(--v-border-base);
-    font-size: 18px;
-  }
-  &-numeral {
-    position: absolute;
-    color: #fff;
-    top: -7px;
-    right: -30px;
-    font-size: 12px;
-  }
-}
-.disabled {
-  pointer-events: none;
-}
+// .control {
+//   &-btn {
+//     width: 16%;
+//     font-size: 20px;
+//     letter-spacing: 1.5px;
+//     position: relative;
+//     margin: 0;
+//   }
+//   &-text {
+//     // width: 100%;
+//     margin: 0 auto;
+//     color: var(--v-border-base);
+//     font-size: 18px;
+//   }
+//   &-numeral {
+//     position: absolute;
+//     color: #fff;
+//     top: -7px;
+//     right: -30px;
+//     font-size: 12px;
+//   }
+// }
+// .disabled {
+//   pointer-events: none;
+// }
 .video-feed-wrapper {
   position: relative;
   // sets max width of image, only required while in 4:3 mode
