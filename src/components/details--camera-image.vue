@@ -17,13 +17,15 @@
     TODO will images come with timestamp or will it need to be created and drawn
 </notes>
 <template>
-  <div id="remove" class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
+  <div class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
+    <v-btn style="position:absolute; top:10px; right:10px;" dark small @click="showVideo()">PLAY VIDEO</v-btn>
     <transition appear name="fade" mode="out-in" :duration="100">
       <svg
         class="svg-responsive"
         viewBox="0 0 640 480"
         preserveAspectRatio="none"
         ref="dummyImage"
+        style="z-index:2020;"
         @click="zoom()"
         :style="setScale"
         id="svgimage"
@@ -51,7 +53,9 @@
             fill="black"
           >{{ source.inferenced_classification }} {{ (+source.inferenced_percentage * 100).toFixed(0) }}%</text>
           <!-- black info box -->
-          <rect
+          <!-- <rect
+          style="z-index:2020;"
+            @click="alert('do it')"
             :x="+source.image_width - 175"
             :y="5"
             :width="170"
@@ -66,7 +70,7 @@
             font-family="DIN Condensed"
             font-size="14"
             fill="white"
-          >CLICK IMAGE OR USE BAR TO ZOOM</text>
+          >PLAY VIDEO</text> -->
         </g>
       </svg>
 
@@ -103,6 +107,9 @@ export default {
     });
   },
   methods: {
+      showVideo() {
+          alert('SHOW')
+      },
     getPathZoomed() {
       return this.source.staticImageZoomed;
     },
@@ -199,6 +206,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.v-btn {
+  letter-spacing: 2px;
+  border: 1px solid var(--v-border-base);
+  background-color: var(--v-buttonBlack-base);
+  color: #fff;
+}
 .images-container {
   overflow: hidden;
   position: relative;

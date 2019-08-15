@@ -9,14 +9,14 @@
         <h2 class="nav-btn">Live Feed</h2>
       </v-tab>
 
-      <v-tab to="/training" exact style="position:relative;">
-        <h2 class="nav-btn">History</h2>
+      <v-tab to="/events" exact style="position:relative;">
+        <h2 class="nav-btn">Events</h2>
         <v-badge
           v-if="!!unclassifiedEventCount"
           :color="$vuetify.theme.accent"
           style="position:absolute; top:12px; right:26px;"
         >
-          <span slot="badge" style="font-family: Din Condensed;">{{ unclassifiedEventCount }}</span>
+          <span slot="badge"></span>
         </v-badge>
       </v-tab>
 

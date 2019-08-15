@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import CameraDetailsPage from '@/views/Details.vue';
+import Events from '@/views/Events.vue';
 import NotFound from '@/views/NotFound.vue';
 import Overview from '@/views/Overview.vue';
 import Archive from '@/views/Archive.vue';
@@ -36,6 +37,14 @@ export const router = new Router({
             path: '/training',
             name: 'training',
             component: CameraDetailsPage,
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
+            path: '/events',
+            name: 'events',
+            component: Events,
             meta: {
                 requiresAuth: true,
             },
