@@ -15,7 +15,7 @@
       <video ref="videoPlayer" @click="togglePause()" class="video-js" :class="{zoom: isZoomed}"></video>
     </div>
     <!-- control bar -->
-    <v-layout v-if="$route.fullPath !== '/overview'" class="controls-bottom" align-center>
+    <!-- <v-layout v-if="$route.fullPath !== '/overview'" class="controls-bottom" align-center>
       <div class="back" @mousedown="backward()" @mouseleave="stop()" @mouseup="stop()">
         <v-icon>fas fa-step-backward</v-icon>
       </div>
@@ -40,11 +40,11 @@
         <div class="live-icon"></div>
         <p class="px-2 mb-0 secondary--text">Live Feed</p>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
   </span>
 </template>
 <script>
-import VideoPlayerSlider from "@/components/video-player--slider.vue";
+// import VideoPlayerSlider from "@/components/video-player--slider.vue";
 
 import videojs from "video.js";
 // import '../../node_modules/videojs-rotatezoom/src/videojs.zoomrotate';
@@ -52,7 +52,7 @@ import videojs from "video.js";
 export default {
   name: "VideoPlayer",
   components: {
-    "video-player--slider": VideoPlayerSlider
+    // "video-player--slider": VideoPlayerSlider
   },
   props: {
     options: {

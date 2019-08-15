@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // # │ │ │ │ │ │
 // # * * * * * *
 
-let sched = '* * 0 * * *';
+let sched = '0 0 0 * * *';
 cron.schedule(sched, async () => {
     console.log('TASK: running chron job at midnight... Clearing "alerts" from database...');
     try {

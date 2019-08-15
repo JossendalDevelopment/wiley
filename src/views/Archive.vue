@@ -15,9 +15,9 @@
                 xs4
                 d-flex
                 class="app-card"
-                :class="selectedEvent.type === item ? 'app-card-selected' : ''"
+                :class="selectedType === i ? 'app-card-selected' : ''"
                 :key="i + 'card'"
-                @click="selectEventType(item)"
+                @click="selectEventType(i)"
               >
                 <v-layout align-center>
                   <v-flex py-0>
@@ -53,7 +53,7 @@
                 <v-layout justify-start>
                   <h3
                     class="sort-bar-text"
-                  >{{ selectedEvent.name.toUpperCase() }}S THIS WEEK ({{ eventTypes[selectedEvent.type].count }})</h3>
+                  >{{ selectedType.toUpperCase() }}S THIS WEEK ({{ eventTypes[selectedType].count }})</h3>
                 </v-layout>
               </v-flex>
               <v-flex xs7>
@@ -64,12 +64,6 @@
                       <option v-for="item in filterOptions" :key="item">{{ item }}</option>
                     </select>
                   </div>
-                  <!-- <div class="select-container">
-                    <span class="text">ARRANGE BY</span>
-                    <select class="select" @change="sortBy($event)">
-                      <option v-for="item in sortOptions" :key="item">{{ item }}</option>
-                    </select>
-                  </div>-->
                 </v-layout>
               </v-flex>
             </v-layout>
@@ -77,13 +71,19 @@
           <!-- dynamic component -->
           <v-flex
             @scroll="onScroll"
+            ref="scrollDiv"
             style="width:70%; position:relative; height:100%;"
             class="list-container"
           >
-            <component
+            <!-- <component
               :is="getComponent"
-              :key="selectedEvent.type + 'selected'"
-              :data="eventTypes[selectedEvent.type]"
+              :key="selectedType + 'selected'"
+              :data="eventTypes[selectedType]"
+              :on:update="fetchHistory"
+              style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
+            /> -->
+            <default-list
+              :data="eventTypes[selectedType]"
               :on:update="fetchHistory"
               style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
             />
@@ -94,8 +94,6 @@
   </v-container>
 </template>
 <script>
-// import firebase from "firebase";
-// import "firebase/firestore";
 
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import FalseAlarmList from "@/components/archive--false-alarm-list.vue";
@@ -105,12 +103,13 @@ import EventTypes from "@/types/eventTypes";
 
 export default {
   components: {
-    "app-loading-spinner": AppLoadingSpinner
+    "app-loading-spinner": AppLoadingSpinner,
+    "default-list": DefaultList,
   },
   data: () => ({
     totalEvents: [],
     eventTypes: new EventTypes(),
-    selectedEvent: { name: "Animal", type: "animal", count: 0 },
+    selectedType: "animal",
     filterOptions: ["All", "Today", "This Week", "Last Week"],
     counts: {}
   }),
@@ -124,30 +123,48 @@ export default {
   methods: {
     onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
       if (scrollTop + clientHeight >= scrollHeight) {
-        console.log("AT THE BOTTOM!!!!!!!!!!!!");
+        this.fetchHistory();
       }
     },
+    scrollToBottom() {
+        var container = this.$refs.scrollDiv;
+        container.scrollTop = container.scrollHeight;
+    },
     async fetchHistory() {
-      console.log("FETCH");
       try {
-        const response = await this.$events.getArchivedEvents({ limit: 10 });
+        const current = this.selectedType
+        const fetchCount = 10
+
+        // stop fetching if we returned less than 10 on the previous query
+        // TODO would still fail on a final previous query of exactly 10
+        if (this.eventTypes[current].events.length % fetchCount !== 0) return;
+
+        console.log("FETCH", current, this.eventTypes[current].page);
+
+        const response = await this.$events.getArchivedEventsByType({ 
+            type: current, 
+            limit: fetchCount, 
+            page: this.eventTypes[current].page 
+        });
         console.log("RESP", response);
+
+        // handle rejection
         if (response.status && response.status === 500) {
           this.$notifyError(
             "ERROR GETTING ARCHIVED EVENTS. PLEASE TRY AGAIN LATER"
           );
+          this.$events.stopLoading()
           return;
         }
+
         let events = response;
-        this.totalEvents = events;
-        this.eventTypes = new EventTypes();
-        // TODO: make each type of event it's own Type
+
         // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
         // in EventTypes and splits up the query results by their type. Sample below
         // EventTypes {
         //     animal: {
         //         name: String,
-        //         count: Number
+        //         page: Number
         //         type: String,
         //         events: Array
         //     },
@@ -156,29 +173,34 @@ export default {
         //     false-alarm: (...)
         //     intruder: (...)
         // }
-        events.forEach(item => {
-          let cls = item.user_classification;
-          this.eventTypes[cls] = {
-            ...this.eventTypes[cls],
-            count: this.eventTypes[cls].count
-              ? (this.eventTypes[cls].count += 1)
-              : 1
-          };
-          this.eventTypes[cls].events.push(item);
+
+        // add newly fetched events to their respective type
+        events.forEach(event => {
+            let cls = event.user_classification;
+            // push any new events
+            this.eventTypes[cls].events.push(event);
         });
+
+        // if its not the first page, scroll to bottom
+        if (this.eventTypes[current].page > 0) {
+            this.scrollToBottom();
+        }
+
+        // increment the page
+        if (events.length >= fetchCount) {
+            this.eventTypes[current].page++;
+        }
+
         this.$events.stopLoading();
       } catch (error) {
         console.error("ERROR GETTING ALL EVENTS", error);
+        this.$events.stopLoading()
         this.$notifyError("ERROR FINDING EVENT HISTORY");
       }
     },
     async getEventsCountByType() {
       const response = await this.$events.getEventsCount();
-      console.log("COUNT RECEIVED", response[0]);
       this.counts = response[0];
-    },
-    percentage(value) {
-      return (100 * value) / this.counts.total;
     },
     filterBy(e) {
       console.log(e.target.value);
@@ -186,13 +208,24 @@ export default {
     sortBy(e) {
       console.log(e.target.value);
     },
+    percentage(value) {
+      return (100 * value) / this.getTotalEvents;
+    },
     selectEventType(event) {
-      this.selectedEvent = event;
+      this.selectedType = event;
+      this.fetchHistory()
     }
   },
   computed: {
+    getTotalEvents() {
+        let counter = 0;
+        for(let e in this.counts) {
+            counter += +this.counts[e]
+        }
+        return counter;
+    },
     getComponent() {
-      if (this.selectedEvent.type === "false-alarm") {
+      if (this.selectedType === "false-alarm") {
         return FalseAlarmList;
       }
       return DefaultList;

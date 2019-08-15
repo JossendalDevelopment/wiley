@@ -92,6 +92,11 @@ export const eventHistory = {
                 return resp;
             });
         },
+        getArchivedEventsByType(context, payload) {
+            return api.getArchivedEventsByType(payload).then(resp => {
+                return resp;
+            });
+        },
         getEventsCount() {
             return api.getEventsCount().then(resp => {
                 return resp;

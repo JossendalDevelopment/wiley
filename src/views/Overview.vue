@@ -40,7 +40,7 @@
             <!-- <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
             <v-card-title>
               <v-layout justify-space-between align-center>
-                <span class="cam-name" v-test-ref="'vid-title'">RAIL WEST</span>
+                <span class="cam-name" v-test-ref="'vid-title'" @click="playSound()">RAIL WEST</span>
                 <router-link
                   to="null"
                   v-show="$alert.showHeader && $alert.alertData.camera === 'west'"

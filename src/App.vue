@@ -102,10 +102,15 @@ export default {
     this.socket.on("TRIGGER_ALARM", data => {
       console.log("RECEIVED", data);
       this.$alert.createAlert(data);
+      this.playSound();
     });
   },
   methods: {
-    goToAlertDetails() {}
+    goToAlertDetails() {},
+    playSound() {
+        const audio = new Audio(require('./assets/sound/meep.mp3'));
+        audio.play();
+    },
   },
   data: () => ({
     socket: io("http://localhost:3001"),

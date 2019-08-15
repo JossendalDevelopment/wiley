@@ -43,6 +43,13 @@ export default {
                             }
                         );
                     };
+                    event.getArchivedEventsByType = (params) => {
+                        return store.dispatch(
+                            'eventHistory/getArchivedEventsByType', {
+                                params
+                            }
+                        );
+                    };
                     event.listenForEventsChanges = () => {
                         return store.dispatch(
                             'eventHistory/listenForEventsChanges',

@@ -60,6 +60,15 @@ instance.getArchivedEvents = async function (params) {
     }
 };
 
+instance.getArchivedEventsByType = async function (params) {
+    try {
+        const resp = await this.post('/get_archived_events_by_type_postgres', { ...params });
+        return resp.data;
+    } catch (err) {
+        return { status: 500, msg: err };
+    }
+};
+
 instance.getEventsCount = async function () {
     try {
         const resp = await this.get('/get_events_count');

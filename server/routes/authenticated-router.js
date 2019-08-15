@@ -97,16 +97,34 @@ router.post('/get_archived_events_postgres', async (req, res) => {
 });
 
 // @METHOD: GET
+// @RETURNS: array of all events events with non null user_classificaiton field
+router.post('/get_archived_events_by_type_postgres', async (req, res) => {
+    console.log("ARCHIVED PARAMS", req.body.params)
+    let params = req.body.params;
+
+    try {
+        const response = await db.any(`SELECT * FROM events WHERE user_classification = $1 ORDER BY modified_date OFFSET $2 LIMIT $3`, [
+            params.type,
+            params.page * 10, // skip ahead 10 at a time
+            params.limit
+        ]);
+        formatResponse(res, 'success', response);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
+// @METHOD: GET
 // @RETURN: 
 router.get('/get_events_count', async (req, res) => {
+    // sum(case when user_classification IS NOT NULL then 1 else 0 end) as Total
     try {
         const response = await db.any(`SELECT  
                 sum(case when user_classification = 'animal' then 1 else 0 end) as Animal,
                 sum(case when user_classification = 'intruder' then 1 else 0 end) as Intruder,
                 sum(case when user_classification = 'train' then 1 else 0 end) as Train,
                 sum(case when user_classification = 'employee' then 1 else 0 end) as Employee,
-                sum(case when user_classification = 'false-alarm' then 1 else 0 end) as FasleAlarm,
-                sum(case when user_classification IS NOT NULL then 1 else 0 end) as Total
+                sum(case when user_classification = 'false-alarm' then 1 else 0 end) as FasleAlarm
             from events;`
         );
         formatResponse(res, 'success', response);

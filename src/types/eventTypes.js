@@ -8,26 +8,26 @@ Object.defineProperty(EventTypes, 'template', {
             employee: {
                 name: 'Employee',
                 type: 'employee',
-                count: 0,
+                page: 0,
                 events: [],
             },
             intruder: {
                 name: 'Intruder',
                 type: 'intruder',
-                count: 0,
+                page: 0,
                 events: [],
             },
             train: {
                 name: 'Train',
                 type: 'train',
-                count: 0,
+                page: 0,
                 events: [],
             },
-            animal: { name: 'Animal', type: 'animal', count: 0, events: [] },
+            animal: { name: 'Animal', type: 'animal', page: 0, events: [] },
             'false-alarm': {
                 name: 'False Alarm',
                 type: 'false-alarm',
-                count: 0,
+                page: 0,
                 events: [],
             },
         };
