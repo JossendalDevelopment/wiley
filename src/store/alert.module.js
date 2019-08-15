@@ -6,6 +6,7 @@ export const alert = {
         alertData: null,
         active: false,
         showHeader: false,
+        muteDuration: null
     },
     getters: {
         alert: (state) => {
@@ -27,6 +28,13 @@ export const alert = {
         },
         hideAlertHeader: state => {
             state.showHeader = false;
+        },
+        setMuteDuration: (state, payload) => {
+            console.log("MUTE", payload)
+            state.muteDuration = payload.duration
+        },
+        clearMuteDuration: state => {
+            state.muteDuration = null
         }
     },
     actions: {
@@ -44,6 +52,12 @@ export const alert = {
         hideAlertHeader({ commit }) {
             commit('clearAlert');
             commit('hideAlertHeader');
+        },
+        setMuteDuration({ commit }, payload) {
+            commit('setMuteDuration', payload);
+        },
+        clearMuteDuration({ commit }) {
+            commit('clearMuteDuration');
         },
     },
 }

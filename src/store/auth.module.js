@@ -4,7 +4,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user
+let initialState = user
     ? { status: { loggedIn: true }, user }
     : { status: {}, user: null };
 
@@ -53,7 +53,7 @@ export const authentication = {
                 })
                 .catch(error => {
                     commit('loginFailure', error);
-                    return {e: error, status: 500};
+                    return { e: error, status: 500 };
                 })
             // return api.login(employeeEmail, password)
             //     .then(user => {
@@ -70,6 +70,6 @@ export const authentication = {
             firebase.auth().signOut();
             window.localStorage.clear();
             commit('logout');
-        }
+        },
     },
 }

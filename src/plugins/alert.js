@@ -20,6 +20,15 @@ export default {
                     alert.hideAlertHeader = () => {
                         return store.dispatch('alert/hideAlertHeader');
                     };
+                    alert.setMuteDuration = (dur) => {
+                        store.dispatch('alert/clearAlert');
+                        return store.dispatch('alert/setMuteDuration', {
+                            duration: dur
+                        });
+                    };
+                    alert.clearMuteDuration = () => {
+                        return store.dispatch('alert/clearMuteDuration');
+                    };
                     return alert;
                 }
             }

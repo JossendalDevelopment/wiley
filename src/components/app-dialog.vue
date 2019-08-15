@@ -32,7 +32,9 @@
           >fas fa-times</v-icon>
         </v-layout>
         <v-card-text class="modal-content">
+
           <slot name="modalcontent" />
+
         </v-card-text>
         <v-card-actions>
           <slot name="cancelbutton">

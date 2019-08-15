@@ -14,6 +14,7 @@
   <div id="app" style="position: relative">
     <!-- Page header alert -->
     <v-alert
+        v-if="!$alert.muteDuration"
       :value="$alert.showHeader"
       v-flash="$alert.showHeader"
       transition="slide-y-transition"

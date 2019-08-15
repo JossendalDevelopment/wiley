@@ -11,8 +11,8 @@
         <v-flex xs6 px-1>
           <v-card
             class="card-container"
-            v-flash="$alert.showHeader"
-            :class="$alert.showHeader && $alert.alertData.camera === 'east' ? 'alert-active' : null"
+            v-flash="!$alert.muteDuration && $alert.showHeader"
+            :class="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration ? 'alert-active' : null"
             flat
           >
             <overview-live-feed :stream="streams[0]" />
@@ -22,7 +22,7 @@
                 <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
                 <router-link
                   to="null"
-                  v-show="$alert.showHeader && $alert.alertData.camera === 'east'"
+                  v-show="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration"
                   class="my-0 cam-link"
                   flat
                 >VIEW</router-link>
@@ -33,7 +33,7 @@
         <v-flex xs6 px-1>
           <v-card
             class="card-container"
-            :class="$alert.showHeader && $alert.alertData.camera === 'west' ? 'alert-active' : null"
+            :class="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration ? 'alert-active' : null"
             flat
           >
             <overview-live-feed :stream="streams[1]" />
@@ -43,7 +43,7 @@
                 <span class="cam-name" v-test-ref="'vid-title'" @click="playSound()">RAIL WEST</span>
                 <router-link
                   to="null"
-                  v-show="$alert.showHeader && $alert.alertData.camera === 'west'"
+                  v-show="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration"
                   class="my-0 cam-link"
                   flat
                 >VIEW</router-link>
@@ -53,7 +53,9 @@
         </v-flex>
       </v-layout>
       <v-layout align-center justify-center>
+
         <overview-mute />
+
       </v-layout>
       <!-- <v-layout column align-end justify-end v-test-ref="'clock-container'">
         <p class="clock label">TIME</p>
@@ -191,17 +193,17 @@ export default {
     text-decoration: none;
   }
 }
-.clock {
-  color: #fff;
-  margin-right: 20px;
-  &.label {
-    font-size: 28px;
-    margin-bottom: -20px;
-  }
-  &.timer {
-    font-size: 64px;
-  }
-}
+// .clock {
+//   color: #fff;
+//   margin-right: 20px;
+//   &.label {
+//     font-size: 28px;
+//     margin-bottom: -20px;
+//   }
+//   &.timer {
+//     font-size: 64px;
+//   }
+// }
 .alert-active {
   border: 1px solid var(--v-accent-base);
   background-color: var(--v-accent-base);
