@@ -18,11 +18,14 @@
       :value="$alert.showHeader"
       v-flash="$alert.showHeader"
       transition="slide-y-transition"
-      style="margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 65px; z-index: 200; background-color: 'red'"
+      style="margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 58px; z-index: 200; background-color: 'red'"
       @click="goToAlertDetails()"
     >
       <v-layout align-center justify-center>
-        <span class="text-xs-center mb-0 alert-text">{{ formatAlertText }}</span>
+        <span class="text-xs-center mb-0 mr-2 alert-text">
+            {{ formatAlertText }}
+        </span>
+            <v-img max-width="50px" :src="'/assets/images/icon-alert-coyote.svg'" />
       </v-layout>
       <v-btn
         @click="$alert.hideAlertHeader()"
@@ -167,7 +170,7 @@ export default {
 }
 .clear-alert-btn {
   position: fixed;
-  top: 14px;
+  top: 9px;
   right: 12px;
   // width: 80px;
   background-color: var(--v-accent-base);

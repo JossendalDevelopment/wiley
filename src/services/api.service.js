@@ -1,10 +1,9 @@
-// import config from 'config';
 import axios from 'axios';
 
 const instance = axios.create();
 instance.token = window.localStorage.getItem('token') || null;
 
-instance.new = function(url = '/') {
+instance.new = function (url = '/') {
     this.defaults.baseURL = url;
 
     if (this.token) {
@@ -15,8 +14,8 @@ instance.new = function(url = '/') {
     }
 };
 
-instance.login = function(employeeEmail, password) {
-    return this.post('/login', {employeeEmail: employeeEmail, password:password})
+instance.login = function (employeeEmail, password) {
+    return this.post('/login', { employeeEmail: employeeEmail, password: password })
         .then(resp => {
             const user = resp.data
             // login successful if there's a jwt token in the response
@@ -37,7 +36,7 @@ instance.login = function(employeeEmail, password) {
         })
 };
 
-instance.logout = function() {
+instance.logout = function () {
     this.token = null;
     this.interceptors.request.eject(this.tokenInterceptor);
     window.localStorage.removeItem('token');

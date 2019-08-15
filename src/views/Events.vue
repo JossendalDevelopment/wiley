@@ -12,7 +12,7 @@ TODO loading component while fetching images
     justify-center
     fill-height
     align-center
-    v-else-if="!unclassifiedRemaining"
+    v-else-if="!events"
     class="video-container"
     v-test-ref="'container'"
   >
@@ -23,7 +23,8 @@ TODO loading component while fetching images
   </v-layout>
   <v-layout v-else class="video-container" justify-center>
     <v-flex xs4>
-        </v-flex>
+        <events--active-list :events="events" />
+    </v-flex>
     <v-flex xs8>
       <!-- Above video -->
       <v-layout align-center justify-center>
@@ -36,11 +37,15 @@ TODO loading component while fetching images
         <v-flex class="video-feed-wrapper">
 
             <details--camera-image
+             v-if="!videoShowing"
               ref="cameraImage"
               :source="currentEvent"
+              v-on:showvideo="showVideo"
               v-on:datauricreated="setThumb($event)"
             />
-            <!-- <video-player :options="getVideoOptions()"/> -->
+            <video-player 
+                v-else
+                :options="getVideoOptions()"/>
 
         </v-flex>
       </v-layout>
@@ -158,31 +163,47 @@ TODO loading component while fetching images
 </template>
 <script>
 import DetailsCameraImage from "@/components/details--camera-image";
-// import VideoPlayer from '@/components/video-player.vue';
+import VideoPlayer from '@/components/video-player.vue';
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import Dialog from "@/components/app-dialog.vue";
+import EventsActiveList from '@/components/events--active-list.vue';
 
 export default {
   components: {
     "details--camera-image": DetailsCameraImage,
-    // 'video-player': VideoPlayer,
+    'video-player': VideoPlayer,
     "app-dialog": Dialog,
-    "app-loading-spinner": AppLoadingSpinner
+    "app-loading-spinner": AppLoadingSpinner,
+    'events--active-list': EventsActiveList
   },
   data: () => ({
+    events: [],
     unclassifiedEvents: [],
     unclassifiedRemaining: 0,
     listeners: null,
     disabled: false,
     currentEventIndex: 0,
     currentEvent: {},
-    classificationDescription: ""
+    classificationDescription: "",
+    videoShowing: false,
+    videoOptions: {
+        autoplay: true,
+        controls: true,
+        responsive: true,
+        aspectRatio: '4:3',
+        fill: true,
+        muted: true,
+        language: 'en',
+        playbackRates: [0.5, 1.0, 1.5, 2.0],
+        sources: [] // being set from setVideoOptions
+    },
   }),
   created() {
     // TODO gets all events from postgres so that the counters below the buttons show grand totals
     // the main function of this page really only demands unclassified events.
     // Should the counters be a grand total or maybe just a current session total
-    this.getFiftyEvents();
+    // this.getFiftyEvents();
+    this.getAlerts();
     // this.setUnclassifiedEvents(this.$events.sessionEvents);
 
     this.listeners = e => {
@@ -223,6 +244,20 @@ export default {
     }
   },
   methods: {
+      getVideoOptions() {
+        // this.setVideoOptions();
+        // add the stream url or filepath to video options
+        // required for video-player component
+        this.videoOptions.sources = [
+        {
+            "src": "/assets/video/sample_rail_west_sm.mp4",
+            "type": "video/mp4"
+        }];
+        return this.videoOptions;
+    },
+    showVideo() {
+        this.videoShowing = true;
+    },
     // eslint-disable-next-line
     setThumb(evt) {
       // TODO forgoing client built thumbnails for now
@@ -300,26 +335,52 @@ export default {
         this.$notifyError("ERROR CLASSIFYING EVENT. PLEASE TRY AGAIN LATER.");
       }
     },
-    async getFiftyEvents() {
+    async getAlerts() {
       this.$events.startLoading();
       try {
-        const response = await this.$events.getFiftyEvents();
+        const response = await this.$alert.getAlerts({
+            page: 0,
+            limit: 100,
+        });
 
-        // console.log("CLIENT RESP", response);
+        console.log("CLIENT RESP", response);
         if (response.status && response.status === 500) {
           this.$notifyError(
-            "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
+            "ERROR GETTING EVENTS. PLEASE TRY AGAIN LATER"
           );
           return;
         }
-        this.setUnclassifiedEvents(response);
+        this.events = response;
+        this.currentEvent = response[0];
+        // this.setUnclassifiedEvents(response);
+        this.$events.stopLoading();
       } catch (error) {
-        console.error("ERROR GETTING ALL EVENTS", error);
+        console.error("ERROR GETTING EVENTS", error);
         this.$notifyError(
-          "ERROR GETTING HISTORICAL EVENTS. PLEASE TRY AGAIN LATER."
+          "ERROR GETTING EVENTS. PLEASE TRY AGAIN LATER."
         );
       }
     },
+    // async getFiftyEvents() {
+    //   this.$events.startLoading();
+    //   try {
+    //     const response = await this.$events.getFiftyEvents();
+
+    //     // console.log("CLIENT RESP", response);
+    //     if (response.status && response.status === 500) {
+    //       this.$notifyError(
+    //         "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
+    //       );
+    //       return;
+    //     }
+    //     this.setUnclassifiedEvents(response);
+    //   } catch (error) {
+    //     console.error("ERROR GETTING ALL EVENTS", error);
+    //     this.$notifyError(
+    //       "ERROR GETTING HISTORICAL EVENTS. PLEASE TRY AGAIN LATER."
+    //     );
+    //   }
+    // },
     setUnclassifiedEvents(events) {
       this.unclassifiedEvents = events.filter(evt => {
         return !evt.user_classification;

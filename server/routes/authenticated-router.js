@@ -181,4 +181,21 @@ router.get('/delete_events', async (req, res) => {
     }
 });
 
+// @METHOD: POST
+// @RETURNS: array of all alerts with pagination
+router.post('/get_alerts_postgres', async (req, res) => {
+    console.log("ALERT PARAMS", req.body.params)
+    let params = req.body.params;
+
+    try {
+        const response = await db.any(`SELECT * FROM alerts ORDER BY modified_date OFFSET $1 LIMIT $2`, [
+            params.page * 10, // skip ahead 10 at a time
+            params.limit
+        ]);
+        formatResponse(res, 'success', response);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
 module.exports = router;

@@ -82,21 +82,35 @@ const createNewJsonFile = async (filepath, data) => {
     const pathname = path.join(__dirname, '../public', filepath);
     console.log("WRITING NEW FILE TO:", pathname);
 
-    const fileWriteStream = fs.createWriteStream(pathname);
-    fileWriteStream.on('error', (err) => Promise.reject(new Error(err)));
+    // const fileWriteStream = fs.createWriteStream(pathname, {flags: 'w'});
+    // fileWriteStream.on('error', (err) => Promise.reject(new Error(err)));
 
-    for (let i = 0; i < 1e6; i++) {
-        const ableToWrite = fileWriteStream.write(JSON.stringify(data, null, 1));
-        if (!ableToWrite) {
-            return await new Promise(resolve => {
-                fileWriteStream.once('drain', resolve("file created successfully"));
-            }).
-                catch(error => {
-                    console.log('caught in createNewJsonFile', error.message);
-                    return { status: 500, msg: "No such file or directory" };
-                });
-        }
-    }
+    // for (let i = 0; i < 1e6; i++) {
+    //     const ableToWrite = fileWriteStream.write(JSON.stringify(data, null, 1));
+    //     if (!ableToWrite) {
+    //         return await new Promise(resolve => {
+    //             fileWriteStream.once('drain', resolve("file created successfully"));
+    //         }).
+    //             catch(error => {
+    //                 console.log('caught in createNewJsonFile', error.message);
+    //                 return { status: 500, msg: "No such file or directory" };
+    //             });
+    //     }
+    // }
+    return await new Promise(resolve => {
+        fs.writeFile(pathname, JSON.stringify(data), (error) => {
+            if (error) {
+                console.log('caught in createNewJsonFile', error.message);
+                return { status: 500, msg: "File write failed" };
+            }
+            resolve("file created successfully")
+
+        })
+    }).
+        catch(error => {
+            console.log('caught in createNewJsonFile', error.message);
+            return { status: 500, msg: "No such file or directory" };
+        });
 };
 
 // const pngDataURLToFile = async (filename, data) => {

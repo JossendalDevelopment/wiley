@@ -1,8 +1,12 @@
 import Alert from '@/types/Alert';
+import api from '../services/alert.service.js';
+
+api.new('/api');
 
 export const alert = {
     namespaced: true,
     state: {
+        alerts: [],
         alertData: null,
         active: false,
         showHeader: false,
@@ -14,6 +18,9 @@ export const alert = {
         },
     },
     mutations: {
+        setAlerts: (state, payload) => {
+            state.alerts = payload
+        },
         createAlert: (state, payload) => {
             state.alertData = new Alert(payload.alertData);
             state.active = true;
@@ -23,14 +30,12 @@ export const alert = {
             state.active = false;
         },
         showAlertHeader: state => {
-            console.log("SHOWING")
             state.showHeader = true;
         },
         hideAlertHeader: state => {
             state.showHeader = false;
         },
         setMuteDuration: (state, payload) => {
-            console.log("MUTE", payload)
             state.muteDuration = payload.duration
         },
         clearMuteDuration: state => {
@@ -59,5 +64,12 @@ export const alert = {
         clearMuteDuration({ commit }) {
             commit('clearMuteDuration');
         },
+        getAlerts({ commit }, payload) {
+            console.log("MODULE PAYLOAD", payload)
+            return api.getAlerts(payload).then(resp => {
+                commit('setAlerts', resp)
+                return resp;
+            });
+        }
     },
 }

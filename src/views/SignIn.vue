@@ -100,13 +100,13 @@ export default {
           return;
         }
 
-        const response = await this.$events.setYesterdaysEvents();
+        // const response = await this.$events.setYesterdaysEvents();
 
-        if (response.status === 500) {
-          this.$notifyError(
-            "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
-          );
-        }
+        // if (response.status === 500) {
+        //   this.$notifyError(
+        //     "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
+        //   );
+        // }
       } catch (error) {
         this.$notifyError(
           "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"

@@ -53,7 +53,7 @@
                 <v-layout justify-start>
                   <h3
                     class="sort-bar-text"
-                  >{{ selectedType.toUpperCase() }}S THIS WEEK ({{ eventTypes[selectedType].count }})</h3>
+                  >{{ selectedType.toUpperCase() }}S THIS WEEK ({{ eventTypes[selectedType].count || 0 }})</h3>
                 </v-layout>
               </v-flex>
               <v-flex xs7>

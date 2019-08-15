@@ -21,7 +21,7 @@
               <v-layout justify-space-between align-center>
                 <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
                 <router-link
-                  to="null"
+                  to="/events"
                   v-show="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration"
                   class="my-0 cam-link"
                   flat
@@ -42,7 +42,7 @@
               <v-layout justify-space-between align-center>
                 <span class="cam-name" v-test-ref="'vid-title'" @click="playSound()">RAIL WEST</span>
                 <router-link
-                  to="null"
+                  to="/events"
                   v-show="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration"
                   class="my-0 cam-link"
                   flat

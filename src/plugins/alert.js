@@ -29,6 +29,13 @@ export default {
                     alert.clearMuteDuration = () => {
                         return store.dispatch('alert/clearMuteDuration');
                     };
+                    alert.getAlerts = (params) => {
+                        return store.dispatch(
+                            'alert/getAlerts', {
+                                params
+                            }
+                        );
+                    };
                     return alert;
                 }
             }

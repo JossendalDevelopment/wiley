@@ -108,7 +108,7 @@ export default {
   },
   methods: {
       showVideo() {
-          alert('SHOW')
+          this.$emit('showvideo')
       },
     getPathZoomed() {
       return this.source.staticImageZoomed;

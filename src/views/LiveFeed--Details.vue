@@ -90,6 +90,7 @@ export default {
         stream: {},
         events: EventsJson,
         working: true,
+        videoShowing: false,
         videoOptions: {
             autoplay: true,
             controls: false,
