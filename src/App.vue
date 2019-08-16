@@ -84,6 +84,7 @@
   </div>
 </template>
 <script>
+import config from '../config/production.js';
 import io from "socket.io-client";
 import AppHeader from "@/components/app-header.vue";
 
@@ -117,7 +118,7 @@ export default {
     },
   },
   data: () => ({
-    socket: io("http://localhost:3001"),
+    socket: io(config.socket_io_addr),
     alert: true,
     tab: null,
     animation: {

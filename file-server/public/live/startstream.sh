@@ -11,13 +11,13 @@ renditions=(
 #  "426x240    400k    64k"
 #   "640x360    800k     96k"      # 360 p
 #   "842x480    1400k    128k"   # 480 p
-  "640x480    800k    128k"   # 480 p
+  "640x480    600k    128k"   # 480 p
 #   "1280x720   2800k    128k"   # HD 720 p
 #   "1920x1080  5000k    192k"   # FULL HD
 )
 
 segment_target_duration=10       # try to create a new segment every X seconds
-max_bitrate_ratio=1.07          # maximum accepted bitrate fluctuations
+max_bitrate_ratio=1.2          # maximum accepted bitrate fluctuations
 rate_monitor_buffer_ratio=1.2   # maximum buffer size between bitrate conformance checks
 
 #########################################################################
