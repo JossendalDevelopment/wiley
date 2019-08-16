@@ -17,6 +17,7 @@
           >
             <overview-live-feed :stream="streams[0]" />
             <!-- <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
+
             <v-card-title>
               <v-layout justify-space-between align-center>
                 <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
@@ -38,6 +39,7 @@
           >
             <overview-live-feed :stream="streams[1]" />
             <!-- <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
+
             <v-card-title>
               <v-layout justify-space-between align-center>
                 <span class="cam-name" v-test-ref="'vid-title'" @click="playSound()">RAIL WEST</span>
@@ -57,10 +59,6 @@
         <overview-mute />
 
       </v-layout>
-      <!-- <v-layout column align-end justify-end v-test-ref="'clock-container'">
-        <p class="clock label">TIME</p>
-        <p class="clock timer">{{ dateTime }}</p>
-      </v-layout>-->
     </v-layout>
   </v-layout>
 </template>
@@ -102,12 +100,7 @@ export default {
         staticImage: "/assets/images/ref_raileast.jpg"
       }
     ]
-    // dateTime: null,
-    // timer: null
   }),
-  created() {
-    // this.startTime();
-  },
   mounted() {
     // this.eastCamStream === null
     //   ? // eslint-disable-next-line
@@ -149,7 +142,7 @@ export default {
     // called when the route that renders this component is about to
     // be navigated away from.
     // has access to `this` component instance.
-    // Needed because the page with changing before wowza players could be properly destroyed
+    // Needed because the route was changing before wowza players could be properly destroyed
     this.stopPlayers().then(() => {
       next();
     });
@@ -158,10 +151,6 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
-    // startTime() {
-    //   this.dateTime = format(new Date(), "hh:mm:ss");
-    //   this.timer = setTimeout(this.startTime, 1000);
-    // },
     stopPlayers() {
       return new Promise(resolve => {
         this.eastCamStream !== null ? this.eastCamStream.destroy() : null;
@@ -193,17 +182,9 @@ export default {
     text-decoration: none;
   }
 }
-// .clock {
-//   color: #fff;
-//   margin-right: 20px;
-//   &.label {
-//     font-size: 28px;
-//     margin-bottom: -20px;
-//   }
-//   &.timer {
-//     font-size: 64px;
-//   }
-// }
+#cameraEast {
+    padding-top: 75%;
+}
 .alert-active {
   border: 1px solid var(--v-accent-base);
   background-color: var(--v-accent-base);

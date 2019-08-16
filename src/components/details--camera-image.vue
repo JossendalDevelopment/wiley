@@ -18,7 +18,7 @@
 </notes>
 <template>
   <div class="images-container" :class="zoomed ? 'zoom-out-cursor' : 'zoom-in-cursor'">
-    <v-btn style="position:absolute; top:10px; right:10px;" dark small @click="showVideo()">PLAY VIDEO</v-btn>
+
     <transition appear name="fade" mode="out-in" :duration="100">
       <svg
         class="svg-responsive"
@@ -107,9 +107,6 @@ export default {
     });
   },
   methods: {
-      showVideo() {
-          this.$emit('showvideo')
-      },
     getPathZoomed() {
       return this.source.staticImageZoomed;
     },
@@ -216,7 +213,7 @@ export default {
   overflow: hidden;
   position: relative;
   //   padding-bottom: 55.65%;
-  //   padding-bottom: 75%;
+    // padding-bottom: 75%;
   margin-bottom: -7px;
   &.zoom-in-cursor {
     cursor: url(/assets/images/zoom-in.png) 10 3, auto;

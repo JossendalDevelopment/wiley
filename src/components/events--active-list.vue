@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="list-container">
         <active-list-item v-for="(e, idx) in events" :event="e" :key="e.id + idx"/>
     </div>
 </template>
@@ -19,3 +19,10 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.list-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+</style>

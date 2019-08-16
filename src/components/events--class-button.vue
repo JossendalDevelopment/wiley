@@ -1,12 +1,13 @@
 <template>
     <v-btn
-        @click="$emit('classification', type)"
+        @click="$emit('classification', type.val)"
         flat
         :class="disabled ? 'control-btn disabled' : 'control-btn'"
         large
+        style="letter-spacing: 0.5px;"
     >
         <!-- :style="selected ? 'filter:invert(1);' : null" -->
-        {{ type }}
+        {{ type.type }}
         <span class="control-numeral">{{index}}</span>
     </v-btn>
 </template>
@@ -14,7 +15,7 @@
 export default {
     props: {
         type: {
-            type: String,
+            type: Object,
             require: true
         },
         selected: {
@@ -37,25 +38,30 @@ export default {
   &-btn {
     width: 16%;
     font-size: 20px;
-    letter-spacing: 1.5px;
     position: relative;
     margin: 0;
-  }
-  &-text {
-    // width: 100%;
-    margin: 0 auto;
-    color: var(--v-border-base);
-    font-size: 18px;
   }
   &-numeral {
     position: absolute;
     color: #fff;
     top: -7px;
-    right: 2px;
+    right: -30px;
     font-size: 12px;
   }
   &.disabled {
-  pointer-events: none;
+    pointer-events: none;
+  }
 }
+@media only screen and (max-width: 1220px) {
+  .control {
+    &-btn {
+      font-size: 18px;
+    }
+    &-numeral {
+      top: -9px;
+      right: -30px;
+      font-size: 10px;
+    }
+  }
 }
 </style>

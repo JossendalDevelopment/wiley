@@ -12,7 +12,7 @@ TODO loading component while fetching images
     justify-center
     fill-height
     align-center
-    v-else-if="!events"
+    v-else-if="events.length < 1"
     class="video-container"
     v-test-ref="'container'"
   >
@@ -22,108 +22,41 @@ TODO loading component while fetching images
     >THERE ARE NO UNCLASSIFIED EVENTS</span>
   </v-layout>
   <v-layout v-else class="video-container" justify-center>
-    <v-flex xs4>
+    <v-flex xs4 pa-3 pr-0>
         <events--active-list :events="events" />
     </v-flex>
-    <v-flex xs8>
-      <!-- Above video -->
-      <v-layout align-center justify-center>
-        <span
-          style="color:white; font-family: 'DIN Condensed'; font-size: 28px;"
-        >{{`${currentEventIndex + 1}/${ $events.sessionEvents && unclassifiedEvents.length}`}}</span>
-      </v-layout>
-      <!-- video/image -->
-      <v-layout align-center justify-center px-2>
-        <v-flex class="video-feed-wrapper">
+    <v-flex xs8 pt-2 px-5 style="position: relative;">
+        <v-btn style="position:absolute; top:10px; right:50px; z-index: 2020;" dark small @click="videoShowing = !videoShowing">PLAY VIDEO</v-btn>
+        <details--camera-image
+            v-if="!videoShowing"
+            ref="cameraImage"
+            :source="currentEvent"
+            v-on:showvideo="showVideo"
+            v-on:datauricreated="setThumb($event)"
+        />
+        <video-player 
+            v-else
+            :options="getVideoOptions()"/>
 
-            <details--camera-image
-             v-if="!videoShowing"
-              ref="cameraImage"
-              :source="currentEvent"
-              v-on:showvideo="showVideo"
-              v-on:datauricreated="setThumb($event)"
-            />
-            <video-player 
-                v-else
-                :options="getVideoOptions()"/>
-
-        </v-flex>
-      </v-layout>
       <!-- below video -->
-      <v-layout column align-center justify-center px-2>
+      <v-layout column align-center justify-center>
         <v-flex class="text--center white--text">
           <p
             style="font-family: Montserrat; font-size:14px; font-weight:700;"
           >SELECT OR USE YOUR KEYBOARD</p>
         </v-flex>
-        <v-layout style="width:100%;" justify-space-between v-test-ref="'bottom-buttons-container'">
+        <v-layout wrap justify-space-between v-test-ref="'bottom-buttons-container'">
 
             <events--class-button 
-                v-for="el in 6"
-                type="employee" 
-                :key="el"
+                v-for="(el, idx) in buttonTypes"
+                :type="el"
+                :key="el.type + idx"
                 v-on:classification="setClassification($event)"
                 :selected="true" 
-                :index="el"
+                :index="idx"
                 :disabled="false"/>
 
-            <v-btn
-              @click="setClassification('employee')"
-              flat
-              :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('employee')"
-              large
-            >
-              employee
-              <span class="control-numeral">1</span>
-            </v-btn>
-
-            <v-btn
-              @click="setClassification('contractor')"
-              flat
-              :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('contractor')"
-              large
-            >
-              contractor
-              <span class="control-numeral">2</span>
-            </v-btn>
-
-            <v-btn
-              @click="setClassification('intruder')"
-              flat
-              :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('intruder')"
-              large
-            >
-              intruder
-              <span class="control-numeral">3</span>
-            </v-btn>
-
-            <v-btn
-              @click="setClassification('train')"
-              flat
-              :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('train')"
-              large
-            >
-              train moving
-              <span class="control-numeral">4</span>
-            </v-btn>
-
-            
-            <v-btn
-              @click="setClassification('animal')"
-              flat
-              :class="disabled ? 'control-btn disabled' : 'control-btn'"
-              :style="selected('animal')"
-              large
-            >
-              animal
-              <span class="control-numeral">5</span>
-            </v-btn>
-
-            <v-btn
+            <!-- <v-btn
               @click="openFalseAlarmModal()"
               flat
               :class="disabled ? 'control-btn disabled' : 'control-btn'"
@@ -132,7 +65,7 @@ TODO loading component while fetching images
             >
               false alarm
               <span class="control-numeral">6</span>
-            </v-btn>
+            </v-btn> -->
 
         </v-layout>
       </v-layout>
@@ -209,6 +142,14 @@ export default {
         playbackRates: [0.5, 1.0, 1.5, 2.0],
         sources: [] // being set from setVideoOptions
     },
+    buttonTypes: [
+        {type: 'employee', val: 'employee'}, 
+        {type: 'contractor',val: 'contractor'}, 
+        {type: 'intruder', val: 'intruder'}, 
+        {type: 'train moving', val: 'train'}, 
+        {type: 'animal', val: 'animal'}, 
+        {type: 'false alarm', val: 'false-alarm'}
+    ]
   }),
   created() {
     // TODO gets all events from postgres so that the counters below the buttons show grand totals
@@ -451,31 +392,6 @@ export default {
   background-color: var(--v-buttonBlack-base);
   color: #fff;
 }
-// .control {
-//   &-btn {
-//     width: 16%;
-//     font-size: 20px;
-//     letter-spacing: 1.5px;
-//     position: relative;
-//     margin: 0;
-//   }
-//   &-text {
-//     // width: 100%;
-//     margin: 0 auto;
-//     color: var(--v-border-base);
-//     font-size: 18px;
-//   }
-//   &-numeral {
-//     position: absolute;
-//     color: #fff;
-//     top: -7px;
-//     right: -30px;
-//     font-size: 12px;
-//   }
-// }
-// .disabled {
-//   pointer-events: none;
-// }
 .video-feed-wrapper {
   position: relative;
   // sets max width of image, only required while in 4:3 mode
@@ -491,17 +407,5 @@ export default {
   padding: 20px;
 }
 
-@media only screen and (max-width: 1000px) {
-  .control {
-    &-btn {
-      width: 130px;
-      font-size: 18px;
-    }
-    &-numeral {
-      top: -6px;
-      right: 6px;
-      font-size: 13px;
-    }
-  }
-}
+
 </style>

@@ -76,9 +76,12 @@ let procs = [];
             );
         });
     }
-    process.on('exit', function () {
+    process.on('exit', () => {
         console.log('Terminating streaming processes on exit');
         procs.forEach(p => p.kill());
+    });
+    process.on('uncaughtException', (err) => {
+        console.log('Caught exception in fileserver: ', err);
     });
 })();
 

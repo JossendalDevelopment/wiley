@@ -1,6 +1,6 @@
 <template>
 <span>
-    <v-layout row wrap>
+    <v-layout row wrap mb-2>
         <app-list-item>
           <!-- <v-img
             slot="list-image"
@@ -26,14 +26,14 @@
 
           <span
             slot="list-info-top-right"
-            class="app-list-item-classification"
+            class="app-list-item-percentage "
           >
-            {{ formatPercentage(event.inferenced_percentage) }}
+            {{ formatPercentage(event.inferenced_percentage) }}%
           </span>
 
           <span
             slot="list-info-bottom-left"
-            class="app-list-item-username"
+            class="app-list-item-date"
           >
             {{ getDateTime(event.modified_date).toUpperCase() }}
           </span>
@@ -239,24 +239,22 @@ export default {
 <style lang="scss" scoped>
 .app-list-item {
   &-image {
-    // margin: 5px 0;
     width: 100%;
+  }
+  &-classification {
+    font-size: 24px;
+      margin-top: -2px;
+  }
+  &-percentage {
+    font-size: 24px;
   }
   &-username {
     font-size: 16px;
     color: var(--v-border-base);
   }
-  &-classification {
-    font-size: 24px;
-  }
-  &-button {
-    border: 1px solid var(--v-border-base);
-    background-color: var(--v-buttonBlack-base);
+  &-date {
+    font-size: 16px;
     color: var(--v-border-base);
-    min-width: 0;
-    font-size: 14px;
-    padding-right: 4px;
-    margin: 0;
   }
 }
 .modal-content {
