@@ -6,9 +6,8 @@
         large
         style="letter-spacing: 0.5px;"
     >
-        <!-- :style="selected ? 'filter:invert(1);' : null" -->
         {{ type.type }}
-        <span class="control-numeral">{{index}}</span>
+        <span class="control-numeral">{{index + 1}}</span>
     </v-btn>
 </template>
 <script>
@@ -17,10 +16,6 @@ export default {
         type: {
             type: Object,
             require: true
-        },
-        selected: {
-            type: Boolean,
-            required: true
         },
         disabled: {
             type: Boolean,

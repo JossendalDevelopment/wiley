@@ -41,7 +41,7 @@
 
         <v-layout column align-center>
           <!-- sub header bar -->
-          <v-flex style="width:70%;" shrink>
+          <v-flex style="width:100%;" shrink>
             <v-layout
               wrap
               my-2

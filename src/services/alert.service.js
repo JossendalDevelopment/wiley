@@ -24,4 +24,13 @@ instance.getAlerts = async function (params) {
     }
 };
 
+instance.updateAlert = async function (event) {
+    try {
+        const resp = await this.post('/update_alert_postgres', { event });
+        return resp.data;
+    } catch (err) {
+        return { status: 500, msg: err };
+    }
+};
+
 export default instance;

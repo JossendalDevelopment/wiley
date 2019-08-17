@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('../config/conn');
 const Event = require('../types/Event.js');
 const {
-    getMetadataFile,
+    // getMetadataFile,
     writeMetadataFile,
     formatResponse,
 } = require('../helpers');
@@ -73,14 +73,14 @@ router.get('/get_all_events_postgres', async (req, res) => {
 
 // @METHOD: GET
 // @RETURNS: array of 50 unclassified events with priority on persons
-router.get('/get_fifty_unclassified_events_postgres', async (req, res) => {
-    try {
-        const response = await db.any("SELECT * FROM events WHERE user_classification IS NULL ORDER BY inferenced_classification = 'person' DESC LIMIT 50;");
-        formatResponse(res, 'success', response);
-    } catch (error) {
-        formatResponse(res, 'error', error);
-    }
-});
+// router.get('/get_fifty_unclassified_events_postgres', async (req, res) => {
+//     try {
+//         const response = await db.any("SELECT * FROM events WHERE user_classification IS NULL ORDER BY inferenced_classification = 'person' DESC LIMIT 50;");
+//         formatResponse(res, 'success', response);
+//     } catch (error) {
+//         formatResponse(res, 'error', error);
+//     }
+// });
 
 // @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
@@ -136,25 +136,25 @@ router.get('/get_events_count', async (req, res) => {
 // @METHOD: GET
 // @RETURNS: json array object
 // pulls metadata.json file for given day, loads it into postgres container, and returns that json to client
-router.get('/set_yesterdays_events_postgres', async (req, res) => {
-    try {
-        // this will return a json object of all events from metadata.json file
-        const eventsJson = await getMetadataFile();
+// router.get('/set_yesterdays_events_postgres', async (req, res) => {
+//     try {
+//         // this will return a json object of all events from metadata.json file
+//         const eventsJson = await getMetadataFile();
 
-        const response = await db.tx(t => {
-            const queries = eventsJson.map(event => {
+//         const response = await db.tx(t => {
+//             const queries = eventsJson.map(event => {
 
-                return t.one('INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name) VALUES(${bbox_height}, ${bbox_width}, ${bbox_xmin}, ${bbox_ymin}, ${camera}, ${classification_description}, ${classified_by}, ${id}, ${image_filename}, ${image_filepath}, ${image_height}, ${image_width}, ${inferenced_classification}, ${inferenced_percentage}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}, ${thumb_height}, ${thumb_width}, ${user_classification}, ${video_clip_filepath}, ${video_clip_name}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
-            });
-            return t.batch(queries);
-        });
-        console.log("INSERT BATCH RESPONSE:", response)
-        res.json(eventsJson);
-    } catch (error) {
-        console.error("ERROR SETTING EVENTS:", error);
-        formatResponse(res, 'error', error);
-    }
-});
+//                 return t.one('INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name) VALUES(${bbox_height}, ${bbox_width}, ${bbox_xmin}, ${bbox_ymin}, ${camera}, ${classification_description}, ${classified_by}, ${id}, ${image_filename}, ${image_filepath}, ${image_height}, ${image_width}, ${inferenced_classification}, ${inferenced_percentage}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}, ${thumb_height}, ${thumb_width}, ${user_classification}, ${video_clip_filepath}, ${video_clip_name}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
+//             });
+//             return t.batch(queries);
+//         });
+//         console.log("INSERT BATCH RESPONSE:", response)
+//         res.json(eventsJson);
+//     } catch (error) {
+//         console.error("ERROR SETTING EVENTS:", error);
+//         formatResponse(res, 'error', error);
+//     }
+// });
 
 router.get('/get_count_by_type', async (req, res) => {
     try {
@@ -188,12 +188,49 @@ router.post('/get_alerts_postgres', async (req, res) => {
     let params = req.body.params;
 
     try {
-        const response = await db.any(`SELECT * FROM alerts ORDER BY modified_date OFFSET $1 LIMIT $2`, [
+        const response = await db.any(`SELECT * FROM alerts ORDER BY modified_date DESC OFFSET $1 LIMIT $2`, [
             params.page * 10, // skip ahead 10 at a time
             params.limit
         ]);
         formatResponse(res, 'success', response);
     } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
+// @METHOD: POST
+// @PARAMS: new event object
+// @RETURNS: updated event object
+router.post('/update_alert_postgres', async (req, res) => {
+    try {
+        const event = new Event(req.body.event);
+
+        const writeResponse = await writeMetadataFile(event);
+        console.log('WRITE RESPONSE', writeResponse);
+
+        // updates event
+        await db.none('UPDATE alerts SET user_classification = $1, classification_description = $2, modified_date = $3, thumb_250x250 = $4, classified_by = $5 WHERE id = $6',
+            [
+                event.user_classification,
+                event.classification_description || null,
+                new Date().toISOString(),
+                event.thumb_250x250,
+                event.classified_by,
+                event.id
+            ]);
+
+        // moves event from alerts to events table
+        await db.none(`
+            INSERT INTO events SELECT * FROM alerts WHERE id = $1;
+            DELETE FROM alerts WHERE id = $1;
+        `,
+            [
+                event.id
+            ]);
+
+        return formatResponse(res, 'success', event);
+    } catch (error) {
+        console.error('ERROR IN /update_alert', error);
         formatResponse(res, 'error', error);
     }
 });

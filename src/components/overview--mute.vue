@@ -68,8 +68,9 @@ export default {
   },
   computed: {
       formatDuration() {
-        let hours = this.toHours(this.$alert.muteDuration);          
+        let hours = this.$alert.muteDuration >= 60 ? this.toHours(this.$alert.muteDuration) : 0;
         var minutes = this.$alert.muteDuration % 60;
+        console.log("HOURS", hours, "MINS", minutes)
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       }
   },

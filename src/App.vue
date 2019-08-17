@@ -19,21 +19,21 @@
       v-flash="$alert.showHeader"
       transition="slide-y-transition"
       style="margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 58px; z-index: 200; background-color: 'red'"
-      @click="goToAlertDetails()"
+      @click="$router.push('/events')"
     >
       <v-layout align-center justify-center>
         <span class="text-xs-center mb-0 mr-2 alert-text">
             {{ formatAlertText }}
         </span>
-            <v-img max-width="50px" :src="'/assets/images/icon-alert-coyote.svg'" />
+        <v-img max-width="50px" :src="'/assets/images/icon-alert-coyote.svg'" />
+        <v-btn
+            @click="$alert.hideAlertHeader()"
+            dark
+            flat
+            small
+            class="clear-alert-btn"
+        >TURN OFF ALARM</v-btn>
       </v-layout>
-      <v-btn
-        @click="$alert.hideAlertHeader()"
-        dark
-        flat
-        small
-        class="clear-alert-btn"
-      >TURN OFF ALARM</v-btn>
     </v-alert>
 
     <v-app id="inspire">
@@ -59,7 +59,7 @@
       >
         <div slot="body" slot-scope="props">
           <div
-            style="display:flex; font-family:'DIN Condensed'; font-size:30px; background-color:red; color:#FFF; padding:20px; letter-spacing:2.5px;"
+            style="display:flex; font-family:'DIN Condensed'; font-size:30px; background-color: #F2F2F2; color:black; padding:20px; letter-spacing:2.5px;"
           >
             <p class="mb-0 mx-auto">{{ props.item.text }}</p>
           </div>
@@ -94,24 +94,17 @@ export default {
     "app-header": AppHeader
   },
   mounted() {
-    //     let Userback = window.Userback || {};
-    //     Userback.access_token = '7500|0|VVHLALuJlr5psmNJnPsu3lcBcG9VqLEH1LlaWdQgAsjgOmVRyF';
-    //     (function(id) {
-    //         if (document.getElementById(id)) {return;}
-    //         var s = document.createElement('script');
-    //         s.id = id;
-    //         s.src = 'https://static.userback.io/widget/v1.js';
-    //         var parent_node = document.head || document.body;
-    //         parent_node.appendChild(s);
-    //     })('userback-sdk');
+
     this.socket.on("TRIGGER_ALARM", data => {
       console.log("RECEIVED", data);
       this.$alert.createAlert(data);
-      this.playSound();
+      if(this.$alert.muteDuration === null) {
+        this.playSound();
+      }
     });
+
   },
   methods: {
-    goToAlertDetails() {},
     playSound() {
         const audio = new Audio(require('./assets/sound/meep.mp3'));
         audio.play();

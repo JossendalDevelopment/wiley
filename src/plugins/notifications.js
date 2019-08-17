@@ -40,7 +40,7 @@ export default {
                     this.$notify({
                         group: CLASSIFICATION_GROUP,
                         text: text,
-                        type: 'accent'
+                        type: 'classification'
                     })
                 }
             }

@@ -39,13 +39,13 @@ export const alert = {
             state.muteDuration = payload.duration
         },
         clearMuteDuration: state => {
-            state.muteDuration = null
+            state.muteDuration = null;
         }
     },
     actions: {
-        createAlert({ commit }, payload) {
-            commit('createAlert', payload);
-            commit('showAlertHeader');
+        createAlert(context, payload) {
+            context.commit('createAlert', payload);
+            context.commit('showAlertHeader');
         },
         clearAlert({ commit }) {
             commit('clearAlert');
@@ -65,11 +65,15 @@ export const alert = {
             commit('clearMuteDuration');
         },
         getAlerts({ commit }, payload) {
-            console.log("MODULE PAYLOAD", payload)
             return api.getAlerts(payload).then(resp => {
                 commit('setAlerts', resp)
                 return resp;
             });
-        }
+        },
+        updateAlert(context, payload) {
+            return api.updateAlert(payload.event).then(resp => {
+                return resp;
+            });
+        },
     },
 }

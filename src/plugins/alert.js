@@ -14,6 +14,11 @@ export default {
                     alert.clearAlert = () => {
                         return store.dispatch('alert/clearAlert');
                     };
+                    alert.updateAlert = event => {
+                        return store.dispatch('alert/updateAlert', {
+                            event,
+                        });
+                    };
                     alert.showAlertHeader = () => {
                         return store.dispatch('alert/showAlertHeader');
                     };

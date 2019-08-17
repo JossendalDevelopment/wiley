@@ -1,7 +1,10 @@
 <template>
 <span>
     <v-layout row wrap mb-2>
-        <app-list-item>
+        <app-list-item 
+            :event="event"
+            v-on:selected="$emit('selected', $event)"
+            :selected="selected == event.id">
           <!-- <v-img
             slot="list-image"
             contain
@@ -164,6 +167,11 @@ export default {
     event: {
       type: Object,
       required: true
+    },
+    selected: {
+        type: Number,
+        required: false,
+        default: 0
     }
   },
   data: () => ({

@@ -52,33 +52,8 @@
             font-size="14"
             fill="black"
           >{{ source.inferenced_classification }} {{ (+source.inferenced_percentage * 100).toFixed(0) }}%</text>
-          <!-- black info box -->
-          <!-- <rect
-          style="z-index:2020;"
-            @click="alert('do it')"
-            :x="+source.image_width - 175"
-            :y="5"
-            :width="170"
-            :height="20"
-            fill="black"
-            :stroke="$vuetify.theme.border"
-            stroke-width="1"
-          />
-          <text
-            :x="+source.image_width - 165"
-            :y="20"
-            font-family="DIN Condensed"
-            font-size="14"
-            fill="white"
-          >PLAY VIDEO</text> -->
         </g>
       </svg>
-
-      <!-- <template v-slot:placeholder>
-        <v-layout fill-height align-center justify-center ma-0>
-          <v-progress-circular indeterminate color="#FFFFFF55"></v-progress-circular>
-        </v-layout>
-      </template>-->
     </transition>
   </div>
 </template>
@@ -92,7 +67,6 @@ export default {
     }
   },
   data: () => ({
-    canvas: null,
     zoomed: false,
     pngDataUrl: null
   }),
@@ -214,28 +188,12 @@ export default {
   position: relative;
   //   padding-bottom: 55.65%;
     // padding-bottom: 75%;
-  margin-bottom: -7px;
+//   margin-bottom: -7px;
   &.zoom-in-cursor {
     cursor: url(/assets/images/zoom-in.png) 10 3, auto;
   }
   &.zoom-out-cursor {
     cursor: url(/assets/images/zoom-out.png) 10 3, auto;
-  }
-}
-.image-overlay {
-  background-color: var(--v-buttonBlack-base);
-  border: 1px solid var(--v-border-base);
-  letter-spacing: 2px;
-  padding: 0px 10px;
-  color: #fff;
-  position: absolute;
-  top: 12px;
-  z-index: 2001;
-  &.zoom-text {
-    right: 12px;
-  }
-  &.date {
-    left: 12px;
   }
 }
 .fade-enter-active,
