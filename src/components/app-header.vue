@@ -2,7 +2,8 @@
   <div v-if="$auth.status.loggedIn" class="app-toolbar">
     <v-tabs centered class="tab-container">
       <v-tabs-slider color="red" style="height: 5px;"></v-tabs-slider>
-      <v-btn @click="createDummyAlarm()" dark flat small class="alert-btn">ALERT</v-btn>
+      <app-hamburger-menu />
+      <!-- <v-btn @click="createDummyAlarm()" dark flat small class="alert-btn">ALERT</v-btn> -->
       <v-spacer></v-spacer>
 
       <v-tab to="/overview" exact>
@@ -24,22 +25,21 @@
         <h2 class="nav-btn">Archive</h2>
       </v-tab>
       <v-spacer></v-spacer>
-      <v-btn @click="logout()" dark flat small class="logout-btn">logout</v-btn>
     </v-tabs>
   </div>
 </template>
 <script>
+import AppHamburgerMenu from "./app-hamburger-menu.vue";
 import Alert from "../types/Alert";
 
 export default {
+  components: {
+    "app-hamburger-menu": AppHamburgerMenu
+  },
   data: () => ({
     tab: null
   }),
   methods: {
-    async logout() {
-      await this.$auth.logout();
-      this.$router.replace("/sign_in");
-    },
     createDummyAlarm() {
       this.$alert.createAlert(
         new Alert({ inferenced_classification: "Coyote", camera: "east" })
