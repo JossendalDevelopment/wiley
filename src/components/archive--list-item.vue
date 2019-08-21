@@ -1,15 +1,25 @@
 <template>
-  <v-container grid-list-xs fluid>
-    <v-layout justify-center v-if="data.events.length === 0">
-      <span
-        style="color:white; font-family: DIN Condensed; font-size: 30px;"
-      >THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S</span>
-    </v-layout>
-    <v-layout v-else row wrap>
-      <v-flex xs3 sm4 ma-0 pa-0 v-for="(evt) in data.events" :key="evt.id + 'default'">
-        <archive--list-item :event="evt" />
-      </v-flex>
-    </v-layout>
+  <span>
+    <v-card flat class="app-list-item" :class="selected ? 'selected' : null" @click="setSelected()">
+      <v-layout row ma-0 pa-0>
+        <div class="app-list-item-image-container">
+          <v-img
+            contain
+            :aspect-ratio="1/1"
+            class="app-list-item-image"
+            :src="event && generateThumbUrl(event)"
+          ></v-img>
+        </div>
+
+        <v-layout ma-0 pa-0 column justify-space-between class="app-list-item-info-container">
+          <span class="app-list-item-date">{{ getDateTime(event.modified_date).toUpperCase() }}</span>
+          <span class="app-list-item-camera">RAIL {{ event.camera.toUpperCase() }}</span>
+
+          <v-btn flat small class="app-list-item-button" @click="openEditModal(event)">EDIT</v-btn>
+        </v-layout>
+      </v-layout>
+    </v-card>
+
     <!-- EDIT modal  -->
     <app-dialog ref="editmodal" max-width="500" lazy v-on:opened="() => null">
       <template slot="modaltitle">CHANGE CLASSIFICATION</template>
@@ -104,23 +114,27 @@
         @click="saveDescription()"
       >Confirm</v-btn>
     </app-dialog>
-  </v-container>
+  </span>
 </template>
 <script>
-import ArchiveListItem from "@/components/archive--list-item.vue";
 import AppDialog from "@/components/app-dialog.vue";
 
 import format from "date-fns/format";
 
 export default {
   components: {
-    "archive--list-item": ArchiveListItem,
     "app-dialog": AppDialog
   },
   props: {
-    data: {
+    event: {
       type: Object,
-      required: true
+      required: false,
+      default: () => {}
+    },
+    selected: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data: () => ({
@@ -135,15 +149,21 @@ export default {
   },
   methods: {
     getDateTime(date) {
-      return format(new Date(date), "MMM DD HH:MM:SS");
+      return format(date, "MMM DD HH:MM:SS");
     },
     generateThumbUrl(evt) {
       return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;
+    },
+    formatPercentage(evt) {
+      return (+evt * 100).toFixed(0);
     },
     focusTextarea() {
       this.$nextTick(() => {
         this.$refs.falsealarmtextarea.focus();
       });
+    },
+    setSelected() {
+      this.$emit("selected", this.event);
     },
     setNewClass(type) {
       this.newClass = type;
@@ -191,12 +211,50 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.app-list-item-image {
-  // margin: 0 auto;
+.v-btn {
+  letter-spacing: 3.5px;
+  border: 1px solid var(--v-border-base);
+  background-color: var(--v-buttonBlack-base);
+  color: #fff;
+}
+.app-list-item {
+  border: 1px solid var(--v-border-base);
+  background-color: var(--v-buttonBlack-base);
+  color: #fff;
   margin: 5px;
-  height: 150px;
-  width: 150px;
-  border-right: 1px solid var(--v-border-base);
+  cursor: pointer;
+  &-image-container {
+    width: 35%;
+    border-right: 1px solid var(--v-border-base);
+  }
+  &-image {
+    margin: 5px;
+    // margin: 0 auto;
+    // width: 100%;
+    // height: 100%;
+  }
+  &-info-container {
+    // min-height: 100%;
+    padding: 8px;
+    // width: 80%;
+    // font-size: 20px;
+  }
+  &-date {
+    font-size: 24px;
+    padding-left: 5px;
+  }
+  &-camera {
+    color: var(--v-border-base);
+    padding-left: 5px;
+  }
+  &-button {
+    // flex-shrink: 1;
+    margin-left: auto;
+  }
+  &.selected {
+    background-color: #fff;
+    color: black;
+  }
 }
 .modal-content {
   border: 1px solid var(--v-border-base);

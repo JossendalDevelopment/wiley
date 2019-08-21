@@ -7,7 +7,7 @@
     </template>
     <template v-else>
       <v-layout column>
-        <!-- card row -->
+        <!-- selectable card row -->
         <v-flex shrink>
           <v-layout justify-center align-center class="app-card-container" pa-2>
             <template v-for="(item, i) in counts">
@@ -39,62 +39,46 @@
           </v-layout>
         </v-flex>
 
-        <v-layout column align-center>
-          <!-- sub header bar -->
-          <v-flex style="width:100%;" shrink>
-            <v-layout
-              wrap
-              my-2
-              px-2
-              align-center
-              :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'"
-            >
-              <v-flex xs5>
-                <v-layout justify-start>
-                  <h3
-                    class="sort-bar-text"
-                  >{{ selectedType.toUpperCase() }}S THIS WEEK ({{ eventTypes[selectedType].count || 0 }})</h3>
-                </v-layout>
-              </v-flex>
-              <v-flex xs7>
-                <v-layout justify-end>
-                  <div class="select-container" style="margin-right:10px;">
-                    <span class="text">SHOW ONLY</span>
-                    <select class="select" @change="filterBy($event)">
-                      <option v-for="item in filterOptions" :key="item">{{ item }}</option>
-                    </select>
-                  </div>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-          <!-- dynamic component -->
-          <v-flex
-            @scroll="onScroll"
-            ref="scrollDiv"
-            style="width:70%; position:relative; height:100%;"
-            class="list-container"
+        <!-- <v-layout column> -->
+        <!-- sub header bar -->
+        <v-flex px-4 shrink>
+          <v-layout
+            wrap
+            my-2
+            px-2
+            align-center
+            :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'"
           >
-            <!-- <component
-              :is="getComponent"
-              :key="selectedType + 'selected'"
-              :data="eventTypes[selectedType]"
-              :on:update="fetchHistory"
-              style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
-            /> -->
-            <default-list
-              :data="eventTypes[selectedType]"
-              :on:update="fetchHistory"
-              style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;"
-            />
-          </v-flex>
-        </v-layout>
+            <v-flex xs5>
+              <v-layout justify-start>
+                <h3
+                  class="sort-bar-text"
+                >{{ selectedType.toUpperCase() }}S THIS WEEK ({{ counts[selectedType] || 0 }})</h3>
+              </v-layout>
+            </v-flex>
+            <v-flex xs7>
+              <v-layout justify-end>
+                <div class="select-container">
+                  <span class="text">SHOW ONLY</span>
+                  <select class="select" @change="filterBy($event)">
+                    <option v-for="item in filterOptions" :key="item">{{ item }}</option>
+                  </select>
+                </div>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <!-- <v-layout> -->
+        <v-flex @scroll="onScroll" ref="scrollDiv" style class="list-container">
+          <archive--default-list :data="eventTypes[selectedType]" :on:update="fetchHistory" />
+          <!-- style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;" -->
+        </v-flex>
+        <!-- </v-layout> -->
       </v-layout>
     </template>
   </v-container>
 </template>
 <script>
-
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import FalseAlarmList from "@/components/archive--false-alarm-list.vue";
 import DefaultList from "@/components/archive--default-list.vue";
@@ -104,7 +88,7 @@ import EventTypes from "@/types/eventTypes";
 export default {
   components: {
     "app-loading-spinner": AppLoadingSpinner,
-    "default-list": DefaultList,
+    "archive--default-list": DefaultList
   },
   data: () => ({
     totalEvents: [],
@@ -127,13 +111,13 @@ export default {
       }
     },
     scrollToBottom() {
-        var container = this.$refs.scrollDiv;
-        container.scrollTop = container.scrollHeight;
+      var container = this.$refs.scrollDiv;
+      container.scrollTop = container.scrollHeight;
     },
     async fetchHistory() {
       try {
-        const current = this.selectedType
-        const fetchCount = 10
+        const current = this.selectedType;
+        const fetchCount = 10;
 
         // stop fetching if we returned less than 10 on the previous query
         // TODO would still fail on a final previous query of exactly 10
@@ -141,10 +125,10 @@ export default {
 
         console.log("FETCH", current, this.eventTypes[current].page);
 
-        const response = await this.$events.getArchivedEventsByType({ 
-            type: current, 
-            limit: fetchCount, 
-            page: this.eventTypes[current].page 
+        const response = await this.$events.getArchivedEventsByType({
+          type: current,
+          limit: fetchCount,
+          page: this.eventTypes[current].page
         });
         console.log("RESP", response);
 
@@ -153,7 +137,7 @@ export default {
           this.$notifyError(
             "ERROR GETTING ARCHIVED EVENTS. PLEASE TRY AGAIN LATER"
           );
-          this.$events.stopLoading()
+          this.$events.stopLoading();
           return;
         }
 
@@ -176,25 +160,25 @@ export default {
 
         // add newly fetched events to their respective type
         events.forEach(event => {
-            let cls = event.user_classification;
-            // push any new events
-            this.eventTypes[cls].events.push(event);
+          let cls = event.user_classification;
+          // push any new events
+          this.eventTypes[cls].events.push(event);
         });
 
         // if its not the first page, scroll to bottom
         if (this.eventTypes[current].page > 0) {
-            this.scrollToBottom();
+          this.scrollToBottom();
         }
 
         // increment the page
         if (events.length >= fetchCount) {
-            this.eventTypes[current].page++;
+          this.eventTypes[current].page++;
         }
 
         this.$events.stopLoading();
       } catch (error) {
         console.error("ERROR GETTING ALL EVENTS", error);
-        this.$events.stopLoading()
+        this.$events.stopLoading();
         this.$notifyError("ERROR FINDING EVENT HISTORY");
       }
     },
@@ -213,16 +197,16 @@ export default {
     },
     selectEventType(event) {
       this.selectedType = event;
-      this.fetchHistory()
+      this.fetchHistory();
     }
   },
   computed: {
     getTotalEvents() {
-        let counter = 0;
-        for(let e in this.counts) {
-            counter += +this.counts[e]
-        }
-        return counter;
+      let counter = 0;
+      for (let e in this.counts) {
+        counter += +this.counts[e];
+      }
+      return counter;
     },
     getComponent() {
       if (this.selectedType === "false-alarm") {
@@ -324,7 +308,7 @@ select::-ms-expand {
   position: relative;
   overflow-y: scroll;
   overflow-x: hidden;
-  width: 90%;
+  width: 100%;
   height: 100%;
   scrollbar-color: var(--v-border-base) transparent;
   &::-webkit-scrollbar {
