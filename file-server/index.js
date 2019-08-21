@@ -2,7 +2,8 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const exec = require('child_process').exec;
+// const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 
 const PORT = process.env.PORT || 3000;
 
@@ -49,39 +50,54 @@ let procs = [];
     console.log('Initializing stream with ', process.env);
     if (procs.length !== 0) {
         // we don't want multiple streams being written for same url
-        console.log('Killing existing ffmpeg processes', procs);
+        console.log('Killing existing ffmpeg processes');
         procs[0].kill();
         procs[1].kill();
+        procs = [];
+        init();
     } else {
         console.log('Creating Stream data in:', `${__dirname}/public/live`);
         let commands = [
-            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_ONE} streams/one`,
-            `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
-            // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/one',
+            { url: './startstream.sh', args: [process.env.IP_CAM_RTSP_URL_ONE, 'streams/one'] },
+            { url: './startstream.sh', args: [process.env.IP_CAM_RTSP_URL_TWO, 'streams/two'] },
+            // `./startstream.sh ${process.env.IP_CAM_RTSP_URL_TWO} streams/two`,
+            // 'channel=1&subtype=0"',
             // './startstream.sh rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov streams/two',
         ];
         commands.forEach(command => {
+            let child = spawn(
+                command.url,
+                command.args,
+                { cwd: `${__dirname}/public/live` }
+            );
+            child.on('exit', () => {
+                console.log('process exit');
+                console.log("*******RESTARTING*******")
+                // init();
+            });
+            child.stdout.on('data', (data) => {
+                console.log('STDOUT Output: ' + data.toString('utf8'));
+            });
+            child.stderr.on('data', (error) => {
+                console.log('STDERR Output: ' + error);
+                // init();
+            });
+            child.on('close', (code) => {
+                console.log(`child process close all stdio with code ${code}`);
+            });
             procs.push(
-                exec(
-                    command,
-                    { cwd: `${__dirname}/public/live` },
-                    (error, stdout, stderr) => {
-                        console.log(stdout);
-                        console.log(stderr);
-                        if (error !== null) {
-                            console.log(`exec error: ${error}`);
-                        }
-                    }
-                )
+                child
             );
         });
     }
-    process.on('exit', () => {
-        console.log('Terminating streaming processes on exit');
-        procs.forEach(p => p.kill());
-    });
+    // process.on('exit', () => {
+    //     console.log('Terminating streaming processes on exit');
+    //     procs.forEach(p => p.kill());
+    //     init();
+    // });
     process.on('uncaughtException', (err) => {
         console.log('Caught exception in fileserver: ', err);
+        init();
     });
 })();
 

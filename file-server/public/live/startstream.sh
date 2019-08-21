@@ -10,15 +10,14 @@ renditions=(
 # resolution  bitrate  audio-rate
 #  "426x240    400k    64k"
 #   "640x360    800k     96k"      # 360 p
-#   "842x480    1400k    128k"   # 480 p
-  "640x480    600k    128k"   # 480 p
+  "640x480    800k    128k"   # 480 p
 #   "1280x720   2800k    128k"   # HD 720 p
 #   "1920x1080  5000k    192k"   # FULL HD
 )
 
-segment_target_duration=10       # try to create a new segment every X seconds
-max_bitrate_ratio=1.2          # maximum accepted bitrate fluctuations
-rate_monitor_buffer_ratio=1.2   # maximum buffer size between bitrate conformance checks
+segment_target_duration=4       # try to create a new segment every X seconds
+max_bitrate_ratio=1.20          # maximum accepted bitrate fluctuations
+rate_monitor_buffer_ratio=1.5   # maximum buffer size between bitrate conformance checks
 
 #########################################################################
 
@@ -37,13 +36,14 @@ key_frames_interval=${key_frames_interval:-50}
 key_frames_interval=$(echo `printf "%.1f\n" $(bc -l <<<"$key_frames_interval/10")`*10 | bc) # round
 key_frames_interval=${key_frames_interval%.*} # truncate to integer
 
-# static parameters that are similar for all renditions
+# static parameters that are similar for all renditions can also try -c:v libx264
 static_params="-c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0"
 static_params+=" -g ${key_frames_interval} -keyint_min ${key_frames_interval} -hls_time ${segment_target_duration} -hls_list_size 10 -hls_flags delete_segments"
+# static_params+=" -hls_time ${segment_target_duration} -hls_list_size 10 -hls_flags delete_segments"
 # static_params+=" -hls_playlist_type vod "
 
 # misc params
-misc_params="-hide_banner -y -thread_queue_size 512"
+misc_params="-hide_banner -y"
 
 master_playlist="#EXTM3U
 #EXT-X-VERSION:3
@@ -56,7 +56,7 @@ for rendition in "${renditions[@]}"; do
   # rendition fields
   resolution="$(echo ${rendition} | cut -d ' ' -f 1)"
   bitrate="$(echo ${rendition} | cut -d ' ' -f 2)"
-#   audiorate="$(echo ${rendition} | cut -d ' ' -f 3)"
+  audiorate="$(echo ${rendition} | cut -d ' ' -f 3)"
 
   # calculated fields
   width="$(echo ${resolution} | grep -oE '^[[:digit:]]+')"
@@ -69,25 +69,18 @@ for rendition in "${renditions[@]}"; do
 #   this will override scale and enforce original aspect ratio
 #   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}:force_original_aspect_ratio=decrease"
   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}"
-  cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k"
+  cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k -b:a ${audiorate}"
   cmd+=" -hls_segment_filename ${target}/${name}_%03d.ts ${target}/${name}.m3u8"
   
   # add rendition entry in the master playlist
   master_playlist+="#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},RESOLUTION=${resolution}\n${name}.m3u8\n"
-
 done
-
 
 # start conversion
 echo -e "Executing command:\nffmpeg ${misc_params} -i ${source} ${cmd}"
-ffmpeg ${misc_params} -i ${source} ${cmd}
+ffmpeg -rtsp_transport tcp ${misc_params} -i ${source} ${cmd}
 
 # create master playlist file
 echo -e "${master_playlist}" > ${target}/playlist.m3u8
 
 echo "Done - encoded HLS is at ${target}/"
-
-until $cmd ; do
-    echo "restarting ffmpeg command..."
-    sleep 2
-done

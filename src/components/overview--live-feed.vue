@@ -5,13 +5,13 @@
     Additionally the controls bar could be made into a component that accepts its content via slots, making it usable in any video view.
 </notes>
 <template>
-  <v-hover>
-    <v-flex class="video-feed-wrapper pa-0">
+  <!-- <v-hover> -->
+    <!-- <v-flex class="video-feed-wrapper pa-0"> -->
       <!--  swap between for static image or video -->
       <video-player :options="getVideoOptions()" />
       <!-- <dummy-camera-image :source="stream.staticImage" /> -->
-    </v-flex>
-  </v-hover>
+    <!-- </v-flex> -->
+  <!-- </v-hover> -->
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default {
       fill: true,
       muted: true,
       language: "en",
-      playbackRates: [0.5, 1.0, 1.5, 2.0],
+    //   playbackRates: [0.5, 1.0, 1.5, 2.0],
       sources: [] // being set from `overview.vue` and stream prop
     },
     plugins: {}
@@ -66,12 +66,5 @@ export default {
 <style lang="scss" scoped>
 .video-feed-wrapper {
   position: relative;
-}
-.controls .top {
-  position: absolute;
-  top: 1px;
-  right: 2px;
-  left: 2px;
-  height: 15%;
 }
 </style>

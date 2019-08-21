@@ -8,7 +8,7 @@
     <v-layout column>
       <v-layout row align-center justify-space-between>
         <!-- <v-flex xs6 v-for="stream in streams" :key="stream.id"> -->
-        <v-flex xs6 px-1>
+        <v-flex xs-6 mx-1>
           <v-card
             class="card-container"
             v-flash="!$alert.muteDuration && $alert.showHeader"
@@ -31,7 +31,8 @@
             </v-card-title>
           </v-card>
         </v-flex>
-        <v-flex xs6 px-1>
+
+        <v-flex xs-6 mx-1>
           <v-card
             class="card-container"
             :class="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration ? 'alert-active' : null"
@@ -69,6 +70,7 @@ import OverviewLiveFeed from "@/components/overview--live-feed.vue";
 // import format from "date-fns/format";
 import config from "../../config/production.js";
 import OverviewMute from "../components/overview--mute";
+
 
 export default {
   components: {
