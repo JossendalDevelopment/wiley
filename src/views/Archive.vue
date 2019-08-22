@@ -22,7 +22,7 @@
                 <v-layout align-center>
                   <v-flex py-0>
                     <p class="name mb-0">{{ i.toUpperCase() }}</p>
-                    <p class="count mb-0">{{ item }}</p>
+                    <p class="count mb-0">{{ item || 0}}</p>
                   </v-flex>
                   <v-flex pa-0 pr-1 text-xs-right style="margin-bottom: -10px;">
                     <p class="percentage mb-0">{{ Math.round(percentage(item)) || 0 }}%</p>
@@ -61,7 +61,11 @@
                 <div class="select-container">
                   <span class="text">SHOW ONLY</span>
                   <select class="select" @change="filterBy($event)">
-                    <option v-for="item in filterOptions" :key="item">{{ item }}</option>
+                    <option
+                      v-for="item in filterOptions"
+                      :value="item.value"
+                      :key="item.text"
+                    >{{ item.text }}</option>
                   </select>
                 </div>
               </v-layout>
@@ -94,7 +98,12 @@ export default {
     totalEvents: [],
     eventTypes: new EventTypes(),
     selectedType: "animal",
-    filterOptions: ["All", "Today", "This Week", "Last Week"],
+    filterOptions: [
+      { text: "All", value: "all" },
+      { text: "Today", value: "today" },
+      { text: "This Week", value: "current_week" },
+      { text: "Last Week", value: "last_week" }
+    ],
     counts: {}
   }),
   created() {
@@ -114,7 +123,7 @@ export default {
       var container = this.$refs.scrollDiv;
       container.scrollTop = container.scrollHeight;
     },
-    async fetchHistory() {
+    async fetchHistory(filteredBy = null) {
       try {
         const current = this.selectedType;
         const fetchCount = 10;
@@ -128,7 +137,8 @@ export default {
         const response = await this.$events.getArchivedEventsByType({
           type: current,
           limit: fetchCount,
-          page: this.eventTypes[current].page
+          page: this.eventTypes[current].page,
+          filteredBy: filteredBy
         });
         console.log("RESP", response);
 
@@ -187,10 +197,8 @@ export default {
       this.counts = response[0];
     },
     filterBy(e) {
-      console.log(e.target.value);
-    },
-    sortBy(e) {
-      console.log(e.target.value);
+      console.log("Filtering by", e.target.value);
+      this.fetchHistory(e.target.value);
     },
     percentage(value) {
       return (100 * value) / this.getTotalEvents;
@@ -228,7 +236,7 @@ export default {
   border-bottom: 1px solid var(--v-border-base);
 }
 .app-card {
-  border-radius: 5px;
+  border-radius: 2px;
   letter-spacing: 2px;
   cursor: pointer;
   margin: 0 8px;

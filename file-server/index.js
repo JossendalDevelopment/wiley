@@ -50,7 +50,7 @@ let procs = [];
     console.log('Initializing stream with ', process.env);
     if (procs.length !== 0) {
         // we don't want multiple streams being written for same url
-        console.log('Killing existing ffmpeg processes');
+        console.log('Killing existing ffmpeg processes and restarting');
         procs[0].kill();
         procs[1].kill();
         procs = [];

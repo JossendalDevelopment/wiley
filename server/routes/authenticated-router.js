@@ -102,8 +102,35 @@ router.post('/get_archived_events_by_type_postgres', async (req, res) => {
     console.log("ARCHIVED PARAMS", req.body.params)
     let params = req.body.params;
 
+    let query = '';
+    if (params.filteredBy === 'today') {
+        query = `SELECT * FROM events WHERE modified_date::date = CURRENT_DATE`
+    } else if (params.filteredBy === 'current_week') {
+        query = `SELECT * FROM events WHERE date_trunc('week', modified_date) = date_trunc('week',CURRENT_TIMESTAMP)`
+    } else if (params.filteredBy === 'last_week') {
+        query = `SELECT * from events 
+                WHERE modified_date BETWEEN 
+                NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND 
+                NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER`
+    } else {
+        query = `SELECT * FROM events WHERE user_classification = $1 ORDER BY modified_date OFFSET $2 LIMIT $3`
+    }
+    // get yesterdays
+    // select * from alerts where modified_date::date = current_date - 1;
+    // get todays
+    // select * from alerts where modified_date::date = current_date;
+    // last week
+    // select * from alerts WHERE modified_date BETWEEN
+    // NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 
+    // AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER;
+    // current week
+    //     SELECT * FROM alerts
+    //   WHERE date_trunc('week', modified_date) = date_trunc('week',CURRENT_TIMESTAMP);
+
+
+
     try {
-        const response = await db.any(`SELECT * FROM events WHERE user_classification = $1 ORDER BY modified_date OFFSET $2 LIMIT $3`, [
+        const response = await db.any(query, [
             params.type,
             params.page * 10, // skip ahead 10 at a time
             params.limit
