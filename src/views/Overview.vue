@@ -4,11 +4,11 @@
     The initial configuration of each stream is set here
 </notes>
 <template>
-  <v-layout fill-height px-0 pt-1 mx-2 class="overview-container" v-test-ref="'container'">
+  <v-layout fill-height px-0 pt-1 class="overview-container" v-test-ref="'container'">
     <v-layout column>
-      <v-layout row align-center justify-space-between>
+      <v-layout align-center justify-space-between>
         <!-- <v-flex xs6 v-for="stream in streams" :key="stream.id"> -->
-        <v-flex xs-6 mx-1>
+        <!-- <v-flex xs-6 mx-1> -->
           <v-card
             class="card-container"
             v-flash="!$alert.muteDuration && $alert.showHeader"
@@ -30,9 +30,9 @@
               </v-layout>
             </v-card-title>
           </v-card>
-        </v-flex>
+        <!-- </v-flex> -->
 
-        <v-flex xs-6 mx-1>
+        <!-- <v-flex xs-6 mx-1> -->
           <v-card
             class="card-container"
             :class="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration ? 'alert-active' : null"
@@ -43,7 +43,7 @@
 
             <v-card-title>
               <v-layout justify-space-between align-center>
-                <span class="cam-name" v-test-ref="'vid-title'" @click="playSound()">RAIL WEST</span>
+                <span class="cam-name" v-test-ref="'vid-title'">RAIL WEST</span>
                 <router-link
                   to="/events"
                   v-show="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration"
@@ -53,7 +53,7 @@
               </v-layout>
             </v-card-title>
           </v-card>
-        </v-flex>
+        <!-- </v-flex> -->
       </v-layout>
       <v-layout align-center justify-center>
 

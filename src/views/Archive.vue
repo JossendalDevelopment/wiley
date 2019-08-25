@@ -45,7 +45,7 @@
           <v-layout
             wrap
             my-2
-            px-2
+            style="padding-left: 14px; padding-right: 20px;"
             align-center
             :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'"
           >
@@ -72,12 +72,10 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <!-- <v-layout> -->
-        <v-flex @scroll="onScroll" ref="scrollDiv" style class="list-container">
+
+        <v-flex @scroll="onScroll" ref="scrollDiv" class="list-container">
           <archive--default-list :data="eventTypes[selectedType]" :on:update="fetchHistory" />
-          <!-- style="position:absolute; top:0px; left:0px; right:0px; padding:8px; padding-right:0px;" -->
         </v-flex>
-        <!-- </v-layout> -->
       </v-layout>
     </template>
   </v-container>
@@ -126,7 +124,7 @@ export default {
     async fetchHistory(filteredBy = null) {
       try {
         const current = this.selectedType;
-        const fetchCount = 10;
+        const fetchCount = 20;
 
         // stop fetching if we returned less than 10 on the previous query
         // TODO would still fail on a final previous query of exactly 10
@@ -317,7 +315,8 @@ select::-ms-expand {
   overflow-y: scroll;
   overflow-x: hidden;
   width: 100%;
-  height: 100%;
+  //   height: 100%;
+  height: 80vh;
   scrollbar-color: var(--v-border-base) transparent;
   &::-webkit-scrollbar {
     background-color: transparent;

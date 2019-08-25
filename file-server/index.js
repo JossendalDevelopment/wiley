@@ -79,7 +79,7 @@ let procs = [];
                 console.log('STDOUT Output: ' + data.toString('utf8'));
             });
             child.stderr.on('data', (error) => {
-                console.log('STDERR Output: ' + error);
+                // console.log('STDERR Output: ' + error);
                 // init();
             });
             child.on('close', (code) => {

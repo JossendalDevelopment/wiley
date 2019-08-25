@@ -19,10 +19,10 @@ getting unweildy.
       style="color:white; font-family: DIN Condensed; font-size: 30px; letter-spacing2px;"
     >THERE ARE NO UNCLASSIFIED EVENTS</span>
   </v-layout>
-  <v-container v-else fluid pa-0 ma-0 style="height:90vh;" class="events-container">
-    <v-layout align-start style="height: 100%;">
+  <v-container v-else fluid fill-height pa-0 pt-2 ma-0 class="events-container">
+    <v-layout align-start>
       <!-- left hand list section -->
-      <v-flex xs4 pl-3 pr-0 class="list-container" style="max-height: 99%;">
+      <v-flex xs4 pl-3 pr-0 class="list-container" @scroll="onScroll">
         <events--active-list-item
           v-for="(e, idx) in events"
           v-on:selected="setCurrentEvent($event)"
@@ -45,8 +45,8 @@ getting unweildy.
           ref="cameraImage"
           :source="currentEvent"
           v-on:showvideo="showVideo"
-          v-on:datauricreated="setThumb($event)"
         />
+        <!-- v-on:datauricreated="setThumb($event)" -->
         <video-player v-else :options="getVideoOptions()" />
 
         <!-- below video -->
@@ -126,12 +126,10 @@ export default {
   },
   data: () => ({
     events: [],
-    // unclassifiedEvents: [],
-    // unclassifiedRemaining: 0,
+    pageCount: 0,
     socket: io(config.socket_io_addr),
     listeners: null,
     disabled: false,
-    // currentEventIndex: 0,
     currentEvent: new Alert(),
     classification_description: "",
     videoShowing: false,
@@ -160,6 +158,7 @@ export default {
     // the main function of this page really only demands unclassified events.
     // Should the counters be a grand total or maybe just a current session total
     // this.getFiftyEvents();
+    this.$events.startLoading();
     this.getAlerts();
     // this.setUnclassifiedEvents(this.$events.sessionEvents);
 
@@ -180,13 +179,6 @@ export default {
         // space bar zoom in/out
         this.$refs.cameraImage.zoom();
       }
-      //   else if (e.keyCode === 39) {
-      //     // arrow right
-      //     this.goNext();
-      //   } else if (e.keyCode === 37) {
-      //     // arrow left
-      //     this.goBack();
-      //   }
     };
     this.addListeners();
   },
@@ -205,6 +197,12 @@ export default {
     }
   },
   methods: {
+    onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+      if (scrollTop + clientHeight >= scrollHeight) {
+        this.pageCount = this.pageCount + 1;
+        this.getAlerts();
+      }
+    },
     getVideoOptions() {
       // this.setVideoOptions();
       // add the stream url or filepath to video options
@@ -226,11 +224,6 @@ export default {
     setCurrentEvent(event) {
       this.currentEvent = event;
     },
-    // eslint-disable-next-line
-    setThumb(evt) {
-      // TODO forgoing client built thumbnails for now
-      //   this.currentEvent.thumb_250x250 = evt;
-    },
     addListeners() {
       // listeners on keystrokes need to be added and removed when the modals are open
       window.addEventListener("keyup", this.listeners);
@@ -238,36 +231,10 @@ export default {
     removeListeners() {
       window.removeEventListener("keyup", this.listeners);
     },
-    // goBack() {
-    //   this.currentEventIndex = this.crawlArray(
-    //     this.unclassifiedEvents,
-    //     this.currentEventIndex,
-    //     -1
-    //   );
-    //   this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
-    //   this.$refs.cameraImage.zoomOut();
-    // },
-    // goNext() {
-    //   if (this.unclassifiedRemaining > 0) {
-    //     this.currentEventIndex = this.crawlArray(
-    //       this.unclassifiedEvents,
-    //       this.currentEventIndex,
-    //       1
-    //     );
-    //     this.currentEvent = this.unclassifiedEvents[this.currentEventIndex];
-    //     this.$refs.cameraImage.zoomOut();
-    //     setTimeout(() => {
-    //       // the buttons need to be disabled until all the svg layers can be loaded
-    //       // in order to create the thumbnail correctly
-    //       // TODO add disable function to vuex
-    //       this.disabled = false;
-    //     }, 900);
-    //   }
-    //   this.unclassifiedRemaining = this.unclassifiedEventsCount;
-    // },
-    // crawlArray(array, index, n) {
-    //   return (((index + n) % array.length) + array.length) % array.length;
-    // },
+    openFalseAlarmModal() {
+      this.removeListeners();
+      this.$refs.falsealarm.open();
+    },
     setFalseAlarmClassification(type) {
       this.$refs.falsealarm.close();
       this.addListeners();
@@ -282,7 +249,6 @@ export default {
       this.updateEvent(this.currentEvent);
     },
     async updateEvent(event) {
-      // this.$notifyClassification(event.user_classification.toUpperCase());
       try {
         const response = await this.$alert.updateAlert(event);
         if (response.status && response.status === 500) {
@@ -296,7 +262,6 @@ export default {
         setTimeout(() => {
           this.events = this.events.filter(evt => evt.id !== event.id);
           this.currentEvent = this.events[0];
-          //   this.goNext();
           // timing the fade out transition with the classification animation
         }, 950);
       } catch (error) {
@@ -306,11 +271,11 @@ export default {
       }
     },
     async getAlerts() {
-      this.$events.startLoading();
+      const queryLimit = 10;
       try {
         const response = await this.$alert.getAlerts({
-          page: 0,
-          limit: 100
+          page: this.pageCount,
+          limit: queryLimit
         });
 
         console.log("CLIENT RESP", response);
@@ -319,49 +284,22 @@ export default {
           return;
         }
 
-        this.events = response;
-        this.currentEvent = response[0];
+        if (this.pageCount > 0 && response.length === 0) {
+          return;
+        }
+
+        if (this.events.length <= response.length) {
+          this.events = response;
+        } else {
+          this.events = [...this.events, ...response];
+        }
+
+        this.currentEvent = this.events[0];
         this.$events.stopLoading();
       } catch (error) {
         console.error("ERROR GETTING EVENTS", error);
         this.$notifyError("ERROR GETTING EVENTS. PLEASE TRY AGAIN LATER.");
       }
-    },
-    // setUnclassifiedEvents(events) {
-    //   this.unclassifiedEvents = events.filter(evt => {
-    //     return !evt.user_classification;
-    //   });
-
-    //   this.unclassifiedRemaining = this.unclassifiedEvents.length;
-
-    //   if (this.unclassifiedEvents.length > 0) {
-    //     this.currentEvent = this.unclassifiedEvents[0];
-    //   }
-    //   this.$events.stopLoading();
-    // },
-    // getTotalByType(type) {
-    //   return this.$events.sessionEvents.reduce((prev, next) => {
-    //     if (next.user_classification === type) {
-    //       prev++;
-    //     }
-    //     return prev;
-    //   }, 0);
-    // },
-    // selected(type) {
-    //   if (
-    //     this.unclassifiedEvents[this.currentEventIndex] &&
-    //     this.unclassifiedEvents[this.currentEventIndex].user_classification ===
-    //       type
-    //   ) {
-    //     // TODO check browser support for invert()
-    //     // return `background-color: #FFF; color: black;`;
-    //     return `filter: invert(1);`;
-    //   }
-    //   return "";
-    // },
-    openFalseAlarmModal() {
-      this.removeListeners();
-      this.$refs.falsealarm.open();
     },
     focusTextarea() {
       this.$nextTick(() => {
@@ -389,6 +327,8 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   scrollbar-color: var(--v-border-base) transparent;
+  //   height: 58%;
+  height: 100vh;
   &::-webkit-scrollbar {
     background-color: transparent;
     width: 8px;

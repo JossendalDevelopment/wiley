@@ -6,7 +6,7 @@
       >THERE ARE NO EVENTS FOR {{ data.type.toUpperCase() }}S</span>
     </v-layout>
     <v-layout v-else row wrap>
-      <v-flex xs3 sm4 ma-0 pa-0 v-for="(evt) in data.events" :key="evt.id + 'default'">
+      <v-flex xs12 sm6 md4 lg3 xl2 ma-0 pa-0 v-for="(evt) in data.events" :key="evt.id + 'default'">
         <archive--list-item :event="evt" />
       </v-flex>
     </v-layout>

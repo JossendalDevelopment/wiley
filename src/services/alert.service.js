@@ -17,7 +17,6 @@ instance.new = function (url = '/') {
 instance.getAlerts = async function (params) {
     try {
         const resp = await this.post('/get_alerts_postgres', { ...params });
-        console.log("SERVICE", resp)
         return resp.data;
     } catch (err) {
         return { status: 500, msg: err };

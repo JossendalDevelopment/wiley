@@ -1,10 +1,10 @@
 <template>
   <v-layout column align-center justify-center>
-      <template v-if="$alert.muteDuration">
-          <p class="clock label mb-0">ALARMS MUTED FOR</p>
-          <p class="clock timer mb-0">{{ formatDuration }}</p>
-            <v-btn class="clock btn" @click="$alert.clearMuteDuration()" flat dark large>UNMUTE</v-btn>
-      </template>
+    <template v-if="$alert.muteDuration">
+      <p class="clock label mb-0">ALARMS MUTED FOR</p>
+      <p class="clock timer mb-0">{{ formatDuration }}</p>
+      <v-btn class="clock btn" @click="$alert.clearMuteDuration()" flat dark large>UNMUTE</v-btn>
+    </template>
     <v-btn v-else @click="$refs.mute.open()" flat dark large>MUTE ALARM</v-btn>
 
     <app-dialog ref="mute" lazy>
@@ -12,14 +12,22 @@
         <v-layout column align-center justify-center fill-height>
           <h1 class="header-text">SELECT HOW LONG YOU WOULD LIKE TO MUTE ALARMS</h1>
           <v-container fluid grid-list-xs>
-          <v-layout row wrap align-center justify-center my-2>
-            <v-btn @click="setMuteDuration(opt.val)" dark v-for="(opt) in muteOptions" :key="opt.val + 'mute'" mx-2 my-2 class="mute-card">
+            <v-layout row wrap align-center justify-center my-2>
+              <v-btn
+                @click="setMuteDuration(opt.val)"
+                dark
+                v-for="(opt) in muteOptions"
+                :key="opt.val + 'mute'"
+                mx-2
+                my-2
+                class="mute-card"
+              >
                 <v-layout column align-center justify-center fill-height>
-                <p class="mb-0 time">{{toHours(opt.val)}}</p>
-                <p class="mb-0 text">{{opt.text}}</p>
+                  <p class="mb-0 time">{{toHours(opt.val)}}</p>
+                  <p class="mb-0 text">{{opt.text}}</p>
                 </v-layout>
-            </v-btn>
-          </v-layout>
+              </v-btn>
+            </v-layout>
           </v-container>
         </v-layout>
       </template>
@@ -35,45 +43,48 @@ export default {
   },
   data: () => ({
     muteOptions: [
-        { val: 15, text: 'MINUTES'},
-        { val: 30, text: 'MINUTES'},
-        { val: 60, text: 'HOUR'},
-        { val: 120, text: 'HOURS'},
-        { val: 180, text: 'HOURS'},
+      { val: 15, text: "MINUTES" },
+      { val: 30, text: "MINUTES" },
+      { val: 60, text: "HOUR" },
+      { val: 120, text: "HOURS" },
+      { val: 180, text: "HOURS" }
     ],
     durationInterval: null,
-    duration: null,
+    duration: null
   }),
   methods: {
-      toHours(mins) {
-          return mins >= 60 ? Math.floor(mins / 60) : mins;
-      },
-      setMuteDuration(dur) {
-          this.$alert.setMuteDuration(dur);
-          this.startCountdown();
-          this.$refs.mute.close();
-      },
-      startCountdown() {
-          // every minute, tick down and reset duration in vuex
-          this.durationInterval = setInterval(() => {
-            
-            this.$alert.setMuteDuration(this.$alert.muteDuration - 1);
+    toHours(mins) {
+      return mins >= 60 ? Math.floor(mins / 60) : mins;
+    },
+    setMuteDuration(dur) {
+      this.$alert.setMuteDuration(dur);
+      this.startCountdown();
+      this.$refs.mute.close();
+    },
+    startCountdown() {
+      // every minute, tick down and reset duration in vuex
+      this.durationInterval = setInterval(() => {
+        this.$alert.setMuteDuration(this.$alert.muteDuration - 1);
 
-            if (this.$alert.muteDuration <= 0) {
-                clearInterval(this.durationInterval);
-                this.$alert.clearMuteDuration();
-            }
-        }, 60000);
-      }
+        if (this.$alert.muteDuration <= 0) {
+          clearInterval(this.durationInterval);
+          this.$alert.clearMuteDuration();
+        }
+      }, 60000);
+    }
   },
   computed: {
-      formatDuration() {
-        let hours = this.$alert.muteDuration >= 60 ? this.toHours(this.$alert.muteDuration) : 0;
-        var minutes = this.$alert.muteDuration % 60;
-        console.log("HOURS", hours, "MINS", minutes)
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      }
-  },
+    formatDuration() {
+      let hours =
+        this.$alert.muteDuration >= 60
+          ? this.toHours(this.$alert.muteDuration)
+          : 0;
+      var minutes = this.$alert.muteDuration % 60;
+      return `${hours
+        .toString()
+        .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -84,29 +95,29 @@ export default {
   color: #fff;
 }
 .header-text {
-    color: #FFF; 
-    font-family: 'DIN Condensed';
-    font-size: 3.5rem;
-    text-align: center;
+  color: #fff;
+  font-family: "DIN Condensed";
+  font-size: 3.5rem;
+  text-align: center;
 }
 .mute-card {
-    border: 1px solid var(--v-border-base); 
-    background-color: var(--v-buttonBlack-base);
-    font-family: 'DIN Condensed';
-    max-width: 12%; 
-    min-width: 10rem;
-    height: 10rem; 
-    color: #FFF;
-    .time {
-        font-size: 4rem;
-    }
-    .text {
-        font-size: 2rem;
-        letter-spacing: 1.5px;
-    }
+  border: 1px solid var(--v-border-base);
+  background-color: var(--v-buttonBlack-base);
+  font-family: "DIN Condensed";
+  max-width: 12%;
+  min-width: 10rem;
+  height: 10rem;
+  color: #fff;
+  .time {
+    font-size: 4rem;
+  }
+  .text {
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+  }
 }
 .mute-card > p {
-    color: #FFF;
+  color: #fff;
 }
 .clock {
   color: #fff;

@@ -14,24 +14,22 @@
   <div id="app" style="position: relative">
     <!-- Page header alert -->
     <v-alert
-        v-if="!$alert.muteDuration"
+      v-if="!$alert.muteDuration"
       :value="$alert.showHeader"
       v-flash="$alert.showHeader"
       transition="slide-y-transition"
       style="margin-top: 0px; position: absolute; top:0; left: 0; right: 0; height: 58px; z-index: 200; background-color: 'red'"
       @click="$router.push('/events')"
     >
-      <v-layout align-center justify-center>
-        <span class="text-xs-center mb-0 mr-2 alert-text">
-            {{ formatAlertText }}
-        </span>
+      <v-layout align-center justify-center style="position:relative;">
+        <span class="text-xs-center mb-0 mr-2 alert-text">{{ formatAlertText }}</span>
         <v-img max-width="50px" :src="'/assets/images/icon-alert-coyote.svg'" />
         <v-btn
-            @click="$alert.hideAlertHeader()"
-            dark
-            flat
-            small
-            class="clear-alert-btn"
+          @click="$alert.hideAlertHeader()"
+          dark
+          flat
+          small
+          class="clear-alert-btn"
         >TURN OFF ALARM</v-btn>
       </v-layout>
     </v-alert>
@@ -84,7 +82,7 @@
   </div>
 </template>
 <script>
-import config from '../config/production.js';
+import config from "../config/production.js";
 import io from "socket.io-client";
 import AppHeader from "@/components/app-header.vue";
 
@@ -94,21 +92,19 @@ export default {
     "app-header": AppHeader
   },
   mounted() {
-
     this.socket.on("TRIGGER_ALARM", data => {
       console.log("RECEIVED", data);
       this.$alert.createAlert(data);
-      if(this.$alert.muteDuration === null) {
+      if (this.$alert.muteDuration === null) {
         this.playSound();
       }
     });
-
   },
   methods: {
     playSound() {
-        const audio = new Audio(require('./assets/sound/meep.mp3'));
-        audio.play();
-    },
+      const audio = new Audio(require("./assets/sound/meep.mp3"));
+      audio.play();
+    }
   },
   data: () => ({
     socket: io(config.socket_io_addr),
@@ -157,16 +153,14 @@ export default {
 .v-btn--active {
   /* header button overrides */
   background-color: #fff !important;
-  //   color: black !important;
 }
 .app-container {
   background-color: var(--v-secondaryDark-base);
 }
 .clear-alert-btn {
-  position: fixed;
-  top: 9px;
-  right: 12px;
-  // width: 80px;
+  position: absolute;
+  top: 2px;
+  right: 8px;
   background-color: var(--v-accent-base);
   border: 1px solid #fff;
 }

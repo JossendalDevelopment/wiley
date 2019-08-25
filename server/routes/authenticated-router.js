@@ -132,7 +132,7 @@ router.post('/get_archived_events_by_type_postgres', async (req, res) => {
     try {
         const response = await db.any(query, [
             params.type,
-            params.page * 10, // skip ahead 10 at a time
+            params.page * 20, // skip ahead 10 at a time
             params.limit
         ]);
         formatResponse(res, 'success', response);
@@ -216,7 +216,7 @@ router.post('/get_alerts_postgres', async (req, res) => {
 
     try {
         const response = await db.any(`SELECT * FROM alerts ORDER BY modified_date DESC OFFSET $1 LIMIT $2`, [
-            params.page * 10, // skip ahead 10 at a time
+            params.page * 10, // skip ahead 20 at a time
             params.limit
         ]);
         formatResponse(res, 'success', response);
@@ -247,13 +247,18 @@ router.post('/update_alert_postgres', async (req, res) => {
             ]);
 
         // moves event from alerts to events table
-        await db.none(`
-            INSERT INTO events SELECT * FROM alerts WHERE id = $1;
-            DELETE FROM alerts WHERE id = $1;
-        `,
-            [
+        // const transferEvent = await db.one(`SELECT * FROM alerts WHERE id = $1`, [event.id])
+        // console.log("TRANSFER", transferEvent)
+        const transferEvent = await db.any(`
+            INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name)
+            SELECT bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name
+            FROM alerts
+            WHERE id = $1
+        `, [
                 event.id
-            ]);
+            ])
+        await db.none(`DELETE FROM alerts WHERE id = $1`, [event.id])
+        console.log("TRANSFER", transferEvent)
 
         return formatResponse(res, 'success', event);
     } catch (error) {
