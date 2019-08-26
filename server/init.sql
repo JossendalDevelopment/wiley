@@ -33,7 +33,7 @@ CREATE TABLE events
     thumb_height TEXT,
     thumb_width TEXT,
     video_clip_filepath TEXT,
-    video_clip_name TEXT,
+    video_clip_filename TEXT,
     CONSTRAINT events_id_constraint UNIQUE (id)
 );
 
@@ -62,6 +62,6 @@ CREATE TABLE alerts
     thumb_height TEXT,
     thumb_width TEXT,
     video_clip_filepath TEXT,
-    video_clip_name TEXT,
+    video_clip_filename TEXT,
     CONSTRAINT alerts_id_constraint UNIQUE (id)
 );

@@ -208,11 +208,11 @@ export default {
       // add the stream url or filepath to video options
       // required for video-player component
       console.log(
-        `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.video_clip_filepath}${this.currentEvent.video_clip_name}`
+        `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.video_clip_filepath}/${this.currentEvent.video_clip_filename}`
       );
       this.videoOptions.sources = [
         {
-          src: `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.video_clip_filepath}${this.currentEvent.video_clip_name}`,
+          src: `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.video_clip_filepath}/${this.currentEvent.video_clip_filename}`,
           type: "video/mp4"
         }
       ];

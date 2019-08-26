@@ -21,7 +21,7 @@
               >
                 <v-layout align-center>
                   <v-flex py-0>
-                    <p class="name mb-0">{{ i.toUpperCase() }}</p>
+                    <p class="name mb-0">{{ i.toUpperCase() }}S</p>
                     <p class="count mb-0">{{ item || 0}}</p>
                   </v-flex>
                   <v-flex pa-0 pr-1 text-xs-right style="margin-bottom: -10px;">
@@ -41,11 +41,11 @@
 
         <!-- <v-layout column> -->
         <!-- sub header bar -->
-        <v-flex px-4 shrink>
+        <v-flex px-4 pb-0 mt-2 shrink>
           <v-layout
             wrap
             my-2
-            style="padding-left: 14px; padding-right: 20px;"
+            style="padding-left: 16px; padding-right: 21px;"
             align-center
             :class="$vuetify.breakpoint.lgAndUp ? 'justify-space-between' : 'justify-center'"
           >
@@ -53,14 +53,18 @@
               <v-layout justify-start>
                 <h3
                   class="sort-bar-text"
-                >{{ selectedType.toUpperCase() }}S THIS WEEK ({{ counts[selectedType] || 0 }})</h3>
+                >
+                {{ currentFilter.replace(/_/, ' ').toUpperCase()}}{{ currentFilter !== 'all' ? 'S' : null}} 
+                {{ selectedType.toUpperCase() }}S 
+                ({{ counts[selectedType] || 0 }})
+                </h3>
               </v-layout>
             </v-flex>
             <v-flex xs7>
               <v-layout justify-end>
                 <div class="select-container">
                   <span class="text">SHOW ONLY</span>
-                  <select class="select" @change="filterBy($event)">
+                  <select class="select" :value="currentFilter" @change="filterBy($event)">
                     <option
                       v-for="item in filterOptions"
                       :value="item.value"
@@ -73,8 +77,8 @@
           </v-layout>
         </v-flex>
 
-        <v-flex @scroll="onScroll" ref="scrollDiv" class="list-container">
-          <archive--default-list :data="eventTypes[selectedType]" :on:update="fetchHistory" />
+        <v-flex pt-0 @scroll="onScroll" ref="scrollDiv" class="list-container">
+          <archive--default-list :data="eventTypes[selectedType]" v-on:update="updateListItems(currentFilter)" />
         </v-flex>
       </v-layout>
     </template>
@@ -82,7 +86,6 @@
 </template>
 <script>
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
-import FalseAlarmList from "@/components/archive--false-alarm-list.vue";
 import DefaultList from "@/components/archive--default-list.vue";
 
 import EventTypes from "@/types/eventTypes";
@@ -96,6 +99,7 @@ export default {
     totalEvents: [],
     eventTypes: new EventTypes(),
     selectedType: "animal",
+    currentFilter: "all",
     filterOptions: [
       { text: "All", value: "all" },
       { text: "Today", value: "today" },
@@ -121,16 +125,30 @@ export default {
       var container = this.$refs.scrollDiv;
       container.scrollTop = container.scrollHeight;
     },
+    updateListItems(filter) {
+        console.log("F", filter)
+      this.fetchHistory(filter);
+    },
+    filterBy(e) {
+      console.log("Filtering by", e.target.value);
+      this.currentFilter = e.target.value;
+      this.resetFilteredEvents(e.target.value);
+    },
+    resetFilteredEvents(newVal) {
+      this.$events.startLoading();
+      this.eventTypes = new EventTypes();
+      this.fetchHistory(newVal);
+    },
     async fetchHistory(filteredBy = null) {
       try {
         const current = this.selectedType;
         const fetchCount = 20;
 
         // stop fetching if we returned less than 10 on the previous query
-        // TODO would still fail on a final previous query of exactly 10
+        // TODO would still fail on a final previous query of exactly 20
         if (this.eventTypes[current].events.length % fetchCount !== 0) return;
-
-        console.log("FETCH", current, this.eventTypes[current].page);
+        // if we change the search filter param, reset page back to 0 
+        if (filteredBy) this.eventTypes[current].page = 0;
 
         const response = await this.$events.getArchivedEventsByType({
           type: current,
@@ -194,14 +212,11 @@ export default {
       const response = await this.$events.getEventsCount();
       this.counts = response[0];
     },
-    filterBy(e) {
-      console.log("Filtering by", e.target.value);
-      this.fetchHistory(e.target.value);
-    },
     percentage(value) {
       return (100 * value) / this.getTotalEvents;
     },
     selectEventType(event) {
+        console.log("SELECTED", this.eventTypes)
       this.selectedType = event;
       this.fetchHistory();
     }
@@ -235,21 +250,21 @@ export default {
 }
 .app-card {
   border-radius: 2px;
-  letter-spacing: 2px;
+  letter-spacing: 1.1px;
   cursor: pointer;
   margin: 0 8px;
   color: #fff;
-  height: 70px;
+  height: 60px;
   &-selected {
     background-color: #fff;
     color: black;
   }
   .name {
-    font-size: 24px;
+    font-size: 18px;
     margin-bottom: -5px;
   }
   .percentage {
-    font-size: 50px;
+    font-size: 40px;
     margin-top: -10px;
     margin-bottom: -10px;
   }

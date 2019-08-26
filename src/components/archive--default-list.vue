@@ -1,3 +1,6 @@
+<notes>
+TODO REMOVE classifiying logic. Being handled in <archive--list-item />
+</notes>
 <template>
   <v-container grid-list-xs fluid>
     <v-layout justify-center v-if="data.events.length === 0">
@@ -7,7 +10,7 @@
     </v-layout>
     <v-layout v-else row wrap>
       <v-flex xs12 sm6 md4 lg3 xl2 ma-0 pa-0 v-for="(evt) in data.events" :key="evt.id + 'default'">
-        <archive--list-item :event="evt" />
+        <archive--list-item :event="evt" v-on:update="$emit('update')" />
       </v-flex>
     </v-layout>
     <!-- EDIT modal  -->
@@ -164,6 +167,7 @@ export default {
       this.$refs.falsealarm.open();
     },
     saveDescription() {
+          console.log("EMITTING")
       this.selectedForEdit.classification_description = this.classification_description.trim();
       this.$refs.falsealarm.close();
       this.saveEdits();
@@ -185,7 +189,7 @@ export default {
           console.error("ERROR", err);
           this.$notifyError("FAILED TO CLASSIFY EVENT");
           this.$events.stopLoading();
-        });
+        })
     }
   }
 };

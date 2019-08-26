@@ -19,7 +19,9 @@
     >
       <v-layout align-center justify-center style="position:relative;">
         <span class="text-xs-center mb-0 mr-2 alert-text">{{ formatAlertText }}</span>
-        <img :src="`/assets/images/icon-alert-${$alert.alertData.inferenced_classification}.svg`" />
+        <img 
+            v-if="$alert.alertData" 
+            :src="`/assets/images/icon-alert-${$alert.alertData.inferenced_classification}.svg`" />
         <v-btn
           @click="$alert.hideAlertHeader()"
           dark

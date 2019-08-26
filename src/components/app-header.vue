@@ -13,7 +13,7 @@
       <v-tab to="/events" exact style="position:relative;">
         <h2 class="nav-btn">Events</h2>
         <v-badge
-          v-if="!!unclassifiedEventCount"
+          v-if="$alert.alerts.length > 0"
           :color="$vuetify.theme.accent"
           style="position:absolute; top:12px; right:26px;"
         >
@@ -46,16 +46,6 @@ export default {
       );
     }
   },
-  computed: {
-    unclassifiedEventCount() {
-      return this.$events.sessionEvents.reduce((prev, next) => {
-        if (!next.user_classification) {
-          prev++;
-        }
-        return prev;
-      }, 0);
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>

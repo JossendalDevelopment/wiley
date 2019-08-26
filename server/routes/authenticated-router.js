@@ -142,16 +142,17 @@ router.post('/get_archived_events_by_type_postgres', async (req, res) => {
 });
 
 // @METHOD: GET
-// @RETURN: 
+// @RETURNS: object of objects with count of each type
 router.get('/get_events_count', async (req, res) => {
     // sum(case when user_classification IS NOT NULL then 1 else 0 end) as Total
     try {
         const response = await db.any(`SELECT  
-                sum(case when user_classification = 'animal' then 1 else 0 end) as Animal,
-                sum(case when user_classification = 'intruder' then 1 else 0 end) as Intruder,
-                sum(case when user_classification = 'train' then 1 else 0 end) as Train,
-                sum(case when user_classification = 'employee' then 1 else 0 end) as Employee,
-                sum(case when user_classification = 'false-alarm' then 1 else 0 end) as FasleAlarm
+                sum(case when user_classification = 'employee' then 1 else 0 end) as employee,
+                sum(case when user_classification = 'contractor' then 1 else 0 end) as contractor,
+                sum(case when user_classification = 'intruder' then 1 else 0 end) as intruder,
+                sum(case when user_classification = 'animal' then 1 else 0 end) as animal,
+                sum(case when user_classification = 'train' then 1 else 0 end) as train,
+                sum(case when user_classification = 'false-alarm' then 1 else 0 end) as "false-alarm"
             from events;`
         );
         formatResponse(res, 'success', response);
@@ -161,28 +162,7 @@ router.get('/get_events_count', async (req, res) => {
 });
 
 // @METHOD: GET
-// @RETURNS: json array object
-// pulls metadata.json file for given day, loads it into postgres container, and returns that json to client
-// router.get('/set_yesterdays_events_postgres', async (req, res) => {
-//     try {
-//         // this will return a json object of all events from metadata.json file
-//         const eventsJson = await getMetadataFile();
-
-//         const response = await db.tx(t => {
-//             const queries = eventsJson.map(event => {
-
-//                 return t.one('INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name) VALUES(${bbox_height}, ${bbox_width}, ${bbox_xmin}, ${bbox_ymin}, ${camera}, ${classification_description}, ${classified_by}, ${id}, ${image_filename}, ${image_filepath}, ${image_height}, ${image_width}, ${inferenced_classification}, ${inferenced_percentage}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}, ${thumb_height}, ${thumb_width}, ${user_classification}, ${video_clip_filepath}, ${video_clip_name}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
-//             });
-//             return t.batch(queries);
-//         });
-//         console.log("INSERT BATCH RESPONSE:", response)
-//         res.json(eventsJson);
-//     } catch (error) {
-//         console.error("ERROR SETTING EVENTS:", error);
-//         formatResponse(res, 'error', error);
-//     }
-// });
-
+// @RETURNS: 
 router.get('/get_count_by_type', async (req, res) => {
     try {
         const response = await db.any('SELECT user_classification, COUNT(*) AS count FROM events WHERE user_classification IS NOT NULL GROUP BY user_classification;');
@@ -209,6 +189,7 @@ router.get('/delete_events', async (req, res) => {
 });
 
 // @METHOD: POST
+// @PARAMS: page<int> , limit<int>
 // @RETURNS: array of all alerts with pagination
 router.post('/get_alerts_postgres', async (req, res) => {
     console.log("ALERT PARAMS", req.body.params)
@@ -226,7 +207,7 @@ router.post('/get_alerts_postgres', async (req, res) => {
 });
 
 // @METHOD: POST
-// @PARAMS: new event object
+// @PARAMS: event object to be updated
 // @RETURNS: updated event object
 router.post('/update_alert_postgres', async (req, res) => {
     try {
@@ -246,12 +227,10 @@ router.post('/update_alert_postgres', async (req, res) => {
                 event.id
             ]);
 
-        // moves event from alerts to events table
-        // const transferEvent = await db.one(`SELECT * FROM alerts WHERE id = $1`, [event.id])
-        // console.log("TRANSFER", transferEvent)
+        // moves event from alerts to events table minus the _id primary key
         const transferEvent = await db.any(`
-            INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name)
-            SELECT bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_name
+            INSERT INTO events(bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_filename)
+            SELECT bbox_height, bbox_width, bbox_xmin, bbox_ymin, camera, classification_description, classified_by, id, image_filename, image_filepath, image_height, image_width, inferenced_classification, inferenced_percentage, modified_date, thumb_filename, thumb_filepath, thumb_250x250, thumb_height, thumb_width, user_classification, video_clip_filepath, video_clip_filename
             FROM alerts
             WHERE id = $1
         `, [

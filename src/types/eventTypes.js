@@ -17,6 +17,12 @@ Object.defineProperty(EventTypes, 'template', {
                 page: 0,
                 events: [],
             },
+            contractor: {
+                name: 'Contraactor',
+                type: 'contractor',
+                page: 0,
+                events: [],
+            },
             train: {
                 name: 'Train',
                 type: 'train',

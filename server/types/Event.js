@@ -29,7 +29,7 @@ Object.defineProperty(Event, 'template', {
             "thumb_width": null,
             "user_classification": null,
             "video_clip_filepath": null,
-            "video_clip_name": null
+            "video_clip_filename": null
         }
     }
 });
