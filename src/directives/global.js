@@ -28,10 +28,10 @@ export const testref = {
 
 export const flash = {
     bind(el, binding) {
-        flasher(el, binding)
+        flasher(el, binding);
     },
     update(el, binding) {
-        flasher(el, binding)
+        flasher(el, binding);
     }
 };
 

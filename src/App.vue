@@ -5,10 +5,6 @@
     $notifySuccess(<message>)
     $notifyInfo(<message>)
     $notifyWarn(<message>)
-
-    Also all the 'simulated alert' logic is being handled here deferred until sprint 2.
-
-    TODO redo the badge in css only, the numerals aren't centering properly with v-badge and are being cheesed a bit
 </notes>
 <template>
   <div id="app" style="position: relative">
@@ -23,7 +19,7 @@
     >
       <v-layout align-center justify-center style="position:relative;">
         <span class="text-xs-center mb-0 mr-2 alert-text">{{ formatAlertText }}</span>
-        <v-img max-width="50px" :src="'/assets/images/icon-alert-coyote.svg'" />
+        <img :src="`/assets/images/icon-alert-${$alert.alertData.inferenced_classification}.svg`" />
         <v-btn
           @click="$alert.hideAlertHeader()"
           dark
@@ -93,7 +89,6 @@ export default {
   },
   mounted() {
     this.socket.on("TRIGGER_ALARM", data => {
-      console.log("RECEIVED", data);
       this.$alert.createAlert(data);
       if (this.$alert.muteDuration === null) {
         this.playSound();
@@ -102,7 +97,7 @@ export default {
   },
   methods: {
     playSound() {
-      const audio = new Audio(require("./assets/sound/meep.mp3"));
+      const audio = new Audio(require('./assets/sound/alarm.mp3'));
       audio.play();
     }
   },
@@ -165,9 +160,6 @@ export default {
   border: 1px solid #fff;
 }
 
-.alert-flash {
-  animation: blink 0.2s 20 alternate;
-}
 .alert-text {
   font-family: "Din Condensed";
   font-size: 30px;
