@@ -21,6 +21,10 @@ export const alert = {
         setAlerts: (state, payload) => {
             state.alerts = payload
         },
+        removeAlert: (state, payload) => {
+            state.alerts = state.alerts.filter(a => a.id !== payload.id)
+            console.log("ATATE", state.alerts)
+        },
         createAlert: (state, payload) => {
             state.alertData = new Alert(payload.alertData);
             state.active = true;
@@ -72,6 +76,7 @@ export const alert = {
         },
         updateAlert(context, payload) {
             return api.updateAlert(payload.event).then(resp => {
+                context.commit('removeAlert', payload.event)
                 return resp;
             });
         },

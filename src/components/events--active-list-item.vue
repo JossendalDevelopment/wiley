@@ -1,60 +1,50 @@
 <template>
-<span>
+  <span>
     <v-layout row wrap mb-2>
-        <app-list-item 
-            :event="event"
-            v-on:selected="$emit('selected', $event)"
-            :selected="selected == event.id">
-          <!-- <v-img
+      <app-list-item
+        :event="event"
+        v-on:selected="$emit('selected', $event)"
+        :selected="selected == event.id"
+      >
+        <!-- <v-img
             slot="list-image"
             contain
             :aspect-ratio="1/1"
             class="app-list-item-image"
             :src="evt.thumb_250x250"
-          ></v-img>-->
-          <v-img
-            slot="list-image"
-            contain
-            :aspect-ratio="1/1"
-            class="app-list-item-image"
-            :src="event && generateThumbUrl(event)"
-          ></v-img>
+        ></v-img>-->
+        <v-img
+          slot="list-image"
+          contain
+          :aspect-ratio="1/1"
+          class="app-list-item-image"
+          :src="event && generateThumbUrl(event)"
+        ></v-img>
 
-          <span
-            slot="list-info-top-left"
-            class="app-list-item-classification"
-          >
-            {{ event.inferenced_classification.toUpperCase() }} DETECTED
-          </span>
+        <span
+          slot="list-info-top-left"
+          class="app-list-item-classification"
+        >{{ event.inferenced_classification.toUpperCase() }} DETECTED</span>
 
-          <span
-            slot="list-info-top-right"
-            class="app-list-item-percentage "
-          >
-            {{ formatPercentage(event.inferenced_percentage) }}%
-          </span>
+        <span
+          slot="list-info-top-right"
+          class="app-list-item-percentage"
+        >{{ formatPercentage(event.inferenced_percentage) }}%</span>
 
-          <span
-            slot="list-info-bottom-left"
-            class="app-list-item-date"
-          >
-            {{ getDateTime(event.modified_date).toUpperCase() }}
-          </span>
+        <span
+          slot="list-info-bottom-left"
+          class="app-list-item-date"
+        >{{ getDateTime(event.modified_date).toUpperCase() }}</span>
 
-          <span
-            slot="list-info-bottom-right"
-            class="app-list-item-username"
-          >
-            SURE
-          </span>
-          <!-- <v-btn
+        <span slot="list-info-bottom-right" class="app-list-item-username">SURE</span>
+        <!-- <v-btn
             flat
             small
             slot="list-info-bottom-right"
             class="app-list-item-button"
             @click="openEditModal(event)"
-          >EDIT</v-btn> -->
-        </app-list-item>
+        >EDIT</v-btn>-->
+      </app-list-item>
     </v-layout>
     <!-- EDIT modal  -->
     <app-dialog ref="editmodal" max-width="500" lazy v-on:opened="() => null">
@@ -150,13 +140,13 @@
         @click="saveDescription()"
       >Confirm</v-btn>
     </app-dialog>
-</span>
+  </span>
 </template>
 <script>
 import AppListItem from "@/components/app-list-item.vue";
 import AppDialog from "@/components/app-dialog.vue";
 
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
 export default {
   components: {
@@ -169,9 +159,9 @@ export default {
       required: true
     },
     selected: {
-        type: Number,
-        required: false,
-        default: 0
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data: () => ({
@@ -186,13 +176,13 @@ export default {
   },
   methods: {
     getDateTime(date) {
-      return distanceInWordsToNow(new Date(date), {addSuffix: true});
+      return distanceInWordsToNow(new Date(date), { addSuffix: true });
     },
     generateThumbUrl(evt) {
       return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;
     },
     formatPercentage(evt) {
-        return (+evt * 100).toFixed(0)
+      return (+evt * 100).toFixed(0);
     },
     focusTextarea() {
       this.$nextTick(() => {
@@ -251,7 +241,7 @@ export default {
   }
   &-classification {
     font-size: 24px;
-      margin-top: -2px;
+    margin-top: -2px;
   }
   &-percentage {
     font-size: 24px;
@@ -279,5 +269,25 @@ export default {
   border: 1px solid var(--v-border-base);
   background-color: var(--v-buttonBlack-base);
   color: #fff;
+}
+@media only screen and (max-width: 880px) {
+  .app-list-item {
+    &-classification {
+      font-size: 18px;
+      margin-top: -2px;
+      margin-bottom: -2px;
+    }
+    &-percentage {
+      font-size: 22px;
+    }
+    &-username {
+      font-size: 14px;
+      color: var(--v-border-base);
+    }
+    &-date {
+      font-size: 14px;
+      color: var(--v-border-base);
+    }
+  }
 }
 </style>

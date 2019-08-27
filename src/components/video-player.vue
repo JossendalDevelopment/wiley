@@ -4,12 +4,7 @@
 <template>
   <!-- <span> -->
   <div class="player-wrapper">
-    <video
-      ref="videoPlayer"
-      @click="togglePause()"
-      class="video-js vjs-4-3"
-      :class="{zoom: isZoomed}"
-    ></video>
+    <video ref="videoPlayer" class="video-js vjs-4-3" :class="{zoom: isZoomed}"></video>
   </div>
   <!-- </span> -->
 </template>

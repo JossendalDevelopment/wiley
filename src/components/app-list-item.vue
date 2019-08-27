@@ -1,7 +1,10 @@
 <template>
   <v-card flat class="app-list-item" :class="selected ? 'selected' : null" @click="setSelected()">
     <v-layout row align-center>
-      <v-flex class="app-list-item-image-container">
+      <v-flex
+        class="app-list-item-image-container"
+        :style="selected ? 'border-right: none;' : null"
+      >
         <slot name="list-image" />
       </v-flex>
       <v-flex class="app-list-item-info-container">

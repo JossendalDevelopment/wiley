@@ -47,7 +47,9 @@ getting unweildy.
           v-on:showvideo="showVideo"
         />
         <!-- v-on:datauricreated="setThumb($event)" -->
-        <video-player v-else :options="getVideoOptions()" />
+        <div v-else style="margin-bottom: 6px;">
+          <video-player :options="getVideoOptions()" />
+        </div>
 
         <!-- below video -->
         <v-layout column align-center justify-center>
@@ -127,6 +129,7 @@ export default {
   data: () => ({
     events: [],
     pageCount: 0,
+    queryLimit: 10,
     socket: io(config.socket_io_addr),
     listeners: null,
     disabled: false,
@@ -184,16 +187,28 @@ export default {
   },
   mounted() {
     this.socket.on("TRIGGER_ALARM", data => {
-      console.log("RECEIVED ALERT IN /EVENTS", data);
+      //   console.log("RECEIVED ALERT IN /EVENTS", data);
       this.getAlerts();
     });
   },
   destroyed() {
     this.removeListeners();
   },
+  watch: {
+    alertsData: function(newVal, oldVal) {
+        // if a user is classifying events and the get down to the query limit
+        // make a call to grab new events
+      if (oldVal.length >= this.queryLimit && newVal.length < this.queryLimit) {
+        this.getAlerts();
+      }
+    }
+  },
   computed: {
     eventsRemaining() {
       return this.events.length > 0;
+    },
+    alertsData() {
+      return this.$alert.alerts;
     }
   },
   methods: {
@@ -271,11 +286,10 @@ export default {
       }
     },
     async getAlerts() {
-      const queryLimit = 10;
       try {
         const response = await this.$alert.getAlerts({
           page: this.pageCount,
-          limit: queryLimit
+          limit: this.queryLimit
         });
 
         console.log("CLIENT RESP", response);
@@ -290,11 +304,11 @@ export default {
 
         if (this.events.length <= response.length) {
           this.events = response;
+          this.currentEvent = this.events[0];
         } else {
           this.events = [...this.events, ...response];
         }
 
-        this.currentEvent = this.events[0];
         this.$events.stopLoading();
       } catch (error) {
         console.error("ERROR GETTING EVENTS", error);
