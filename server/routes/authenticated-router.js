@@ -72,17 +72,6 @@ router.get('/get_all_events_postgres', async (req, res) => {
 });
 
 // @METHOD: GET
-// @RETURNS: array of 50 unclassified events with priority on persons
-// router.get('/get_fifty_unclassified_events_postgres', async (req, res) => {
-//     try {
-//         const response = await db.any("SELECT * FROM events WHERE user_classification IS NULL ORDER BY inferenced_classification = 'person' DESC LIMIT 50;");
-//         formatResponse(res, 'success', response);
-//     } catch (error) {
-//         formatResponse(res, 'error', error);
-//     }
-// });
-
-// @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.post('/get_archived_events_postgres', async (req, res) => {
     console.log("ARCHIVED PARAMS", req.body.params)
@@ -162,6 +151,17 @@ router.get('/get_events_count', async (req, res) => {
 });
 
 // @METHOD: GET
+// @RETURNS: a count of all active alerts
+router.get('/get_alerts_count', async (req, res) => {
+    try {
+        const response = await db.any(`SELECT COUNT(*) FROM alerts;`);
+        formatResponse(res, 'success', response);
+    } catch (error) {
+        formatResponse(res, 'error', error);
+    }
+});
+
+// @METHOD: GET
 // @RETURNS: 
 router.get('/get_count_by_type', async (req, res) => {
     try {
@@ -197,7 +197,7 @@ router.post('/get_alerts_postgres', async (req, res) => {
 
     try {
         const response = await db.any(`SELECT * FROM alerts ORDER BY modified_date DESC OFFSET $1 LIMIT $2`, [
-            params.page * 10, // skip ahead 20 at a time
+            +params.page * +params.limit, // skip ahead 20 at a time
             params.limit
         ]);
         formatResponse(res, 'success', response);

@@ -32,4 +32,13 @@ instance.updateAlert = async function (event) {
     }
 };
 
+instance.getAlertCount = async function () {
+    try {
+        const resp = await this.get('/get_alerts_count');
+        return resp.data;
+    } catch (err) {
+        return { status: 500, msg: err };
+    }
+};
+
 export default instance;

@@ -41,6 +41,9 @@ export default {
                             }
                         );
                     };
+                    alert.getAlertCount = () => {
+                        return store.dispatch('alert/getAlertCount');
+                    }
                     return alert;
                 }
             }

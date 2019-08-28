@@ -19,9 +19,10 @@
     >
       <v-layout align-center justify-center style="position:relative;">
         <span class="text-xs-center mb-0 mr-2 alert-text">{{ formatAlertText }}</span>
-        <img 
-            v-if="$alert.alertData" 
-            :src="`/assets/images/icon-alert-${$alert.alertData.inferenced_classification}.svg`" />
+        <img
+          v-if="$alert.alertData"
+          :src="`/assets/images/icon-alert-${$alert.alertData.inferenced_classification}.svg`"
+        />
         <v-btn
           @click="$alert.hideAlertHeader()"
           dark
@@ -80,6 +81,7 @@
   </div>
 </template>
 <script>
+import { Howl } from "howler";
 import config from "../config/production.js";
 import io from "socket.io-client";
 import AppHeader from "@/components/app-header.vue";
@@ -89,19 +91,26 @@ export default {
   components: {
     "app-header": AppHeader
   },
+  data: () => ({
+    sound: null
+  }),
   mounted() {
-    this.socket.on("TRIGGER_ALARM", data => {
-      this.$alert.createAlert(data);
-      if (this.$alert.muteDuration === null) {
-        this.playSound();
+    this.sound = new Howl({
+      src: "./assets/sound/alarm.mp3",
+      autoplay: false,
+      loop: false,
+      volume: 1.0,
+      onend: () => {
+        // console.log("Finished!");
       }
     });
-  },
-  methods: {
-    playSound() {
-      const audio = new Audio(require('./assets/sound/alarm.mp3'));
-      audio.play();
-    }
+
+    this.socket.on("TRIGGER_ALARM", data => {
+      this.$alert.createAlert(data);
+      if (!this.$alert.muteDuration) {
+        this.sound.play();
+      }
+    });
   },
   data: () => ({
     socket: io(config.socket_io_addr),

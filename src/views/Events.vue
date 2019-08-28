@@ -22,14 +22,17 @@ getting unweildy.
   <v-container v-else fluid fill-height pa-0 pt-2 ma-0 class="events-container">
     <v-layout align-start>
       <!-- left hand list section -->
-      <v-flex xs4 pl-3 pr-0 class="list-container" @scroll="onScroll">
-        <events--active-list-item
-          v-for="(e, idx) in events"
-          v-on:selected="setCurrentEvent($event)"
-          :event="e"
-          :key="e.id + 'idx' + idx"
-          :selected="currentEvent.id"
-        />
+      <v-flex xs4 pl-3 pr-0>
+        <span style="color: #FFF; font-size: 24px;">EVENTS {{ this.totalEventsCount || 0 }}</span>
+        <v-flex class="list-container" @scroll="onScroll">
+          <events--active-list-item
+            v-for="(e, idx) in events"
+            v-on:selected="setCurrentEvent($event)"
+            :event="e"
+            :key="e.id + 'idx' + idx"
+            :selected="currentEvent.id"
+          />
+        </v-flex>
       </v-flex>
       <!-- video/image section -->
       <v-flex xs8 style="position: relative; padding: 0px 65px 0;">
@@ -128,8 +131,9 @@ export default {
   },
   data: () => ({
     events: [],
+    totalEventsCount: null,
     pageCount: 0,
-    queryLimit: 10,
+    queryLimit: 20,
     socket: io(config.socket_io_addr),
     listeners: null,
     disabled: false,
@@ -157,13 +161,9 @@ export default {
     ]
   }),
   created() {
-    // TODO gets all events from postgres so that the counters below the buttons show grand totals
-    // the main function of this page really only demands unclassified events.
-    // Should the counters be a grand total or maybe just a current session total
-    // this.getFiftyEvents();
     this.$events.startLoading();
+
     this.getAlerts();
-    // this.setUnclassifiedEvents(this.$events.sessionEvents);
 
     this.listeners = e => {
       if (String.fromCharCode(e.keyCode) === "1" || e.keyCode === 97) {
@@ -183,9 +183,10 @@ export default {
         this.$refs.cameraImage.zoom();
       }
     };
+
     this.addListeners();
   },
-  mounted() {
+  async mounted() {
     this.socket.on("TRIGGER_ALARM", data => {
       //   console.log("RECEIVED ALERT IN /EVENTS", data);
       this.getAlerts();
@@ -196,8 +197,8 @@ export default {
   },
   watch: {
     alertsData: function(newVal, oldVal) {
-        // if a user is classifying events and the get down to the query limit
-        // make a call to grab new events
+      // if a user is classifying events and they get down to the query limit
+      // make a call to grab new events
       if (oldVal.length >= this.queryLimit && newVal.length < this.queryLimit) {
         this.getAlerts();
       }
@@ -219,12 +220,6 @@ export default {
       }
     },
     getVideoOptions() {
-      // this.setVideoOptions();
-      // add the stream url or filepath to video options
-      // required for video-player component
-      console.log(
-        `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.video_clip_filepath}/${this.currentEvent.video_clip_filename}`
-      );
       this.videoOptions.sources = [
         {
           src: `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.video_clip_filepath}/${this.currentEvent.video_clip_filename}`,
@@ -262,6 +257,14 @@ export default {
       this.currentEvent.classified_by = this.$auth.user.email;
       this.classification_description = "";
       this.updateEvent(this.currentEvent);
+    },
+    focusTextarea() {
+      this.$nextTick(() => {
+        this.$refs.falsealarmtextarea.focus();
+      });
+    },
+    newline() {
+      this.classification_description = `${this.classification_description}\n`;
     },
     async updateEvent(event) {
       try {
@@ -309,19 +312,22 @@ export default {
           this.events = [...this.events, ...response];
         }
 
+        this.setEventsCount();
         this.$events.stopLoading();
       } catch (error) {
         console.error("ERROR GETTING EVENTS", error);
         this.$notifyError("ERROR GETTING EVENTS. PLEASE TRY AGAIN LATER.");
       }
     },
-    focusTextarea() {
-      this.$nextTick(() => {
-        this.$refs.falsealarmtextarea.focus();
-      });
-    },
-    newline() {
-      this.classification_description = `${this.classification_description}\n`;
+    async setEventsCount() {
+      try {
+        this.totalEventsCount = await this.$alert.getAlertCount();
+      } catch (error) {
+        console.error("ERROR GETTING COUNT", error);
+        this.$notifyError(
+          "ERROR GETTING EVENTS COUNT. PLEASE TRY AGAIN LATER."
+        );
+      }
     }
   }
 };

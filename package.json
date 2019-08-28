@@ -22,6 +22,7 @@
         "core-js": "^2.6.5",
         "date-fns": "^1.30.1",
         "firebase": "^6.0.1",
+        "howler": "^2.1.2",
         "socket.io-client": "^2.2.0",
         "velocity-animate": "^1.5.2",
         "video.js": "^7.5.4",
@@ -54,14 +55,5 @@
         "sass-loader": "^7.1.0",
         "vue-cli-plugin-vuetify": "^0.5.0",
         "vue-template-compiler": "^2.5.21"
-    },
-    "gitHooks": {
-        "pre-commit": "lint-staged"
-    },
-    "lint-staged": {
-        "*.{js,vue}": [
-            "vue-cli-service lint",
-            "git add"
-        ]
     }
 }

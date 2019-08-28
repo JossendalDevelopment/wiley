@@ -80,5 +80,10 @@ export const alert = {
                 return resp;
             });
         },
+        getAlertCount() {
+            return api.getAlertCount().then(resp => {
+                return resp[0].count;
+            })
+        }
     },
 }
