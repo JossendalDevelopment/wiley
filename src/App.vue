@@ -82,7 +82,6 @@
 </template>
 <script>
 import { Howl } from "howler";
-import config from "../config/production.js";
 import io from "socket.io-client";
 import AppHeader from "@/components/app-header.vue";
 
@@ -91,9 +90,6 @@ export default {
   components: {
     "app-header": AppHeader
   },
-  data: () => ({
-    sound: null
-  }),
   mounted() {
     this.sound = new Howl({
       src: "./assets/sound/alarm.mp3",
@@ -113,7 +109,8 @@ export default {
     });
   },
   data: () => ({
-    socket: io(config.socket_io_addr),
+    socket: io(process.env.VUE_APP_SOCKET_IO_ADDR),
+    sound: null,
     alert: true,
     tab: null,
     animation: {

@@ -1,24 +1,23 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const conf = require('../config/production');
 
 const router = express.Router();
 
-const createReadDirPaths = (less = 1) => {
-    // create filepath from yesterdays date
-    let yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - less) // -1 because we want yesterdays images
-    // const year = yesterday.getFullYear();
-    // let month = yesterday.getMonth() + 1; // months are zero indexed
-    // month = month.toString().padStart(2, '0');
-    let day = yesterday.getDate().toString().padStart(2, '0');
-    console.log("DAY", day)
+// const createReadDirPaths = (less = 1) => {
+//     // create filepath from yesterdays date
+//     let yesterday = new Date()
+//     yesterday.setDate(yesterday.getDate() - less) // -1 because we want yesterdays images
+//     // const year = yesterday.getFullYear();
+//     // let month = yesterday.getMonth() + 1; // months are zero indexed
+//     // month = month.toString().padStart(2, '0');
+//     let day = yesterday.getDate().toString().padStart(2, '0');
+//     console.log("DAY", day)
 
-    // hardcoded for dev
-    return [`${conf.image_filepath_east}/2019/07/24/unverified`, `${conf.image_filepath_west}/2019/07/24/unverified`]
-    // return [`${conf.image_filepath_east}/${year}/${month}/${day}/unverified/`, `${conf.image_filepath_west}/${year}/${month}/${day}/unverified/`]
-};
+//     // hardcoded for dev
+//     return [`${process.env.IMAGE_FILEPATH_EAST}/2019/07/24/unverified`, `${process.env.IMAGE_FILEPATH_WEST}/2019/07/24/unverified`]
+//     // return [`${conf.image_filepath_east}/${year}/${month}/${day}/unverified/`, `${conf.image_filepath_west}/${year}/${month}/${day}/unverified/`]
+// };
 
 const createWriteJsonPath = (eventData) => {
     // create filepath from provided events data
@@ -35,47 +34,47 @@ const createDeletePath = (eventData) => {
 //     return `${eventData.thumb_filepath}/thumbnails/${eventData.thumb_filename}`;
 // };
 
-const arrayFromJsonFiles = async (filepath) => {
-    // read 25 json files from each camera directory
-    return await new Promise((resolve, reject) => {
-        console.log("FILEPATH", filepath)
-        fs.readdir(filepath, async (err, filenames) => {
-            if (err) reject(new Error(err));
+// const arrayFromJsonFiles = async (filepath) => {
+//     // read 25 json files from each camera directory
+//     return await new Promise((resolve, reject) => {
+//         console.log("FILEPATH", filepath)
+//         fs.readdir(filepath, async (err, filenames) => {
+//             if (err) reject(new Error(err));
 
-            try {
-                if (!filenames.length) {
-                    resolve([]);
-                }
+//             try {
+//                 if (!filenames.length) {
+//                     resolve([]);
+//                 }
 
-                let promises = [];
+//                 let promises = [];
 
-                for (let i = 0; i < 25; i++) {
-                    filenames[i] && promises.push(readFileContents(filepath, filenames[i]));
-                }
-                resolve(Promise.all(promises));
-            } catch (error) {
-                reject(new Error(error));
-            }
-        });
-    }).
-        catch(error => {
-            console.log('caught in arrayFromJsonFiles', error.message);
-            return { status: 500, msg: "No such file or directory" };
-        });
-};
+//                 for (let i = 0; i < 25; i++) {
+//                     filenames[i] && promises.push(readFileContents(filepath, filenames[i]));
+//                 }
+//                 resolve(Promise.all(promises));
+//             } catch (error) {
+//                 reject(new Error(error));
+//             }
+//         });
+//     }).
+//         catch(error => {
+//             console.log('caught in arrayFromJsonFiles', error.message);
+//             return { status: 500, msg: "No such file or directory" };
+//         });
+// };
 
-const readFileContents = async (filepath, file) => {
-    // does the actual reading for arrayFromJsonFiles
-    return await new Promise((resolve, reject) => {
-        fs.readFile(`${filepath}/${file}`, 'utf-8', async (err, content) => {
-            err ? reject(new Error(err)) : resolve(JSON.parse(content));
-        })
-    }).
-        catch(error => {
-            console.log('caught in readFileContents', error.message);
-            return { status: 500, msg: "No such file or directory" };
-        });
-};
+// const readFileContents = async (filepath, file) => {
+//     // does the actual reading for arrayFromJsonFiles
+//     return await new Promise((resolve, reject) => {
+//         fs.readFile(`${filepath}/${file}`, 'utf-8', async (err, content) => {
+//             err ? reject(new Error(err)) : resolve(JSON.parse(content));
+//         })
+//     }).
+//         catch(error => {
+//             console.log('caught in readFileContents', error.message);
+//             return { status: 500, msg: "No such file or directory" };
+//         });
+// };
 
 const createNewJsonFile = async (filepath, data) => {
     // write json with updated classification to /verified directory
@@ -160,22 +159,22 @@ router.get('/', (req, res) => {
     res.json({ title: 'You Have File server' });
 });
 
-router.get('/metadata', async (req, res) => {
-    try {
-        let dirPaths = createReadDirPaths();
-        let cam1 = await arrayFromJsonFiles(dirPaths[0]);
-        let cam2 = await arrayFromJsonFiles(dirPaths[1]);
-        if (cam1.status === 500 || cam2.status === 500) {
-            formatResponse(res, 'error', "COULD NOT LOCATE DATA FOR CAMERA");
-        } else {
-            console.log("FROM EACH CAMERA", cam1.length, "AND", cam2.length);
-            res.json([...cam1, ...cam2]);
-        }
-    } catch (error) {
-        console.error('ERROR IN FILESERVER', error);
-        formatResponse(res, 'error', error);
-    }
-});
+// router.get('/metadata', async (req, res) => {
+//     try {
+//         let dirPaths = createReadDirPaths();
+//         let cam1 = await arrayFromJsonFiles(dirPaths[0]);
+//         let cam2 = await arrayFromJsonFiles(dirPaths[1]);
+//         if (cam1.status === 500 || cam2.status === 500) {
+//             formatResponse(res, 'error', "COULD NOT LOCATE DATA FOR CAMERA");
+//         } else {
+//             console.log("FROM EACH CAMERA", cam1.length, "AND", cam2.length);
+//             res.json([...cam1, ...cam2]);
+//         }
+//     } catch (error) {
+//         console.error('ERROR IN FILESERVER', error);
+//         formatResponse(res, 'error', error);
+//     }
+// });
 
 router.post('/write_metadata', async (req, res) => {
     try {

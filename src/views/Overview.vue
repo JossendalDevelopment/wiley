@@ -9,56 +9,54 @@
       <v-layout align-center justify-space-between>
         <!-- <v-flex xs6 v-for="stream in streams" :key="stream.id"> -->
         <!-- <v-flex xs-6 mx-1> -->
-          <v-card
-            class="card-container"
-            v-flash="!$alert.muteDuration && $alert.showHeader"
-            :class="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration ? 'alert-active' : null"
-            flat
-          >
-            <overview-live-feed :stream="streams[0]" />
-            <!-- <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
+        <v-card
+          class="card-container"
+          v-flash="!$alert.muteDuration && $alert.showHeader"
+          :class="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration ? 'alert-active' : null"
+          flat
+        >
+          <overview-live-feed :stream="streams[0]" />
+          <!-- <div id="cameraEast" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
 
-            <v-card-title>
-              <v-layout justify-space-between align-center>
-                <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
-                <router-link
-                  to="/events"
-                  v-show="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration"
-                  class="my-0 cam-link"
-                  flat
-                >VIEW</router-link>
-              </v-layout>
-            </v-card-title>
-          </v-card>
+          <v-card-title>
+            <v-layout justify-space-between align-center>
+              <span class="cam-name" v-test-ref="'vid-title'">RAIL EAST</span>
+              <router-link
+                to="/events"
+                v-show="$alert.showHeader && $alert.alertData.camera === 'east' && !$alert.muteDuration"
+                class="my-0 cam-link"
+                flat
+              >VIEW</router-link>
+            </v-layout>
+          </v-card-title>
+        </v-card>
         <!-- </v-flex> -->
 
         <!-- <v-flex xs-6 mx-1> -->
-          <v-card
-            class="card-container"
-            :class="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration ? 'alert-active' : null"
-            flat
-          >
-            <overview-live-feed :stream="streams[1]" />
-            <!-- <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
+        <v-card
+          class="card-container"
+          :class="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration ? 'alert-active' : null"
+          flat
+        >
+          <overview-live-feed :stream="streams[1]" />
+          <!-- <div id="cameraWest" style="width:100%; height:0; padding:0 0 75% 0"></div> -->
 
-            <v-card-title>
-              <v-layout justify-space-between align-center>
-                <span class="cam-name" v-test-ref="'vid-title'">RAIL WEST</span>
-                <router-link
-                  to="/events"
-                  v-show="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration"
-                  class="my-0 cam-link"
-                  flat
-                >VIEW</router-link>
-              </v-layout>
-            </v-card-title>
-          </v-card>
+          <v-card-title>
+            <v-layout justify-space-between align-center>
+              <span class="cam-name" v-test-ref="'vid-title'">RAIL WEST</span>
+              <router-link
+                to="/events"
+                v-show="$alert.showHeader && $alert.alertData.camera === 'west' && !$alert.muteDuration"
+                class="my-0 cam-link"
+                flat
+              >VIEW</router-link>
+            </v-layout>
+          </v-card-title>
+        </v-card>
         <!-- </v-flex> -->
       </v-layout>
       <v-layout align-center justify-center>
-
         <overview-mute />
-
       </v-layout>
     </v-layout>
   </v-layout>
@@ -66,11 +64,7 @@
 
 <script>
 import OverviewLiveFeed from "@/components/overview--live-feed.vue";
-
-// import format from "date-fns/format";
-import config from "../../config/production.js";
-import OverviewMute from "../components/overview--mute";
-
+import OverviewMute from "@/components/overview--mute";
 
 export default {
   components: {
@@ -87,7 +81,8 @@ export default {
         camName: "Rail-EAST",
         sourceData: {
           // These urls point to the file server, not the express api server, and are set in /config/production.js
-          src: config.stream_data_one,
+          //   src: config.stream_data_one,
+          src: process.env.VUE_APP_STREAM_DATA_ONE,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -96,7 +91,8 @@ export default {
         camNumber: 2,
         camName: "Rail-WEST",
         sourceData: {
-          src: config.stream_data_two,
+          //   src: config.stream_data_two,
+          src: process.env.VUE_APP_STREAM_DATA_TWO,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -174,6 +170,7 @@ export default {
   background-color: var(--v-secondaryDark2-base);
   color: #fff;
   width: 100%;
+  padding: 5px;
 }
 .cam {
   &-name {
@@ -185,7 +182,7 @@ export default {
   }
 }
 #cameraEast {
-    padding-top: 75%;
+  padding-top: 75%;
 }
 .alert-active {
   border: 1px solid var(--v-accent-base);

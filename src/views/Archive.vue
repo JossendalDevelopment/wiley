@@ -144,9 +144,17 @@ export default {
         const current = this.selectedType;
         const fetchCount = 20;
 
-        // stop fetching if we returned less than 10 on the previous query
-        // TODO would still fail on a final previous query of exactly 20
-        if (this.eventTypes[current].events.length % fetchCount !== 0) return;
+        // stop fetching if we are already showing all available events for the current type
+        if (
+          this.eventTypeCount &&
+          this.eventTypes[current].events.length !== 0 &&
+          this.eventTypeCount != 0 &&
+          this.eventTypes[current].events.length >= this.eventTypeCount
+        ) {
+          this.$events.stopLoading();
+          return;
+        }
+
         // if we change the search filter param, reset page back to 0
         if (filteredBy) this.eventTypes[current].page = 0;
 
@@ -179,10 +187,10 @@ export default {
         //         type: String,
         //         events: Array
         //     },
+        //     intruder: (...)
         //     contractor: (...)
         //     employee: (...)
         //     false-alarm: (...)
-        //     intruder: (...)
         // }
 
         // add newly fetched events to their respective type
@@ -217,7 +225,6 @@ export default {
       return (100 * value) / this.getTotalEvents;
     },
     selectEventType(event) {
-      console.log("SELECTED", this.eventTypes);
       this.selectedType = event;
       this.fetchHistory();
     }

@@ -2,11 +2,9 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-// const exec = require('child_process').exec;
 const spawn = require('child_process').spawn;
 
 const PORT = process.env.PORT || 3000;
-
 
 var app = express();
 
@@ -78,7 +76,7 @@ let procs = [];
             child.stdout.on('data', (data) => {
                 console.log('STDOUT Output: ' + data.toString('utf8'));
             });
-            child.stderr.on('data', (error) => {
+            child.stderr.on('data', () => {
                 // console.log('STDERR Output: ' + error);
                 // init();
             });
@@ -90,11 +88,7 @@ let procs = [];
             );
         });
     }
-    // process.on('exit', () => {
-    //     console.log('Terminating streaming processes on exit');
-    //     procs.forEach(p => p.kill());
-    //     init();
-    // });
+
     process.on('uncaughtException', (err) => {
         console.log('Caught exception in fileserver: ', err);
         init();
