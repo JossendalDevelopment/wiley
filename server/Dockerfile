@@ -22,7 +22,6 @@ COPY --chown=node:node . .
 # see index.js for how server shutdown processes are being handled without an init process like tini
 CMD ["node", "index.js"]
 
-
 # FROM prod-stage as dev-stage
 
 # ENV NODE_ENV=development

@@ -9,15 +9,15 @@ const createReadDirPaths = (less = 1) => {
     // create filepath from yesterdays date
     let yesterday = new Date()
     yesterday.setDate(yesterday.getDate() - less) // -1 because we want yesterdays images
-    // const year = yesterday.getFullYear();
-    // let month = yesterday.getMonth() + 1; // months are zero indexed
-    // month = month.toString().padStart(2, '0');
+    const year = yesterday.getFullYear();
+    let month = yesterday.getMonth() + 1; // months are zero indexed
+    month = month.toString().padStart(2, '0');
     let day = yesterday.getDate().toString().padStart(2, '0');
     console.log("DAY", day)
 
     // hardcoded for dev
-    return [`${conf.image_filepath_east}/2019/07/24/unverified`, `${conf.image_filepath_west}/2019/07/24/unverified`]
-    // return [`${conf.image_filepath_east}/${year}/${month}/${day}/unverified/`, `${conf.image_filepath_west}/${year}/${month}/${day}/unverified/`]
+    return [`${conf.image_filepath_east}/2019/07/31/unverified`, `${conf.image_filepath_west}/2019/07/31/unverified`]
+   // return [`${conf.image_filepath_east}/${year}/${month}/${day}/unverified/`, `${conf.image_filepath_west}/${year}/${month}/${day}/unverified/`]
 };
 
 const createWriteJsonPath = (eventData) => {
@@ -44,7 +44,7 @@ const arrayFromJsonFiles = async (filepath) => {
 
             try {
                 if (!filenames.length) {
-                    resolve("No Unclasified events available");
+                    resolve([]);
                 }
 
                 let promises = [];

@@ -101,12 +101,12 @@ router.get('/set_yesterdays_events_postgres', async (req, res) => {
     try {
         // this will return a json object of all events from metadata.json file
         const eventsJson = await getMetadataFile();
-        console.log("EVENTS TO BE INSERTED TO DB", eventsJson.length)
+        console.log("EVENTS TO BE INSERTED TO DB", eventsJson)
 
         const response = await db.tx(t => {
             const queries = eventsJson.map(event => {
-                // event.thumb_250x250 = null;
-                return t.one('INSERT INTO events(id, image_filepath, image_filename, image_width, image_height, bbox_xmin, bbox_ymin, bbox_width, bbox_height, camera, inferenced_classification, inferenced_percentage, user_classification, classification_description, classified_by, modified_date, thumb_filename, thumb_filepath, thumb_250x250) VALUES(${id}, ${image_filepath}, ${image_filename}, ${image_width}, ${image_height}, ${bbox_xmin}, ${bbox_ymin}, ${bbox_width}, ${bbox_height}, ${camera}, ${inferenced_classification}, ${inferenced_percentage}, ${user_classification}, ${classification_description}, ${classified_by}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', new Event(event));
+                event.thumb_250x250 = null;
+                return t.one('INSERT INTO events(id, image_filepath, image_filename, image_width, image_height, bbox_xmin, bbox_ymin, bbox_width, bbox_height, camera, inferenced_classification, inferenced_percentage, user_classification, classification_description, classified_by, modified_date, thumb_filename, thumb_filepath, thumb_250x250) VALUES(${id}, ${image_filepath}, ${image_filename}, ${image_width}, ${image_height}, ${bbox_xmin}, ${bbox_ymin}, ${bbox_width}, ${bbox_height}, ${camera}, ${inferenced_classification}, ${inferenced_percentage}, ${user_classification}, ${classification_description}, ${classified_by}, ${modified_date}, ${thumb_filename}, ${thumb_filepath}, ${thumb_250x250}) ON CONFLICT (id) DO UPDATE SET user_classification = null RETURNING id', event);
             });
             return t.batch(queries);
         });

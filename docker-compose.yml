@@ -1,0 +1,85 @@
+version: '2.2'
+services:
+    client:
+        build: ./
+        volumes:
+            - ./:/app:delegated
+            - /node_modules
+        ports:
+            - 5001:80
+        depends_on:
+            # fileserver:
+            #     condition: service_healthy
+            api:
+                condition: service_healthy
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+            - NODE_ENV=production
+    api:
+        build:
+            context: ./server
+            #target: 'prod-stage'
+        # depends_on:
+        #     db:
+        #         condition: service_healthy
+        volumes:
+            - ./server:/server:delegated
+            - /server/node_modules
+        ports:
+            - 3001:3001 #exposed only for testing and required for healthcheck script
+        environment:
+            # this is used in metadataFile.js, should default to localhost in dev and fileserver container name in prod
+            - FILESERVER_BASE_URL=fileserver
+            - NODE_ENV=production
+            # These files need to be retrieved from firebase and placed in `server/certs`
+            - GOOGLE_APPLICATION_CREDENTIALS_DEV=./certs/wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
+            - GOOGLE_APPLICATION_CREDENTIALS_PROD=./certs/wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json
+    fileserver:
+        build: ./file-server
+        ports:
+            - 3000:3000
+        volumes:
+            - ./file-server:/opt/node_app/app:delegated
+            - /node/app/node_modules
+            - sol2_video:/opt/node_app/app/public/mnt/sol2_video
+        environment:
+            # replace these with live rtsp urls
+            #- IP_CAM_RTSP_URL_ONE=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+              #- IP_CAM_RTSP_URL_TWO=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+            - IP_CAM_RTSP_URL_ONE=rtsp://Solution2:2Cn3Dm4s@10.10.101.182:554/Streaming/Channels/2
+            - IP_CAM_RTSP_URL_TWO=rtsp://Solution2:2Cn3Dm4s@10.10.101.184:554/Streaming/Channels/2
+    db:
+        image: postgres:10-alpine
+        restart: always
+        # healthcheck:
+        #     test: pg_isready -U postgres -h 127.0.0.1
+        ports:
+            # Only needed if you want to connect to management software
+            - 5432:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_DB: wiley
+            POSTGRES_PASSWORD: wiley_rotf_2019
+        volumes:
+            - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+            - wiley_db:/var/lib/postgresql/data
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+
+volumes:
+        sol2_video:
+                driver: "local"
+                driver_opts:
+                        type: nfs
+                        o: "addr=10.10.101.112,rw"
+                        device: ":/export/sol2_video"
+        wiley_db:
+                driver: "local"
+                driver_opts:
+                        type: nfs
+                        o: "addr=10.10.101.112,rw,hard,sync"
+                        device: ":/export/sol2_video/wiley"
+                        

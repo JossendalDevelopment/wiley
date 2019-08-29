@@ -15,9 +15,9 @@ renditions=(
 #   "1920x1080  5000k    192k"   # FULL HD
 )
 
-segment_target_duration=4       # try to create a new segment every X seconds
-max_bitrate_ratio=1.07          # maximum accepted bitrate fluctuations
-rate_monitor_buffer_ratio=1.5   # maximum buffer size between bitrate conformance checks
+segment_target_duration=8       # try to create a new segment every X seconds
+max_bitrate_ratio=1.75          # maximum accepted bitrate fluctuations
+rate_monitor_buffer_ratio=1.75  # maximum buffer size between bitrate conformance checks
 
 #########################################################################
 
@@ -68,12 +68,14 @@ for rendition in "${renditions[@]}"; do
 #   this will override scale and enforce original aspect ratio
 #   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}:force_original_aspect_ratio=decrease"
   cmd+=" ${static_params} -vf scale=w=${width}:h=${height}"
-  cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k -b:a ${audiorate}"
+  cmd+=" -b:v ${bitrate} -maxrate ${maxrate%.*}k -bufsize ${bufsize%.*}k"
   cmd+=" -hls_segment_filename ${target}/${name}_%03d.ts ${target}/${name}.m3u8"
   
   # add rendition entry in the master playlist
   master_playlist+="#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},RESOLUTION=${resolution}\n${name}.m3u8\n"
+
 done
+
 
 # start conversion
 echo -e "Executing command:\nffmpeg ${misc_params} -i ${source} ${cmd}"
@@ -83,3 +85,8 @@ ffmpeg ${misc_params} -i ${source} ${cmd}
 echo -e "${master_playlist}" > ${target}/playlist.m3u8
 
 echo "Done - encoded HLS is at ${target}/"
+
+until $cmd ; do
+  echo "restarting ffmpeg command..."
+  sleep 2
+done

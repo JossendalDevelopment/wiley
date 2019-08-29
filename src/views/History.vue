@@ -127,7 +127,6 @@ export default {
     async fetchHistory() {
         try {
             const response = await this.$events.getAllClassifiedEvents()
-            console.log("HISTORY", response)
             if (response.status && response.status === 500) {
                 this.$notifyError(
                     "ERROR GETTING ARCHIVED EVENTS. PLEASE TRY AGAIN LATER"
