@@ -2,15 +2,12 @@
     everything but the video player, needs abstracting to video-player--control-bar componnent
 </notes>
 <template>
-  <!-- <span> -->
   <div class="player-wrapper">
     <video ref="videoPlayer" class="video-js vjs-4-3" :class="{zoom: isZoomed}"></video>
   </div>
-  <!-- </span> -->
 </template>
 <script>
 import videojs from "video.js";
-// import '../../node_modules/videojs-rotatezoom/src/videojs.zoomrotate';
 
 export default {
   name: "VideoPlayer",
@@ -20,6 +17,10 @@ export default {
       default() {
         return {};
       }
+    },
+    fallbackImageUrl: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -44,16 +45,20 @@ export default {
             console.log("onPlayerReady", this);
           }
         );
-        this.player.on("timeupdate", () => {
-          // console.log('time update!', self.player.currentTime());
-          // run ~ every .25 seconds, causes choppy movement of slider handle
-          //   self.currentTime = self.player.currentTime();
-        });
-        this.player.on("loadedmetadata", () => {
-          console.log("metadata loaded");
-          // the video duration can be float decimal
-          // can cause mismatch between slider and actual video length
-          //   self.duration = Math.ceil(self.player.duration());
+        // this.player.on("timeupdate", () => {
+        // console.log('time update!', self.player.currentTime());
+        // run ~ every .25 seconds, causes choppy movement of slider handle
+        //   self.currentTime = self.player.currentTime();
+        // });
+        // this.player.on("loadedmetadata", () => {
+        //   console.log("metadata loaded");
+        // the video duration can be float decimal
+        // can cause mismatch between slider and actual video length
+        //   self.duration = Math.ceil(self.player.duration());
+        // });
+        this.player.on("error", e => {
+          this.player.poster(this.fallbackImageUrl);
+          console.log("ERROR LOADING VIDEO", this.player.error());
         });
       });
     }

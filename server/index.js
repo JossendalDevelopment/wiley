@@ -71,6 +71,10 @@ io.on('connection', function (socket) {
     console.log('SOCKET.IO CONNECTED', socket.id);
 });
 
+io.on('disconnect', (socket) => {
+    console.log("SOCKET.IO DISCONNECTING", socket.id)
+    socket.removeAllListeners();
+})
 // Make io accessible to our router
 app.use((req, res, next) => {
     req.io = io;

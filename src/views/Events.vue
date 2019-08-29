@@ -51,7 +51,7 @@ getting unweildy.
         />
         <!-- v-on:datauricreated="setThumb($event)" -->
         <div v-else style="margin-bottom: 6px;">
-          <video-player :options="getVideoOptions()" />
+          <video-player :fallbackImageUrl="createFallbackImageUrl" :options="getVideoOptions()" />
         </div>
 
         <!-- below video -->
@@ -210,6 +210,9 @@ export default {
     },
     alertsData() {
       return this.$alert.alerts;
+    },
+    createFallbackImageUrl() {
+      return `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
     }
   },
   methods: {
