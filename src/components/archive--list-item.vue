@@ -53,9 +53,9 @@
               block
               flat
               class="classification-btn"
-              @click="() => setNewClass('train')"
-              :style="newClass === 'train' ? selectedClass : ''"
-            >train</v-btn>
+              @click="() => setNewClass('contractor')"
+              :style="newClass === 'contractor' ? selectedClass : ''"
+            >contractor</v-btn>
             <v-btn
               block
               flat
@@ -70,6 +70,13 @@
               @click="() => setNewClass('animal')"
               :style="newClass === 'animal' ? selectedClass : ''"
             >animal</v-btn>
+            <v-btn
+              block
+              flat
+              class="classification-btn"
+              @click="() => setNewClass('train')"
+              :style="newClass === 'train' ? selectedClass : ''"
+            >train</v-btn>
             <v-btn
               block
               flat

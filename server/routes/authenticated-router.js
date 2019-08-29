@@ -13,23 +13,6 @@ router.get('/authenticated', (req, res) => {
     res.json({ title: 'You have authenticated access' });
 });
 
-// unused. revisit on sprint 2 when events are received via live events
-// router.post('/create_event', (req, res) => {
-// TODO run this as a batch command
-// const event = req.body.event;
-// COLLECTION_REF.add(event)
-//     .then(docRef => {
-//         COLLECTION_REF.doc(docRef.id).update({
-//             eventId: docRef.id,
-//             timestamp: admin.firestore.FieldValue.serverTimestamp(),
-//         });
-//         formatResponse(res, 'success', docRef.id);
-//     })
-//     .catch(error => {
-//         formatResponse(res, 'error', error);
-//     });
-// });
-
 // @METHOD: POST
 // @PARAMS: new event object
 // @RETURNS: updated event object
@@ -74,7 +57,6 @@ router.get('/get_all_events_postgres', async (req, res) => {
 // @METHOD: GET
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.post('/get_archived_events_postgres', async (req, res) => {
-    console.log("ARCHIVED PARAMS", req.body.params)
     let params = req.body.params;
 
     try {
@@ -86,44 +68,47 @@ router.post('/get_archived_events_postgres', async (req, res) => {
 });
 
 // @METHOD: GET
-// @RETURNS: array of all events events with non null user_classificaiton field
+// @RETURNS: object with count prop<int> and events prop<array> of all events by type and filter
 router.post('/get_archived_events_by_type_postgres', async (req, res) => {
     console.log("ARCHIVED PARAMS", req.body.params)
     let params = req.body.params;
 
-    let query = '';
+    let filterQuery = ''
     if (params.filteredBy === 'today') {
-        query = `SELECT * FROM events WHERE modified_date::date = CURRENT_DATE`
+        filterQuery = `AND modified_date::date = CURRENT_DATE`
     } else if (params.filteredBy === 'current_week') {
-        query = `SELECT * FROM events WHERE date_trunc('week', modified_date) = date_trunc('week',CURRENT_TIMESTAMP)`
+        filterQuery = `AND date_trunc('week', modified_date) = date_trunc('week',CURRENT_TIMESTAMP)`
     } else if (params.filteredBy === 'last_week') {
-        query = `SELECT * from events 
-                WHERE modified_date BETWEEN 
-                NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND 
-                NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER`
-    } else {
-        query = `SELECT * FROM events WHERE user_classification = $1 ORDER BY modified_date OFFSET $2 LIMIT $3`
+        filterQuery = `AND modified_date BETWEEN 
+            NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND 
+            NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER`
     }
-    // get yesterdays
-    // select * from alerts where modified_date::date = current_date - 1;
-    // get todays
-    // select * from alerts where modified_date::date = current_date;
-    // last week
-    // select * from alerts WHERE modified_date BETWEEN
-    // NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 
-    // AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER;
-    // current week
-    //     SELECT * FROM alerts
-    //   WHERE date_trunc('week', modified_date) = date_trunc('week',CURRENT_TIMESTAMP);
 
+    const query = `SELECT * FROM events 
+            WHERE user_classification = $1 
+            ${filterQuery}
+            ORDER BY modified_date 
+            OFFSET $2 
+            LIMIT $3`
 
+    const countQuery = `SELECT COUNT(*) 
+                        FROM events 
+                        WHERE user_classification = $1
+                        ${filterQuery}
+                        `
 
     try {
-        const response = await db.any(query, [
+        const events = await db.any(query, [
             params.type,
-            params.page * 20, // skip ahead 10 at a time
+            +params.page * +params.limit,
             params.limit
         ]);
+        const count = await db.any(countQuery, [
+            params.type
+        ]);
+
+        const response = { count: count[0].count, events: events };
+
         formatResponse(res, 'success', response);
     } catch (error) {
         formatResponse(res, 'error', error);
@@ -197,7 +182,7 @@ router.post('/get_alerts_postgres', async (req, res) => {
 
     try {
         const response = await db.any(`SELECT * FROM alerts ORDER BY modified_date DESC OFFSET $1 LIMIT $2`, [
-            +params.page * +params.limit, // skip ahead 20 at a time
+            +params.page * +params.limit, // skip ahead <limit> at a time
             params.limit
         ]);
         formatResponse(res, 'success', response);

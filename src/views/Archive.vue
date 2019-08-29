@@ -51,12 +51,10 @@
           >
             <v-flex xs5>
               <v-layout justify-start>
-                <h3
-                  class="sort-bar-text"
-                >
-                {{ currentFilter.replace(/_/, ' ').toUpperCase()}}{{ currentFilter !== 'all' ? 'S' : null}} 
-                {{ selectedType.toUpperCase() }}S 
-                ({{ counts[selectedType] || 0 }})
+                <h3 class="sort-bar-text">
+                  {{ currentFilter.replace(/_/, ' ').toUpperCase()}}{{ currentFilter !== 'all' ? 'S' : null}}
+                  {{ selectedType.toUpperCase() }}S
+                  ({{ eventTypeCount || 0 }})
                 </h3>
               </v-layout>
             </v-flex>
@@ -78,7 +76,10 @@
         </v-flex>
 
         <v-flex pt-0 @scroll="onScroll" ref="scrollDiv" class="list-container">
-          <archive--default-list :data="eventTypes[selectedType]" v-on:update="updateListItems(currentFilter)" />
+          <archive--default-list
+            :data="eventTypes[selectedType]"
+            v-on:update="updateListItems(currentFilter)"
+          />
         </v-flex>
       </v-layout>
     </template>
@@ -98,6 +99,7 @@ export default {
   data: () => ({
     totalEvents: [],
     eventTypes: new EventTypes(),
+    eventTypeCount: null,
     selectedType: "animal",
     currentFilter: "all",
     filterOptions: [
@@ -126,11 +128,9 @@ export default {
       container.scrollTop = container.scrollHeight;
     },
     updateListItems(filter) {
-        console.log("F", filter)
       this.fetchHistory(filter);
     },
     filterBy(e) {
-      console.log("Filtering by", e.target.value);
       this.currentFilter = e.target.value;
       this.resetFilteredEvents(e.target.value);
     },
@@ -147,7 +147,7 @@ export default {
         // stop fetching if we returned less than 10 on the previous query
         // TODO would still fail on a final previous query of exactly 20
         if (this.eventTypes[current].events.length % fetchCount !== 0) return;
-        // if we change the search filter param, reset page back to 0 
+        // if we change the search filter param, reset page back to 0
         if (filteredBy) this.eventTypes[current].page = 0;
 
         const response = await this.$events.getArchivedEventsByType({
@@ -167,7 +167,8 @@ export default {
           return;
         }
 
-        let events = response;
+        let events = response.events;
+        this.eventTypeCount = response.count;
 
         // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
         // in EventTypes and splits up the query results by their type. Sample below
@@ -216,7 +217,7 @@ export default {
       return (100 * value) / this.getTotalEvents;
     },
     selectEventType(event) {
-        console.log("SELECTED", this.eventTypes)
+      console.log("SELECTED", this.eventTypes);
       this.selectedType = event;
       this.fetchHistory();
     }
