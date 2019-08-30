@@ -46,6 +46,7 @@ export default {
             console.log("onPlayerReady", this);
           }
         );
+
         // this.player.on("timeupdate", () => {
         // console.log('time update!', self.player.currentTime());
         // run ~ every .25 seconds, causes choppy movement of slider handle
@@ -59,6 +60,28 @@ export default {
         // });
         this.player.on("error", e => {
           this.player.poster(this.fallbackImageUrl);
+          var modal_content = `<div class="error-modal-container">
+                <span>Sorry.</span>
+                <p>There is no video available for this event</p>
+            </div>`;
+
+          var contentEl = document.createElement("div");
+          contentEl.innerHTML = modal_content;
+
+          const options = {
+            content: contentEl,
+            label: "Video not available",
+            uncloseable: true
+          };
+          const ModalDialog = videojs.getComponent("ModalDialog");
+          const modal = new ModalDialog(this.player, options);
+          this.player.addChild(modal);
+          modal.open();
+
+          //   let modal = this.player.createModal(
+          //     "There is no video associated with this alert."
+          //   );
+          //   modal.addClass("error-modal-class");
           console.log("ERROR LOADING VIDEO", this.player.error());
         });
       });
@@ -96,11 +119,6 @@ video {
 }
 .video-js {
   outline: none;
-  //   height: 100% !important;
-  //   width: 100% !important;
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
 }
 .video-js-responsive-container.vjs-sd {
   padding-top: 75%;
@@ -116,5 +134,16 @@ video {
 }
 .video-js > button.vjs-big-play-button {
   display: none;
+}
+.error-modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  font-size: 24px;
+  text-align: center;
+  font-family: "DIN Condensed";
+  letter-spacing: 1.5px;
 }
 </style>

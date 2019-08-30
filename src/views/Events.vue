@@ -142,6 +142,7 @@ export default {
     classification_description: "",
     videoShowing: false,
     videoOptions: {
+      errorDisplay: false,
       autoplay: true,
       controls: true,
       responsive: true,
@@ -189,8 +190,9 @@ export default {
   },
   async mounted() {
     this.socket.on("TRIGGER_ALARM", data => {
-      //   console.log("RECEIVED ALERT IN /EVENTS", data);
-      this.getAlerts();
+      console.log("RECEIVED ALERT IN /EVENTS", data);
+      //   this.getAlerts();
+      this.addIncomingAlert(data);
     });
   },
   destroyed() {
@@ -213,8 +215,8 @@ export default {
       return this.$alert.alerts;
     },
     createFallbackImageUrl() {
-      console.log("CREATE FALLBACK", process.env.VUE_APP_FILESERVER_BASE_URL);
-      return `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
+      console.log("CREATE FALLBACK", config.fileserver_base_url);
+      return `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
     }
   },
   methods: {
@@ -237,6 +239,7 @@ export default {
       this.videoShowing = true;
     },
     setCurrentEvent(event) {
+      this.videoShowing = false;
       this.currentEvent = event;
     },
     addListeners() {
@@ -270,6 +273,21 @@ export default {
     },
     newline() {
       this.classification_description = `${this.classification_description}\n`;
+    },
+    async addIncomingAlert(data) {
+      try {
+        console.log("ADD THIS", data);
+        // const response = this.$alert.addIncomingAlert(data);
+        // if (response.status && response.status === 500) {
+        //   this.$notifyError(
+        //     "ERROR IN INCOMING ALERT. PLEASE TRY AGAIN LATER"
+        //   );
+        //   return;
+        // }
+
+        this.events = [data, ...this.events];
+        this.setEventsCount();
+      } catch (error) {}
     },
     async updateEvent(event) {
       try {

@@ -102,6 +102,7 @@ export default {
         // console.log("Finished!");
       }
     });
+
     this.socket.on("TRIGGER_ALARM", data => {
       this.$alert.createAlert(data);
       if (!this.$alert.muteDuration) {
