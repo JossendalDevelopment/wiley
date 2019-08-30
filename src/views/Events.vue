@@ -134,6 +134,7 @@ export default {
     totalEventsCount: null,
     pageCount: 0,
     queryLimit: 20,
+    // socket: io(process.env.VUE_APP_SOCKET_IO_ADDR),
     socket: io(config.socket_io_addr),
     listeners: null,
     disabled: false,
@@ -212,6 +213,7 @@ export default {
       return this.$alert.alerts;
     },
     createFallbackImageUrl() {
+      console.log("CREATE FALLBACK", process.env.VUE_APP_FILESERVER_BASE_URL);
       return `${process.env.VUE_APP_FILESERVER_BASE_URL}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
     }
   },

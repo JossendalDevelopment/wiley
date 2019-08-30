@@ -66,6 +66,8 @@
 import OverviewLiveFeed from "@/components/overview--live-feed.vue";
 import OverviewMute from "@/components/overview--mute";
 
+import config from "../../config/production";
+
 export default {
   components: {
     "overview-live-feed": OverviewLiveFeed,
@@ -81,8 +83,8 @@ export default {
         camName: "Rail-EAST",
         sourceData: {
           // These urls point to the file server, not the express api server, and are set in /config/production.js
-          //   src: config.stream_data_one,
-          src: process.env.VUE_APP_STREAM_DATA_ONE,
+          src: config.stream_data_one,
+          //   src: process.env.VUE_APP_STREAM_DATA_ONE,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"
@@ -91,8 +93,8 @@ export default {
         camNumber: 2,
         camName: "Rail-WEST",
         sourceData: {
-          //   src: config.stream_data_two,
-          src: process.env.VUE_APP_STREAM_DATA_TWO,
+          src: config.stream_data_two,
+          //   src: process.env.VUE_APP_STREAM_DATA_TWO,
           type: "application/x-mpegURL"
         },
         staticImage: "/assets/images/ref_raileast.jpg"

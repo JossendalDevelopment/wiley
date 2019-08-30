@@ -85,6 +85,8 @@ import { Howl } from "howler";
 import io from "socket.io-client";
 import AppHeader from "@/components/app-header.vue";
 
+import config from "../config/production";
+
 export default {
   name: "App",
   components: {
@@ -100,7 +102,7 @@ export default {
         // console.log("Finished!");
       }
     });
-
+    this.checkEnv();
     this.socket.on("TRIGGER_ALARM", data => {
       this.$alert.createAlert(data);
       if (!this.$alert.muteDuration) {
@@ -109,7 +111,8 @@ export default {
     });
   },
   data: () => ({
-    socket: io(process.env.VUE_APP_SOCKET_IO_ADDR),
+    // socket: io(process.env.VUE_APP_SOCKET_IO_ADDR),
+    socket: io(config.socket_io_addr),
     sound: null,
     alert: true,
     tab: null,
@@ -139,6 +142,13 @@ export default {
       }
     }
   }),
+  methods: {
+    checkEnv() {
+      this.$nextTick(() => {
+        console.log("CHECK ENV", process.env.VUE_APP_SOCKET_IO_ADDR);
+      });
+    }
+  },
   computed: {
     formatAlertText() {
       let alert = this.$alert.alertData;

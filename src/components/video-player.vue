@@ -20,7 +20,8 @@ export default {
     },
     fallbackImageUrl: {
       type: String,
-      required: true
+      required: false,
+      default: null
     }
   },
   data() {
