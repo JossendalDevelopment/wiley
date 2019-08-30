@@ -102,7 +102,6 @@ export default {
         // console.log("Finished!");
       }
     });
-    this.checkEnv();
     this.socket.on("TRIGGER_ALARM", data => {
       this.$alert.createAlert(data);
       if (!this.$alert.muteDuration) {
@@ -142,13 +141,6 @@ export default {
       }
     }
   }),
-  methods: {
-    checkEnv() {
-      this.$nextTick(() => {
-        console.log("CHECK ENV", process.env.VUE_APP_SOCKET_IO_ADDR);
-      });
-    }
-  },
   computed: {
     formatAlertText() {
       let alert = this.$alert.alertData;

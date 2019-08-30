@@ -21,4 +21,6 @@ EXPOSE 80
 RUN apk add --update --upgrade --no-cache wget
 ADD ./nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+
 CMD ["nginx", "-g", "daemon off;"]

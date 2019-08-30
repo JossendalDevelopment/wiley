@@ -310,9 +310,11 @@ export default {
           return;
         }
 
+        if (this.events.length === 0) {
+          this.currentEvent = response[0];
+        }
         if (this.events.length <= response.length) {
           this.events = response;
-          this.currentEvent = this.events[0];
         } else {
           this.events = [...this.events, ...response];
         }
