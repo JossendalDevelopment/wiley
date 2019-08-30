@@ -215,7 +215,10 @@ export default {
       return this.$alert.alerts;
     },
     createFallbackImageUrl() {
-      console.log("CREATE FALLBACK", config.fileserver_base_url);
+      console.log(
+        "CREATE FALLBACK",
+        `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`
+      );
       return `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
     }
   },
@@ -239,6 +242,7 @@ export default {
       this.videoShowing = true;
     },
     setCurrentEvent(event) {
+      this.$refs.cameraImage.zoomOut();
       this.videoShowing = false;
       this.currentEvent = event;
     },
@@ -276,18 +280,12 @@ export default {
     },
     async addIncomingAlert(data) {
       try {
-        console.log("ADD THIS", data);
-        // const response = this.$alert.addIncomingAlert(data);
-        // if (response.status && response.status === 500) {
-        //   this.$notifyError(
-        //     "ERROR IN INCOMING ALERT. PLEASE TRY AGAIN LATER"
-        //   );
-        //   return;
-        // }
-
         this.events = [data, ...this.events];
         this.setEventsCount();
-      } catch (error) {}
+      } catch (error) {
+        console.log("ERROR IN INCOMING ALERT", error);
+        this.$notifyError("ERROR IN INCOMING ALERT. PLEASE TRY AGAIN LATER");
+      }
     },
     async updateEvent(event) {
       try {

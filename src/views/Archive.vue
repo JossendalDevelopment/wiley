@@ -100,7 +100,7 @@ export default {
     totalEvents: [],
     eventTypes: new EventTypes(),
     eventTypeCount: null,
-    selectedType: "animal",
+    selectedType: "employee",
     currentFilter: "all",
     filterOptions: [
       { text: "All", value: "all" },
