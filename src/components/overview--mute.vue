@@ -57,7 +57,9 @@ export default {
       return mins >= 60 ? Math.floor(mins / 60) : mins;
     },
     setMuteDuration(dur) {
-      this.$alert.setMuteDuration(dur);
+      console.log("TOTAL SECS", dur * 60);
+
+      this.$alert.setMuteDuration(dur * 60);
       this.startCountdown();
       this.$refs.mute.close();
     },
@@ -70,19 +72,22 @@ export default {
           clearInterval(this.durationInterval);
           this.$alert.clearMuteDuration();
         }
-      }, 60000);
+      }, 1000);
     }
   },
   computed: {
     formatDuration() {
-      let hours =
-        this.$alert.muteDuration >= 60
-          ? this.toHours(this.$alert.muteDuration)
-          : 0;
-      var minutes = this.$alert.muteDuration % 60;
-      return `${hours
+      let totalSeconds = this.$alert.muteDuration;
+      let hours = Math.floor(totalSeconds / 3600);
+      totalSeconds %= 3600;
+      let minutes = Math.floor(totalSeconds / 60);
+      let seconds = totalSeconds % 60;
+
+      return `
+      ${hours.toString().padStart(2, "0")}:${minutes
         .toString()
-        .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}
+      `;
     }
   }
 };

@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     getDateTime(date) {
-      return format(date, "MMM DD HH:MM:SS");
+      return format(date, "MMM DD HH:MM:ss");
     },
     generateThumbUrl(evt) {
       return `${process.env.VUE_APP_FILESERVER_BASE_URL}/${evt.thumb_filepath}/${evt.thumb_filename}`;

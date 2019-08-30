@@ -70,7 +70,6 @@ router.post('/get_archived_events_postgres', async (req, res) => {
 // @METHOD: GET
 // @RETURNS: object with count prop<int> and events prop<array> of all events by type and filter
 router.post('/get_archived_events_by_type_postgres', async (req, res) => {
-    console.log("ARCHIVED PARAMS", req.body.params)
     let params = req.body.params;
 
     let filterQuery = ''
@@ -87,7 +86,7 @@ router.post('/get_archived_events_by_type_postgres', async (req, res) => {
     const query = `SELECT * FROM events 
             WHERE user_classification = $1 
             ${filterQuery}
-            ORDER BY modified_date 
+            ORDER BY modified_date DESC
             OFFSET $2 
             LIMIT $3`
 

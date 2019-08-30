@@ -39,7 +39,6 @@
           </v-layout>
         </v-flex>
 
-        <!-- <v-layout column> -->
         <!-- sub header bar -->
         <v-flex px-4 pb-0 mt-2 shrink>
           <v-layout
@@ -128,7 +127,9 @@ export default {
       container.scrollTop = container.scrollHeight;
     },
     updateListItems(filter) {
-      this.fetchHistory(filter);
+      this.getEventsCountByType();
+      //   this.fetchHistory(filter);
+      this.resetFilteredEvents(filter);
     },
     filterBy(e) {
       this.currentFilter = e.target.value;
@@ -151,9 +152,11 @@ export default {
           this.eventTypeCount != 0 &&
           this.eventTypes[current].events.length >= this.eventTypeCount
         ) {
+          console.log("WE NO MAKE IT PAST");
           this.$events.stopLoading();
           return;
         }
+        console.log("WE NO MAKE IT PAST");
 
         // if we change the search filter param, reset page back to 0
         if (filteredBy) this.eventTypes[current].page = 0;
