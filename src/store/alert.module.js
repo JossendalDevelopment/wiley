@@ -23,7 +23,6 @@ export const alert = {
         },
         removeAlert: (state, payload) => {
             state.alerts = state.alerts.filter(a => a.id !== payload.id)
-            console.log("ATATE", state.alerts)
         },
         createAlert: (state, payload) => {
             state.alertData = new Alert(payload.alertData);

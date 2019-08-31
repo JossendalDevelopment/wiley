@@ -239,12 +239,6 @@ export default {
         counter += +this.counts[e];
       }
       return counter;
-    },
-    getComponent() {
-      if (this.selectedType === "false-alarm") {
-        return FalseAlarmList;
-      }
-      return DefaultList;
     }
   }
 };

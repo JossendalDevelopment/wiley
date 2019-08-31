@@ -10,7 +10,7 @@ getting unweildy.
     justify-center
     fill-height
     align-center
-    v-else-if="!eventsRemaining"
+    v-else-if="!eventsRemaining()"
     class="events-container"
     v-test-ref="'container'"
   >
@@ -29,7 +29,7 @@ getting unweildy.
             v-for="(e, idx) in events"
             v-on:selected="setCurrentEvent($event)"
             :event="e"
-            :key="e.id + 'idx' + idx"
+            :key="e.modified_date + 'idx' + idx"
             :selected="currentEvent.id"
           />
         </v-flex>
@@ -208,17 +208,10 @@ export default {
     }
   },
   computed: {
-    eventsRemaining() {
-      return this.events.length > 0;
-    },
     alertsData() {
       return this.$alert.alerts;
     },
     createFallbackImageUrl() {
-      console.log(
-        "CREATE FALLBACK",
-        `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`
-      );
       return `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
     }
   },
@@ -227,6 +220,14 @@ export default {
       if (scrollTop + clientHeight >= scrollHeight) {
         this.pageCount = this.pageCount + 1;
         this.getAlerts();
+      }
+    },
+    eventsRemaining() {
+      if (this.events.length > 0) {
+        return true;
+      } else {
+        this.$alert.hideAlertHeader();
+        return false;
       }
     },
     getVideoOptions() {
@@ -242,7 +243,9 @@ export default {
       this.videoShowing = true;
     },
     setCurrentEvent(event) {
-      this.$refs.cameraImage.zoomOut();
+      if (!this.videoShowing) {
+        this.$refs.cameraImage.zoomOut();
+      }
       this.videoShowing = false;
       this.currentEvent = event;
     },
@@ -281,6 +284,7 @@ export default {
     async addIncomingAlert(data) {
       try {
         this.events = [data, ...this.events];
+        if (this.events.length === 1) this.currentEvent = data;
         this.setEventsCount();
       } catch (error) {
         console.log("ERROR IN INCOMING ALERT", error);
