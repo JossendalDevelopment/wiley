@@ -134,7 +134,6 @@ export default {
     totalEventsCount: null,
     pageCount: 0,
     queryLimit: 20,
-    // socket: io(process.env.VUE_APP_SOCKET_IO_ADDR),
     socket: io(config.socket_io_addr),
     listeners: null,
     disabled: false,
@@ -190,16 +189,15 @@ export default {
   },
   async mounted() {
     this.socket.on("TRIGGER_ALARM", data => {
-      console.log("RECEIVED ALERT IN /EVENTS", data);
-      //   this.getAlerts();
-      this.addIncomingAlert(data);
+      console.log("RECEIVED ALERT IN /EVENTS", new Alert(data));
+      this.addIncomingAlert(new Alert(data));
     });
   },
   destroyed() {
     this.removeListeners();
   },
   watch: {
-    alertsData: function(newVal, oldVal) {
+    alertsData: function() {
       this.setEventsCount();
     }
   },
@@ -286,6 +284,7 @@ export default {
       }
     },
     async updateEvent(event) {
+      console.log("EVENT ID", event.id);
       try {
         const response = await this.$alert.updateAlert(event);
 

@@ -11,7 +11,7 @@ VALUES(1000, 'Youve made a successful query');
 CREATE TABLE events
 (
     _id SERIAL PRIMARY KEY,
-    id INT NOT NULL,
+    id TEXT NOT NULL,
     image_filepath TEXT NOT NULL,
     image_filename TEXT NOT NULL,
     image_width INT NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE events
 CREATE TABLE alerts
 (
     _id SERIAL PRIMARY KEY,
-    id INT NOT NULL,
+    id TEXT NOT NULL,
     image_filepath TEXT NOT NULL,
     image_filename TEXT NOT NULL,
     image_width INT NOT NULL,

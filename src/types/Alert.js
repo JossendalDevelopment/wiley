@@ -12,7 +12,6 @@ Object.defineProperty(Alert, 'template', {
             "camera": null,
             "classification_description": null,
             "classified_by": null,
-            "eventId": null,
             "id": "",
             "image_filename": "",
             "image_filepath": "",
@@ -28,7 +27,7 @@ Object.defineProperty(Alert, 'template', {
             "thumb_width": null,
             "user_classification": null,
             "video_clip_filepath": null,
-            "video_clip_name": null
+            "video_clip_filename": null
         }
     }
 });

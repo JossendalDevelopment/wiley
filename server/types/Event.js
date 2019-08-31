@@ -1,5 +1,3 @@
-// this is purely assumption on what an alerted event might look like
-
 function Event(data) {
     Object.assign(this, Event.template, data);
 }
