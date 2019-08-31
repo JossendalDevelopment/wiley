@@ -2,7 +2,6 @@ const express = require('express');
 const db = require('../config/conn');
 const Event = require('../types/Event.js');
 const {
-    // getMetadataFile,
     writeMetadataFile,
     formatResponse,
 } = require('../helpers');

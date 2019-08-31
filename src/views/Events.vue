@@ -43,7 +43,7 @@ getting unweildy.
           @click="videoShowing = !videoShowing"
         >{{ videoShowing ? 'SHOW IMAGE' : 'PLAY VIDEO' }}</v-btn>
 
-        <details--camera-image
+        <events--camera-image
           v-if="!videoShowing"
           ref="cameraImage"
           :source="currentEvent"
@@ -68,7 +68,7 @@ getting unweildy.
               :key="el.type + idx"
               v-on:classification="setClassification($event)"
               :index="idx"
-              :disabled="false"
+              :disabled="disabled"
             />
           </v-layout>
         </v-layout>
@@ -109,7 +109,7 @@ getting unweildy.
   </v-container>
 </template>
 <script>
-import DetailsCameraImage from "@/components/details--camera-image";
+import EventsCameraImage from "@/components/events--camera-image";
 import AppLoadingSpinner from "@/components/app-loading-spinner.vue";
 import EventsClassButton from "@/components/events--class-button.vue";
 import ActiveListItem from "@/components/events--active-list-item.vue";
@@ -122,7 +122,7 @@ import io from "socket.io-client";
 
 export default {
   components: {
-    "details--camera-image": DetailsCameraImage,
+    "events--camera-image": EventsCameraImage,
     "events--class-button": EventsClassButton,
     "app-loading-spinner": AppLoadingSpinner,
     "events--active-list-item": ActiveListItem,
@@ -200,11 +200,8 @@ export default {
   },
   watch: {
     alertsData: function(newVal, oldVal) {
-      // if a user is classifying events and they get down to the query limit
-      // make a call to grab new events
-      if (oldVal.length >= this.queryLimit && newVal.length < this.queryLimit) {
-        this.getAlerts();
-      }
+      console.log("WATCHING EVENT LENGTHS", oldVal.length, newVal.length);
+      this.setEventsCount();
     }
   },
   computed: {
@@ -212,13 +209,9 @@ export default {
       return this.events.length > 0;
     },
     alertsData() {
-      return this.$alert.alerts;
+      return this.events;
     },
     createFallbackImageUrl() {
-      console.log(
-        "CREATE FALLBACK",
-        `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`
-      );
       return `${config.fileserver_base_url}${this.currentEvent.image_filepath}/${this.currentEvent.image_filename}`;
     }
   },
@@ -226,6 +219,7 @@ export default {
     onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
       if (scrollTop + clientHeight >= scrollHeight) {
         this.pageCount = this.pageCount + 1;
+        console.log("HIT BOTTOM");
         this.getAlerts();
       }
     },
@@ -242,7 +236,8 @@ export default {
       this.videoShowing = true;
     },
     setCurrentEvent(event) {
-      this.$refs.cameraImage.zoomOut();
+      this.$alert.clearAlert();
+      if (!this.videoShowing) this.$refs.cameraImage.zoomOut();
       this.videoShowing = false;
       this.currentEvent = event;
     },
@@ -281,26 +276,39 @@ export default {
     async addIncomingAlert(data) {
       try {
         this.events = [data, ...this.events];
-        this.setEventsCount();
       } catch (error) {
         console.log("ERROR IN INCOMING ALERT", error);
         this.$notifyError("ERROR IN INCOMING ALERT. PLEASE TRY AGAIN LATER");
       }
     },
     async updateEvent(event) {
+      console.log("DISABLED", this.disabled);
       try {
         const response = await this.$alert.updateAlert(event);
+
         if (response.status && response.status === 500) {
           this.$notifyError(
             "ERROR GETTING TODAYS EVENTS. PLEASE TRY AGAIN LATER"
           );
           return;
         }
+
         this.$notifyClassification(event.user_classification.toUpperCase());
 
         setTimeout(() => {
+          const prevEventCount = this.events.length;
           this.events = this.events.filter(evt => evt.id !== event.id);
+          // while classifying, if we get below the queryLimit, add more
+          // alerts if available
+          if (
+            prevEventCount == this.queryLimit &&
+            this.events.length == this.queryLimit - 1
+          ) {
+            this.pageCount = this.pageCount + 1;
+            this.getAlerts();
+          }
           this.currentEvent = this.events[0];
+          this.disabled = false;
           // timing the fade out transition with the classification animation
         }, 950);
       } catch (error) {
@@ -316,26 +324,31 @@ export default {
           limit: this.queryLimit
         });
 
-        console.log("CLIENT RESP", response);
         if (response.status && response.status === 500) {
           this.$notifyError("ERROR GETTING EVENTS. PLEASE TRY AGAIN LATER");
           return;
         }
 
         if (this.pageCount > 0 && response.length === 0) {
+          // return if user is past initial page but query returns nothing
           return;
         }
 
         if (this.events.length === 0) {
+          // if no events exist, set the current event to the first one in response
           this.currentEvent = response[0];
         }
         if (this.events.length <= response.length) {
+          // if the number of events is less than the response (which will never be more than this.queryLimit)
+          // then replace all events with the response events
+          console.log("REPLACING", response);
           this.events = response;
         } else {
+          // otherwise add the response events to the end of existing events
+          console.log("APPENDING", response);
           this.events = [...this.events, ...response];
         }
 
-        this.setEventsCount();
         this.$events.stopLoading();
       } catch (error) {
         console.error("ERROR GETTING EVENTS", error);
@@ -370,7 +383,6 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   scrollbar-color: var(--v-border-base) transparent;
-  //   height: 58%;
   height: 100vh;
   &::-webkit-scrollbar {
     background-color: transparent;

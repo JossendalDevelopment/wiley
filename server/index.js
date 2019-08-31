@@ -4,14 +4,11 @@ const path = require('path');
 const bodyParser = require('body-parser');
 var cron = require('node-cron');
 require('dotenv').config();
-// const ejwt = require('express-jwt');
-// const config = require('config');
 const db = require('./config/conn.js')
 
 const PORT = process.env.PORT || 3001;
 
 console.log("ENV:", process.env.NODE_ENV)
-
 
 var app = express();
 var server = require('http').Server(app);
@@ -56,7 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let sched = '0 0 0 * * *';
 cron.schedule(sched, async () => {
-    console.log('TASK: running chron job at midnight... Clearing "alerts" from database...');
+    console.log('TASK: running chron job at what should be midnight... Clearing all "alerts" from database...');
     try {
         await db.none('TRUNCATE alerts; DELETE FROM alerts;');
     } catch (error) {
@@ -87,7 +84,6 @@ app.use((req, res, next) => {
 
 let retries = 50;
 const testPostgres = () => {
-    // db.one('SELECT $1 AS value', 123)
     db.any('SELECT * FROM test')
         .then((data) => {
             console.log('DB INIT SUCCESS:', data)
@@ -101,7 +97,7 @@ const testPostgres = () => {
                 retries--;
             }, 50000 / retries)
         })
-}
+};
 testPostgres();
 
 /* ***********************************************************
@@ -123,7 +119,6 @@ const publicRouter = require('./routes/public-router');
 const authenticatedRouter = require('./routes/authenticated-router');
 app.use('/', publicRouter);
 app.use('/api', authenticatedRouter);
-// app.use('/api', ejwt({secret: config.get('jwt-secret')}), authenticatedRouter);
 
 // start server
 server.listen(PORT, () => {

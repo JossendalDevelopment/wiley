@@ -3,19 +3,15 @@ import Router from 'vue-router';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-import CameraDetailsPage from '@/views/Details.vue';
 import Events from '@/views/Events.vue';
 import NotFound from '@/views/NotFound.vue';
 import Overview from '@/views/Overview.vue';
 import Archive from '@/views/Archive.vue';
 import SignIn from '@/views/SignIn.vue';
-// const CameraDetailsPage = () => import(/* webpackChunkName: "group-views" */ '@/views/Details.vue');
 // const NotFound = () => import(/* webpackChunkName: "group-notFound" */ '@/views/NotFound.vue');
 // const Overview = () => import(/* webpackChunkName: "group-views" */ '@/views/Overview.vue');
 // const Archive = () => import(/* webpackChunkName: "group-views" */ '@/views/Archive.vue');
 // const SignIn = () => import(/* webpackChunkName: "group-auth" */ '@/views/SignIn.vue');
-
-import store from '@/store';
 
 Vue.use(Router);
 
@@ -32,14 +28,6 @@ export const router = new Router({
                 requiresAuth: true,
             },
             alias: '/'
-        },
-        {
-            path: '/training',
-            name: 'training',
-            component: CameraDetailsPage,
-            meta: {
-                requiresAuth: true,
-            },
         },
         {
             path: '/events',
@@ -63,19 +51,6 @@ export const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-    // a url based method to reset dummy data for purpose of demo
-    if (to.redirectedFrom && to.redirectedFrom.includes('clear')) {
-        try {
-            const response = await store.dispatch('eventHistory/deleteEvents', {});
-            if (response.status === 500) {
-                console.log("Error in router")
-            }
-            next('/training');
-        } catch (error) {
-            throw new Error(error);
-        }
-        return;
-    }
     // router guard requiring a user be authenticated via firebase
     if (to.matched.some(record => record.meta.requiresAuth)) {
         firebase.auth().onAuthStateChanged(function (user) {

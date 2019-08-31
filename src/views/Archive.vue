@@ -152,11 +152,9 @@ export default {
           this.eventTypeCount != 0 &&
           this.eventTypes[current].events.length >= this.eventTypeCount
         ) {
-          console.log("WE NO MAKE IT PAST");
           this.$events.stopLoading();
           return;
         }
-        console.log("WE NO MAKE IT PAST");
 
         // if we change the search filter param, reset page back to 0
         if (filteredBy) this.eventTypes[current].page = 0;
@@ -167,7 +165,6 @@ export default {
           page: this.eventTypes[current].page,
           filteredBy: filteredBy
         });
-        console.log("RESP", response);
 
         // handle rejection
         if (response.status && response.status === 500) {
@@ -181,8 +178,8 @@ export default {
         let events = response.events;
         this.eventTypeCount = response.count;
 
-        // clarification: this takes the query results array and creates an object of objects aggregated by the types defined
-        // in EventTypes and splits up the query results by their type. Sample below
+        // clarification: this takes the query results array and creates an object of
+        // objects aggregated by type so each type maintains it's own data.
         // EventTypes {
         //     animal: {
         //         name: String,
