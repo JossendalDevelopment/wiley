@@ -159,9 +159,9 @@ export default {
       required: true
     },
     selected: {
-      type: Number,
+      type: String,
       required: false,
-      default: 0
+      default: ""
     }
   },
   data: () => ({

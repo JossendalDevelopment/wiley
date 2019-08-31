@@ -10,7 +10,7 @@ getting unweildy.
     justify-center
     fill-height
     align-center
-    v-else-if="!eventsRemaining"
+    v-else-if="!eventsRemaining()"
     class="events-container"
     v-test-ref="'container'"
   >
@@ -29,7 +29,7 @@ getting unweildy.
             v-for="(e, idx) in events"
             v-on:selected="setCurrentEvent($event)"
             :event="e"
-            :key="e.id + 'idx' + idx"
+            :key="e.modified_date + 'idx' + idx"
             :selected="currentEvent.id"
           />
         </v-flex>
@@ -200,14 +200,10 @@ export default {
   },
   watch: {
     alertsData: function(newVal, oldVal) {
-      console.log("WATCHING EVENT LENGTHS", oldVal.length, newVal.length);
       this.setEventsCount();
     }
   },
   computed: {
-    eventsRemaining() {
-      return this.events.length > 0;
-    },
     alertsData() {
       return this.events;
     },
@@ -219,8 +215,15 @@ export default {
     onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
       if (scrollTop + clientHeight >= scrollHeight) {
         this.pageCount = this.pageCount + 1;
-        console.log("HIT BOTTOM");
         this.getAlerts();
+      }
+    },
+    eventsRemaining() {
+      if (this.events.length > 0) {
+        return true;
+      } else {
+        this.$alert.hideAlertHeader();
+        return false;
       }
     },
     getVideoOptions() {
@@ -276,13 +279,13 @@ export default {
     async addIncomingAlert(data) {
       try {
         this.events = [data, ...this.events];
+        if (this.events.length === 1) this.currentEvent = data;
       } catch (error) {
         console.log("ERROR IN INCOMING ALERT", error);
         this.$notifyError("ERROR IN INCOMING ALERT. PLEASE TRY AGAIN LATER");
       }
     },
     async updateEvent(event) {
-      console.log("DISABLED", this.disabled);
       try {
         const response = await this.$alert.updateAlert(event);
 
@@ -341,11 +344,9 @@ export default {
         if (this.events.length <= response.length) {
           // if the number of events is less than the response (which will never be more than this.queryLimit)
           // then replace all events with the response events
-          console.log("REPLACING", response);
           this.events = response;
         } else {
           // otherwise add the response events to the end of existing events
-          console.log("APPENDING", response);
           this.events = [...this.events, ...response];
         }
 
