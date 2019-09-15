@@ -9,8 +9,9 @@ node_modules
 .env.local
 .env.*.local
 serviceAccountKey.json
-wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json
-wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
+server/certs/*
+# wiley-app-rotf-firebase-adminsdk-c8icg-c5c654c918.json
+# wiley-app-rotf-dev-firebase-adminsdk-q51h0-d40a785d8a.json
 **/production.js
 
 # Log files
@@ -28,9 +29,8 @@ yarn-error.log*
 *.sw?
 
 # docker
-**/docker-compose*.yml
+**/docker-compose-dev.yml
 docker-compose.yml
-Dockerfile-dev
 
 # fileserver
 streams

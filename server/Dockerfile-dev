@@ -1,0 +1,24 @@
+FROM node:10.16.0
+
+ENV NODE_ENV=production
+
+EXPOSE 3001
+
+RUN npm install -g nodemon
+
+WORKDIR /app/server
+
+COPY package*.json ./
+
+RUN chown -R node:node .
+
+USER node
+
+HEALTHCHECK --interval=30s CMD node healthcheck.js
+
+RUN npm install && npm cache clean --force
+
+COPY --chown=node:node . .
+
+# see index.js for how server shutdown processes are being handled without an init process like tini
+CMD ["nodemon", "index.js"]

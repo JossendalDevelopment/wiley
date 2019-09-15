@@ -1,5 +1,4 @@
-/*   This is completely fubar, jest continually fails on a css import which jest apparently doesn't know how to handle natively.
-     Tried to configure transform prop set in jest.config.js   */
+// TODO -- All of it
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import { shallowMount } from '@vue/test-utils';

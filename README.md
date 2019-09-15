@@ -1,8 +1,8 @@
 # Wiley VaaS - Video as a sensor
 
 ## Requirements
-1. Node.js and npm
-2. Docker and Docker Compose
+1. [Node.js](https://nodejs.org/en/) and npm
+2. [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/)
 3. Preferrably Chrome browser
 
 
@@ -18,19 +18,16 @@
     - In `/config/production_example.js`, configure the needed hostnames and ports. Rename this file to `production.js`.
     - Create `.env.local` and/or `.env.production` as necessary from the template in `/env_example`.
     - Create `docker.compose.yml` - need to create example version for version control.
+    - Create `docker.compose-dev.yml` from `docker-compose-dev-EXAMPLE.yaml`.
+    - Review `vue.config.js` and `nginx.conf` if you changed any service names or ports from the given template.
 
 ## Commands
+
 
 ### Run server and client locally in development
 
 ```
-npm run dev
-```
-
-### Build and deploy to firebase hosting
-
-```
-npm run deploy
+docker-compose -f docker-compose-dev up --build
 ```
 
 ### Compiles and hot-reloads for development W/O express

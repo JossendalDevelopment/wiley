@@ -1,7 +1,4 @@
-// const path = require('path');
-
 module.exports = {
-    // outputDir: path.resolve(__dirname, 'public'),
     devServer: {
         port: 5001,
         proxy: {
@@ -10,16 +7,6 @@ module.exports = {
             },
         },
     },
-    //   chainWebpack: config => {
-    //     config.module
-    //       .rule('ignore')
-    //       .test(/\.vue$/)
-    //       .use('ignore-loader')
-    //         .loader('ignore-loader')
-    //         .options({
-    //             resourceQuery: '/blockType=notes/'
-    //         })
-    //   },
     configureWebpack: {
         optimization: {
             splitChunks: {

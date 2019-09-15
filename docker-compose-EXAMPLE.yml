@@ -1,0 +1,73 @@
+version: '2.4'
+services:
+    client:
+        build:
+          context: .
+        volumes:
+            - ./:/app:delegated
+            - /node_modules
+        ports:
+            - 5001:80
+        # depends_on:
+        #     api:
+        #         condition: service_healthy
+        environment:
+            - NODE_ENV=production
+            - VUE_APP_SOCKET_IO_ADDR=http://localhost:3001
+            - VUE_APP_STREAM_DATA_ONE=http://localhost:3000/live/streams/one/480p.m3u8
+            - VUE_APP_STREAM_DATA_TWO=http://localhost:3000/live/streams/one/480p.m3u8
+    api:
+        build:
+            context: ./server
+            target: 'prod-stage'
+        depends_on:
+            db:
+                condition: service_healthy
+        volumes:
+            - ./server:/server:delegated
+            - /server/node_modules
+        ports:
+            - 3001:3001
+        environment:
+            # FILESERVER_BASE_URL should default to localhost in dev and fileserver container name in prod
+            - FILESERVER_BASE_URL=fileserver
+            - NODE_ENV=production
+            # These files need to be retrieved from firebase ( or ask your admin ) and placed in `/server/certs`
+            - GOOGLE_APPLICATION_CREDENTIALS_DEV=./certs/<Dev cert file name>.json
+            - GOOGLE_APPLICATION_CREDENTIALS_PROD=./certs/<Prod cert file name>.json
+    fileserver:
+        build: ./file-server
+        ports:
+            - 3000:3000
+        volumes:
+            - ./file-server:/opt/node_app/app:delegated
+            - /node/app/node_modules
+        environment:
+            # replace these with live rtsp urls
+            - IP_CAM_RTSP_URL_ONE=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+            - IP_CAM_RTSP_URL_TWO=rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+    db:
+        image: postgres:10-alpine
+        restart: always
+        healthcheck:
+            # -U = POSTGRES_USER, -d = POSTGRE_DB
+            test: ['CMD-SHELL', 'pg_isready -U postgres -d wiley']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+        ports:
+            # Only needed if you want to connect to management software
+            - 5432:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_DB: wiley
+            POSTGRES_PASSWORD: wiley_rotf_2019
+        volumes:
+            - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+            # the /wiley part of the url needs to match the POSTGRES_DB env var
+            - /<path/to/anywhere>/wiley:/var/lib/postgresql/data
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080

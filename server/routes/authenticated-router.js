@@ -53,7 +53,7 @@ router.get('/get_all_events_postgres', async (req, res) => {
     }
 });
 
-// @METHOD: GET
+// @METHOD: POST
 // @RETURNS: array of all events events with non null user_classificaiton field
 router.post('/get_archived_events_postgres', async (req, res) => {
     let params = req.body.params;
@@ -66,7 +66,7 @@ router.post('/get_archived_events_postgres', async (req, res) => {
     }
 });
 
-// @METHOD: GET
+// @METHOD: POST
 // @RETURNS: object with count prop<int> and events prop<array> of all events by type and filter
 router.post('/get_archived_events_by_type_postgres', async (req, res) => {
     let params = req.body.params;

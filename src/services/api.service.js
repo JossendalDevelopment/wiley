@@ -1,3 +1,4 @@
+// TODO Rename as auth.service.js
 import axios from 'axios';
 
 const instance = axios.create();
